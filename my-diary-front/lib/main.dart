@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_diary_front/diaryInfoPage.dart';
 import 'mapPage.dart';
 
 void main() async {
@@ -16,9 +17,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
-      initialRoute: '/mapPage',
+      initialRoute: '/diaryInfoPage',
       routes: {
         '/mapPage': (context) => MapPage(),
+        '/diaryInfoPage': (context) => DiaryInfoPage()
       },
     );
   }
