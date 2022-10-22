@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_diary_front/diaryImagePage.dart';
 import 'package:my_diary_front/diaryInfoPage.dart';
+import 'package:my_diary_front/signInPage.dart';
 import 'mapPage.dart';
 
 void main() async {
@@ -17,10 +19,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
-      initialRoute: '/diaryInfoPage',
+      initialRoute: '/signInPage',
       routes: {
+        '/signInPage': (context) => SignInPage(),
         '/mapPage': (context) => MapPage(),
-        '/diaryInfoPage': (context) => DiaryInfoPage()
+        '/diaryInfoPage': (context) => DiaryInfoPage(),
+        '/diaryImagePage': (context) => DiaryImagePage(),
       },
     );
   }
