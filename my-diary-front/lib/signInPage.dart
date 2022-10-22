@@ -12,9 +12,9 @@ class _SignInPageState extends State<SignInPage> {
   var passwordText = '';
 
   final TextEditingController _emailController =
-  TextEditingController(text: 'johnjames12@naver.com');
+  TextEditingController();
   final TextEditingController _passwordController =
-  TextEditingController(text: 'fldhsortm12!');
+  TextEditingController();
 
   @override
   Widget build(BuildContext context) {
