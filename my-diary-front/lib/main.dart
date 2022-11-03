@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_diary_front/diaryImagePage.dart';
 import 'package:my_diary_front/diaryInfoPage.dart';
-import 'package:my_diary_front/signInPage.dart';
-import 'mapPage.dart';
+import 'package:my_diary_front/homePage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -24,10 +23,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
-      initialRoute: '/signInPage',
+      initialRoute: '/HomePage',
       routes: {
-        '/signInPage': (context) => SignInPage(),
-        '/mapPage': (context) => MapPage(),
+        '/HomePage': (context) => HomePage(),
         '/diaryInfoPage': (context) => DiaryInfoPage(),
         '/diaryImagePage': (context) => DiaryImagePage(),
       },
