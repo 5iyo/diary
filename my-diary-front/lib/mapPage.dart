@@ -16,7 +16,7 @@ class _MapPageState extends State<MapPage> {
 
   // 이 값은 지도가 시작될 때 첫 번째 위치입니다.
   final CameraPosition _initialPosition =
-  CameraPosition(target: LatLng(37.335887, 126.584063));
+  CameraPosition(target: LatLng(37.335887, 126.584063), zoom: 17.0);
 
   // 지도 클릭 시 표시할 장소에 대한 마커 목록
   final List<Marker> markers = [];
@@ -47,7 +47,7 @@ class _MapPageState extends State<MapPage> {
       CameraPosition(
         bearing: 0,
         target: LatLng(currentLocation.latitude!, currentLocation.longitude!),
-        zoom: 10.0,
+        zoom: 17.0,
       ),
     ));
   }
@@ -73,7 +73,6 @@ class _MapPageState extends State<MapPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-
         onPressed: () {
           _currentLocation();
         },

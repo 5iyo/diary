@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -95,7 +97,7 @@ class _SignInPageState extends State<SignInPage> {
                     padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 10.0),
                     child: ElevatedButton(
                       child: const Text('Sign In'),
-                      onPressed: () => _signIn(),
+                      onPressed: () => {},
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.grey),
                     )
@@ -118,7 +120,7 @@ class _SignInPageState extends State<SignInPage> {
                             height: 50,
                             fit: BoxFit.fitHeight,
                           ),
-                          onPressed: () => _signIn(),
+                          onPressed: () {},
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.transparent,
                               elevation: 0.0
@@ -130,7 +132,7 @@ class _SignInPageState extends State<SignInPage> {
                             height: 50,
                             fit: BoxFit.fitHeight,
                           ),
-                          onPressed: () => _signIn(),
+                          onPressed: () {},
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.transparent,
                               elevation: 0.0
@@ -142,7 +144,7 @@ class _SignInPageState extends State<SignInPage> {
                             height: 50,
                             fit: BoxFit.fitHeight,
                           ),
-                          onPressed: () => _signIn(),
+                          onPressed: () => _googleSignIn(),
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.transparent,
                               elevation: 0.0
@@ -158,7 +160,22 @@ class _SignInPageState extends State<SignInPage> {
       ),
     );
   }
-  _signIn() async {
 
+  Future<UserCredential> _googleSignIn() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication googleAuth =
+    await googleUser!.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 }

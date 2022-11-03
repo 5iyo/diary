@@ -3,9 +3,14 @@ import 'package:my_diary_front/diaryImagePage.dart';
 import 'package:my_diary_front/diaryInfoPage.dart';
 import 'package:my_diary_front/signInPage.dart';
 import 'mapPage.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   runApp(const MyApp());
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
 
 class MyApp extends StatelessWidget {
