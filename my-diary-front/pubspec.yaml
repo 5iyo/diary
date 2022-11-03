@@ -20,11 +20,11 @@ dependencies:
   #swipe animation
   flutter_swiper: ^1.1.6
   swipe_cards: ^1.0.0
-  # firebase
-  firebase_core: ^1.22.0
-  firebase_auth: ^3.9.0
   # firebase_google
   google_sign_in: ^5.4.2
+  # firebase
+  firebase_core: ^2.1.1
+  firebase_auth: ^4.1.0
 
 dev_dependencies:
   flutter_test:
