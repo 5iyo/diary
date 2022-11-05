@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Diary extends BaseEntity {
 
     @Id
@@ -26,29 +26,41 @@ public class Diary extends BaseEntity {
     private String title;
 
     // 여행 일자
-    private LocalDate tripDate;
+    private LocalDate travelDate;
 
     // 일기 본문 내용
     private String mainText;
 
     // 날씨
     private String weather;
-
-    // 사진들?
-//    private List<String> diaryImages = new ArrayList<>();
-
+    
+    // 여행
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TRIP_ID")
-    private Trip trip;
+    private Travel travel;
+
+    // 사진들
+    @OneToMany(mappedBy = "diary")
+    private List<DiaryImage> diaryImages = new ArrayList<>();
 
     // 동행자 보류 (공유할 때 필요!!)
 
+
+    public Diary(LocalDateTime createDate, LocalDateTime lastModifiedDate, String title, LocalDate travelDate, String mainText, String weather, Travel travel) {
+        super(createDate, lastModifiedDate);
+        this.title = title;
+        this.travelDate = travelDate;
+        this.mainText = mainText;
+        this.weather = weather;
+        this.travel = travel;
+    }
+
     /* 연관관계 편의 메서드 */
-    public void setTrip(Trip trip) {
-        if (this.trip != null) {
-            this.trip.getDiaries().remove(this);
+    public void setTravel(Travel travel) {
+        if (this.travel != null) {
+            this.travel.getDiaries().remove(this);
         }
-        this.trip = trip;
-        trip.getDiaries().add(this);
+        this.travel = travel;
+        travel.getDiaries().add(this);
     }
 }
