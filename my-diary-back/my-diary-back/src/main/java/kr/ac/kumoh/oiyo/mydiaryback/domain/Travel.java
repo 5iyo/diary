@@ -6,12 +6,12 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Travel extends BaseEntity {
 
     @Id
@@ -47,4 +47,14 @@ public class Travel extends BaseEntity {
     // 여행 종료 날짜
     private LocalDate travelEndDate;
 
+    public Travel(LocalDateTime createDate, LocalDateTime lastModifiedDate, Member member, String travelDestination, String travelLatitude, String travelLongitude, String travelImage, LocalDate travelStartDate, LocalDate travelEndDate) {
+        super(createDate, lastModifiedDate);
+        this.member = member;
+        this.travelDestination = travelDestination;
+        this.travelLatitude = travelLatitude;
+        this.travelLongitude = travelLongitude;
+        this.travelImage = travelImage;
+        this.travelStartDate = travelStartDate;
+        this.travelEndDate = travelEndDate;
+    }
 }
