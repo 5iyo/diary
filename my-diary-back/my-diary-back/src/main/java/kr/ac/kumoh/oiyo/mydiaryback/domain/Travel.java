@@ -47,12 +47,4 @@ public class Travel extends BaseEntity {
     // 여행 종료 날짜
     private LocalDate travelEndDate;
 
-    /* 연관관계 편의 메서드 */
-    public void setMember(Member member) {
-        if (this.member != null) {
-            this.member.getTravels().remove(this);
-        }
-        this.member = member;
-        member.getTravels().add(this);
-    }
 }
