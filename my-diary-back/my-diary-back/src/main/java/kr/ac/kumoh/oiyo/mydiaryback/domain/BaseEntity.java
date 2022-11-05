@@ -10,8 +10,13 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class BaseEntity {
-    private String createBy;
+    //    private String createBy;
+
+    // 생성일자
     private LocalDateTime createDate;
-    private String modifiedBy;
+
+    //    private String modifiedBy;
+
+    // 수정일자
     private LocalDateTime lastModifiedDate;
 }
