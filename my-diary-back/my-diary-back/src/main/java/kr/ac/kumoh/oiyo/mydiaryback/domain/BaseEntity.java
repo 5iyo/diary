@@ -1,6 +1,8 @@
 package kr.ac.kumoh.oiyo.mydiaryback.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.MappedSuperclass;
@@ -9,7 +11,9 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @Getter
 @Setter
-public class BaseEntity {
+@AllArgsConstructor
+@NoArgsConstructor
+public abstract class BaseEntity {
     //    private String createBy;
 
     // 생성일자
