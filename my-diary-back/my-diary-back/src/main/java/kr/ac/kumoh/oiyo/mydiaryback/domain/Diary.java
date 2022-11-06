@@ -13,7 +13,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class Diary extends BaseEntity {
 
@@ -52,7 +51,7 @@ public class Diary extends BaseEntity {
         this.travelDate = travelDate;
         this.mainText = mainText;
         this.weather = weather;
-        this.travel = travel;
+        setTravel(travel);
     }
 
     /* 연관관계 편의 메서드 */
