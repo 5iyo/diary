@@ -23,12 +23,19 @@ public class TravelRepository {
         return travel.getId();
     }
 
+    public Travel findOne(Long travelId) {
+        return em.find(Travel.class, travelId);
+    }
+
     /**
      * 사용자의 모든 여행 조회
+     * 로그인하고 지도에 여행지 마커 표시할 때 사용
      * @param memberId 사용자의 ID (pk)
      * @return 해당 사용자의 모든 여행 기록 조회
      */
-    /*public List<Travel> findAllByMember(Long memberId) {
-        em.createQuery("select t from Travel t join fetch t.diaries")
-    }*/
+    public List<Travel> findTravelsByMember(String memberId) {
+        return em.createQuery("select t from Travel t join t.member m on m.id = :mId", Travel.class)
+                .setParameter("mId", memberId)
+                .getResultList();
+    }
 }
