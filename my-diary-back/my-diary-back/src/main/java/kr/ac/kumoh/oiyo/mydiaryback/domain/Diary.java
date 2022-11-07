@@ -39,7 +39,7 @@ public class Diary extends BaseEntity {
     private Travel travel;
 
     // 사진들
-    @OneToMany(mappedBy = "diary")
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<DiaryImage> diaryImages = new ArrayList<>();
 
     // 동행자 보류 (공유할 때 필요!!)

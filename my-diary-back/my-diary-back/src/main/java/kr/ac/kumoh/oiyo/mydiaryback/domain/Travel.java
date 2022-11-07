@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,8 +26,8 @@ public class Travel extends BaseEntity {
     private Member member;
 
     // Diary
-    @OneToMany(mappedBy = "travel")
-    private List<Diary> diaries;
+    @OneToMany(mappedBy = "travel", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Diary> diaries = new ArrayList<>();
 
     // 여행지
     private String travelDestination;
