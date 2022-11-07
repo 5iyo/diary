@@ -6,7 +6,6 @@ import kr.ac.kumoh.oiyo.mydiaryback.domain.Member;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.Travel;
 import kr.ac.kumoh.oiyo.mydiaryback.repository.dto.FindDiaryDtoByTravel;
 import kr.ac.kumoh.oiyo.mydiaryback.repository.dto.FindOneDiaryDto;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -97,7 +96,7 @@ public class DiaryRepositoryTest {
         em.flush();
         em.clear();
 
-        List<FindDiaryDtoByTravel> diaryDtoByTravels = diaryRepository.findDiaryDtoByTravel(travel.getId());
+        List<FindDiaryDtoByTravel> diaryDtoByTravels = diaryRepository.findDiariesByTravel(travel.getId());
 
         // Then
         assertThat(diaryDtoByTravels.get(0).getDiaryId()).isEqualTo(diary1.getId());
