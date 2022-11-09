@@ -13,6 +13,7 @@ public class DiaryImageRepository {
 
     private final EntityManager em;
 
+    // 생성
     public Long save(DiaryImage diaryImage) {
         em.persist(diaryImage);
         return diaryImage.getId();
@@ -25,9 +26,12 @@ public class DiaryImageRepository {
      * @param diaryId
      * @return
      */
+    // 조회
     public List<String> findImagesByDiary(Long diaryId) {
         return em.createQuery("select di.imageFile from DiaryImage di join di.diary d on d.id = :dId", String.class)
                 .setParameter("dId", diaryId)
                 .getResultList();
     }
+    
+    // 삭제
 }
