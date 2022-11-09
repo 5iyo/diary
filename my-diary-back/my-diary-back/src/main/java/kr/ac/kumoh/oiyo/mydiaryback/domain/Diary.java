@@ -39,11 +39,10 @@ public class Diary extends BaseEntity {
     private Travel travel;
 
     // 사진들
-    @OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DiaryImage> diaryImages = new ArrayList<>();
 
     // 동행자 보류 (공유할 때 필요!!)
-
 
     public Diary(LocalDateTime createDate, LocalDateTime lastModifiedDate, String title, LocalDate travelDate, String mainText, String weather, Travel travel) {
         super(createDate, lastModifiedDate);
@@ -61,5 +60,10 @@ public class Diary extends BaseEntity {
         }
         this.travel = travel;
         travel.getDiaries().add(this);
+    }
+
+    //== 수정 메서드 ==//
+    public void changeLastModifiedDate(LocalDateTime time) {
+        this.setLastModifiedDate(time);
     }
 }
