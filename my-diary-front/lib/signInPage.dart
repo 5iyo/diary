@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:uuid/uuid.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -131,7 +133,7 @@ class _SignInPageState extends State<SignInPage> {
                               height: 50,
                               fit: BoxFit.fitHeight,
                             ),
-                            onPressed: () {},
+                            onPressed: () => _kakaoSignIn(),
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
                                 elevation: 0.0),
@@ -174,5 +176,22 @@ class _SignInPageState extends State<SignInPage> {
 
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
+  Future<UserCredential> _kakaoSignIn() async {
+    final clientState = Uuid().v4();
+    final url = Uri.https('kauth.kakao.com', '/oauth/authorize', {
+      'response_type': 'code',
+      'client_id': 'client_id', // Input Your Client_ID
+      'redirect_uri': 'redirect_uri', //  Input Your Redirect URI
+      'state': clientState,
+    });
+    final result = await FlutterWebAuth.authenticate(
+        url: url.toString(), callbackUrlScheme: "webauthcallback");
+
+    final params = Uri.parse(result).queryParameters;
+    print(params);
+    return await FirebaseAuth.instance
+        .signInWithCustomToken(params['customToken']!);
   }
 }

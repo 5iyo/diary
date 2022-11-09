@@ -24,7 +24,11 @@ dependencies:
   google_sign_in: ^5.4.2
   # firebase
   firebase_core: ^2.1.1
-  firebase_auth: ^4.1.0
+  firebase_auth: ^4.1.1
+  # firebase_kakao
+  flutter_web_auth: ^0.5.0
+  uuid: ^3.0.6
+  flutter_secure_storage: ^6.0.0
 
 dev_dependencies:
   flutter_test:
