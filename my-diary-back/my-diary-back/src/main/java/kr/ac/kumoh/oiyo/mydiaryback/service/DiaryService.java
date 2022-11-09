@@ -3,13 +3,12 @@ package kr.ac.kumoh.oiyo.mydiaryback.service;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.Diary;
 import kr.ac.kumoh.oiyo.mydiaryback.repository.DiaryImageRepository;
 import kr.ac.kumoh.oiyo.mydiaryback.repository.DiaryRepository;
-import kr.ac.kumoh.oiyo.mydiaryback.repository.dto.FindDiaryDtoByTravel;
-import kr.ac.kumoh.oiyo.mydiaryback.repository.dto.FindOneDiaryDto;
-import kr.ac.kumoh.oiyo.mydiaryback.service.dto.ReadDiaryDTO;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -20,6 +19,8 @@ public class DiaryService {
 
     private final DiaryImageRepository diaryImageRepository;
 
+    // 저장
+    @Transactional
     public Long saveDiary(Diary diary) {
         diaryRepository.save(diary);
         return diary.getId();
@@ -32,15 +33,10 @@ public class DiaryService {
      * @param diaryId
      * @return
      */
-    public ReadDiaryDTO readDiary(Long diaryId) {
+    // 조회
+    public Diary readDiary(Long diaryId) {
 
-        FindOneDiaryDto findOneDiaryDto = diaryRepository.findOne(diaryId);
-
-        List<String> diaryImages = diaryImageRepository.findImagesByDiary(diaryId);
-
-        return new ReadDiaryDTO(findOneDiaryDto.getTitle(), findOneDiaryDto.getTravelDate(), findOneDiaryDto.getMainText()
-                , findOneDiaryDto.getWeather(), findOneDiaryDto.getTravelDestination(), diaryImages
-                , findOneDiaryDto.getCreatedDate(), findOneDiaryDto.getLastModifiedDate());
+        return diaryRepository.findDiary(diaryId);
     }
 
     /**
@@ -52,8 +48,14 @@ public class DiaryService {
      * @param travelId
      * @return
      */
-    public List<FindDiaryDtoByTravel> readDiaryList(Long travelId) {
+    // 일기 목록 조회
+    public List<Diary> readDiaryList(Long travelId) {
         return diaryRepository.findDiariesByTravel(travelId);
+    }
+
+    @Transactional
+    public void deleteDiary(Long diaryId) {
+        diaryRepository.delete(diaryId);
     }
 
     /**
@@ -62,9 +64,9 @@ public class DiaryService {
      *
      * @param diaryId
      */
-    // 현재 일기 내용 수정에 관한 DTO 필요 <- 무슨 필드 변경할지 필요함.
-    @Transactional
-    public void editDiary(Long diaryId) {
+   /* @Transactional
+    public void update(Long diaryId, String title, LocalDate travelDate, String mainText, String weather, String travelDestination, ) {
+        Diary diary = diaryRepository.findDiary(diaryId);
 
-    }
+    }*/
 }
