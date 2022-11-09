@@ -38,4 +38,9 @@ public class TravelRepository {
                 .setParameter("mId", memberId)
                 .getResultList();
     }
+
+    public void delete(Long travelId) {
+        Travel findTravel = findOne(travelId);
+        em.remove(findTravel);
+    }
 }
