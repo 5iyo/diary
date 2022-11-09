@@ -15,6 +15,10 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly("org.springframework.boot:spring-boot-devtools")
+    implementation 'org.projectlombok:lombok'
+    implementation 'com.google.firebase:firebase-admin:9.1.0'
 }
 
 tasks.named('test') {
