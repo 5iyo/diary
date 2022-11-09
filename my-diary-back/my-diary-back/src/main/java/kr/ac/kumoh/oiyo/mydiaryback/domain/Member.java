@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -36,6 +38,9 @@ public class Member extends BaseEntity {
     // 사용자 주소
     @Embedded
     private Address address;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Travel> travels = new ArrayList<>();
 
     public Member(LocalDateTime createDate, LocalDateTime lastModifiedDate, String id, String name, String profileImg, String profileIntroduction, LocalDate birthDate, String email, Address address) {
         super(createDate, lastModifiedDate);
