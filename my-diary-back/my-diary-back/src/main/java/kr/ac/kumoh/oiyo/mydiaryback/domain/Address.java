@@ -2,6 +2,7 @@ package kr.ac.kumoh.oiyo.mydiaryback.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
@@ -10,6 +11,7 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@Getter
 public class Address {
 
     // 시

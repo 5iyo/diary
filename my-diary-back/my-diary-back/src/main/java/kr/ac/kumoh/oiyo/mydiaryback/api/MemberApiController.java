@@ -21,6 +21,7 @@ public class MemberApiController {
 
     private final MemberService memberService;
 
+    // 회원 생성
     @PostMapping("/api/members")
     public ResponseEntity saveMember(@RequestBody @Valid CreateMemberRequest createMemberRequest) {
 
@@ -48,11 +49,46 @@ public class MemberApiController {
         return new ResponseEntity(createMemberResponse, HttpStatus.CREATED);
     }
 
+    // 회원 삭제
     @DeleteMapping("/api/members/{id}")
     public ResponseEntity deleteMember(@PathVariable("id") String memberId) {
         memberService.deleteMember(memberId);
 
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    // 마이페이지에 조회할 때 사용
+    @GetMapping("/api/members/{id}")
+    public ResponseEntity inquiryMember(@PathVariable("id") String memberId) {
+        Member findMember = memberService.findOne(memberId);
+
+        String name = findMember.getName();
+        String profileImg = findMember.getProfileImg();
+        String profileIntroduction = findMember.getProfileIntroduction();
+        LocalDate birthDate = findMember.getBirthDate();
+        String email = findMember.getEmail();
+        Address address = findMember.getAddress();
+        String city = address.getCity();
+        String street = address.getStreet();
+        String zipcode = address.getZipcode();
+
+        MemberDto memberDto = new MemberDto(name, profileImg, profileIntroduction, birthDate, email, city, street, zipcode);
+        
+        return new ResponseEntity(memberDto, HttpStatus.OK);
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class MemberDto {
+        private String name;
+        private String profileImage;
+        private String profileIntroduction;
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        private LocalDate birthDate;
+        private String email;
+        private String city;
+        private String street;
+        private String zipcode;
     }
 
     @Data
