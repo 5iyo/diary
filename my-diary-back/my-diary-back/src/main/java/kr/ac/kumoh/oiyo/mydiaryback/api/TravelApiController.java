@@ -47,7 +47,7 @@ public class TravelApiController {
 
         CreateTravelResponse createTravelResponse = new CreateTravelResponse(saveTravelId);
 
-        return new ResponseEntity(createTravelResponse, HttpStatus.OK);
+        return new ResponseEntity(createTravelResponse, HttpStatus.CREATED);
 
     }
 

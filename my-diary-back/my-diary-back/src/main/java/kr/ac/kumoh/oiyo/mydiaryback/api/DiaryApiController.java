@@ -48,7 +48,7 @@ public class DiaryApiController {
 
         CreateDiaryResponse createDiaryResponse = new CreateDiaryResponse(diary.getId());
 
-        return new ResponseEntity(createDiaryResponse, HttpStatus.OK);
+        return new ResponseEntity(createDiaryResponse, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/api/diaries/{id}")

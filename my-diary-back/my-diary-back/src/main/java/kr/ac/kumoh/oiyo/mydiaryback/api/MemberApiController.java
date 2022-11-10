@@ -45,7 +45,7 @@ public class MemberApiController {
 
         CreateMemberResponse createMemberResponse = new CreateMemberResponse(saveMemberId);
 
-        return new ResponseEntity(createMemberResponse, HttpStatus.OK);
+        return new ResponseEntity(createMemberResponse, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/api/members/{id}")
