@@ -27,20 +27,19 @@ public class TravelApiController {
     @PostMapping("/api/travels/{id}")
     public ResponseEntity saveTravel(@PathVariable("id") String memberId, @RequestBody @Valid CreateTravelRequest createTravelRequest) {
 
-        System.out.println(memberId);
-
         Member member = memberService.findOne(memberId);
 
         LocalDateTime now = LocalDateTime.now();
 
-        String travelDestination = createTravelRequest.getTravelDestination();
+        String travelTitle = createTravelRequest.getTravelTitle();
+        String travelArea = createTravelRequest.getTravelArea();
         String travelLatitude = createTravelRequest.getTravelLatitude();
         String travelLongitude = createTravelRequest.getTravelLongitude();
         String travelImage = createTravelRequest.getTravelImage();
         LocalDate travelStartDate = createTravelRequest.getTravelStartDate();
         LocalDate travelEndDate = createTravelRequest.getTravelEndDate();
 
-        Travel travel = new Travel(now, now, member, travelDestination, travelLatitude,
+        Travel travel = new Travel(now, now, member, travelTitle, travelArea, travelLatitude,
                 travelLongitude, travelImage, travelStartDate, travelEndDate);
 
         Long saveTravelId = travelService.saveTravel(travel);
@@ -67,7 +66,8 @@ public class TravelApiController {
 
     @Data
     static class CreateTravelRequest {
-        private String travelDestination;
+        private String travelTitle;
+        private String travelArea;
         private String travelLatitude;
         private String travelLongitude;
         private String travelImage;
