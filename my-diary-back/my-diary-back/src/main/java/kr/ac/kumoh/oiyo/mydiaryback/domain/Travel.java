@@ -1,6 +1,5 @@
 package kr.ac.kumoh.oiyo.mydiaryback.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,9 +27,12 @@ public class Travel extends BaseEntity {
     // Diary
     @OneToMany(mappedBy = "travel", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Diary> diaries = new ArrayList<>();
+    
+    // 여행에 대한 제목
+    private String travelTitle;
 
     // 여행지
-    private String travelDestination;
+    private String travelArea;
 
     // 해당 여행지의 위도
     private String travelLatitude;
@@ -48,10 +50,13 @@ public class Travel extends BaseEntity {
     // 여행 종료 날짜
     private LocalDate travelEndDate;
 
-    public Travel(LocalDateTime createDate, LocalDateTime lastModifiedDate, Member member, String travelDestination, String travelLatitude, String travelLongitude, String travelImage, LocalDate travelStartDate, LocalDate travelEndDate) {
+    public Travel(LocalDateTime createDate, LocalDateTime lastModifiedDate, Member member, String travelTitle
+            , String travelArea, String travelLatitude, String travelLongitude, String travelImage
+            , LocalDate travelStartDate, LocalDate travelEndDate) {
         super(createDate, lastModifiedDate);
         this.member = member;
-        this.travelDestination = travelDestination;
+        this.travelTitle = travelTitle;
+        this.travelArea = travelArea;
         this.travelLatitude = travelLatitude;
         this.travelLongitude = travelLongitude;
         this.travelImage = travelImage;
