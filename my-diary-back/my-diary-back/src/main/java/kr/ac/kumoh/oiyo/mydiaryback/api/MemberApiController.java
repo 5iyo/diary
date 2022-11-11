@@ -34,13 +34,7 @@ public class MemberApiController {
         LocalDate birthDate = createMemberRequest.getBirthDate();
         String email = createMemberRequest.getEmail();
 
-        String city = createMemberRequest.getCity();
-        String street = createMemberRequest.getStreet();
-        String zipcode = createMemberRequest.getZipcode();
-
-        Address address = new Address(city, street, zipcode);
-
-        Member member = new Member(now, now, memberId, name, profileImage, profileIntroduction, birthDate, email, address);
+        Member member = new Member(now, now, memberId, name, profileImage, profileIntroduction, birthDate, email);
 
         String saveMemberId = memberService.join(member);
 
@@ -67,12 +61,8 @@ public class MemberApiController {
         String profileIntroduction = findMember.getProfileIntroduction();
         LocalDate birthDate = findMember.getBirthDate();
         String email = findMember.getEmail();
-        Address address = findMember.getAddress();
-        String city = address.getCity();
-        String street = address.getStreet();
-        String zipcode = address.getZipcode();
 
-        MemberDto memberDto = new MemberDto(name, profileImg, profileIntroduction, birthDate, email, city, street, zipcode);
+        MemberDto memberDto = new MemberDto(name, profileImg, profileIntroduction, birthDate, email);
         
         return new ResponseEntity(memberDto, HttpStatus.OK);
     }
@@ -86,9 +76,6 @@ public class MemberApiController {
         @DateTimeFormat(pattern = "yyyy-MM-dd")
         private LocalDate birthDate;
         private String email;
-        private String city;
-        private String street;
-        private String zipcode;
     }
 
     @Data
