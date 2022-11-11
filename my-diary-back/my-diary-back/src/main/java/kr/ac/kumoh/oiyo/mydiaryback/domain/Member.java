@@ -35,14 +35,10 @@ public class Member extends BaseEntity {
     // 사용자 이메일
     private String email;
 
-    // 사용자 주소
-    @Embedded
-    private Address address;
-
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Travel> travels = new ArrayList<>();
 
-    public Member(LocalDateTime createDate, LocalDateTime lastModifiedDate, String id, String name, String profileImg, String profileIntroduction, LocalDate birthDate, String email, Address address) {
+    public Member(LocalDateTime createDate, LocalDateTime lastModifiedDate, String id, String name, String profileImg, String profileIntroduction, LocalDate birthDate, String email) {
         super(createDate, lastModifiedDate);
         this.id = id;
         this.name = name;
@@ -50,6 +46,5 @@ public class Member extends BaseEntity {
         this.profileIntroduction = profileIntroduction;
         this.birthDate = birthDate;
         this.email = email;
-        this.address = address;
     }
 }
