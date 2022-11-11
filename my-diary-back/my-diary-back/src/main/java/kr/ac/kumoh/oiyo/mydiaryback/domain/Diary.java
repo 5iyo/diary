@@ -32,6 +32,9 @@ public class Diary extends BaseEntity {
 
     // 날씨
     private String weather;
+
+    // 세부 여행지
+    private String travelDestination;
     
     // 여행
     @ManyToOne(fetch = FetchType.LAZY)
@@ -44,12 +47,14 @@ public class Diary extends BaseEntity {
 
     // 동행자 보류 (공유할 때 필요!!)
 
-    public Diary(LocalDateTime createDate, LocalDateTime lastModifiedDate, String title, LocalDate travelDate, String mainText, String weather, Travel travel) {
+    public Diary(LocalDateTime createDate, LocalDateTime lastModifiedDate, String title, LocalDate travelDate
+            , String mainText, String weather, String travelDestination, Travel travel) {
         super(createDate, lastModifiedDate);
         this.title = title;
         this.travelDate = travelDate;
         this.mainText = mainText;
         this.weather = weather;
+        this.travelDestination = travelDestination;
         setTravel(travel);
     }
 
@@ -63,7 +68,13 @@ public class Diary extends BaseEntity {
     }
 
     //== 수정 메서드 ==//
-    public void changeLastModifiedDate(LocalDateTime time) {
-        this.setLastModifiedDate(time);
+    public void updateDiary(String title, LocalDate travelDate, String mainText, String weather
+            , String travelDestination, LocalDateTime lastModifiedDate) {
+        this.title = title;
+        this.travelDate = travelDate;
+        this.mainText = mainText;
+        this.weather = weather;
+        this.travelDestination = travelDestination;
+        this.setLastModifiedDate(lastModifiedDate);
     }
 }
