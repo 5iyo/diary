@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -39,6 +40,10 @@ public class DiaryService {
         return diaryRepository.findDiary(diaryId);
     }
 
+    public Diary findOne(Long diaryId) {
+        return diaryRepository.findOne(diaryId);
+    }
+
     /**
      * 여행별 일기 조회 메서드 (날짜 오름차순)
      * 지도에서 마커를 클릭하면 해당 메서드가 호출된다.
@@ -64,9 +69,11 @@ public class DiaryService {
      *
      * @param diaryId
      */
-   /* @Transactional
-    public void update(Long diaryId, String title, LocalDate travelDate, String mainText, String weather, String travelDestination, ) {
-        Diary diary = diaryRepository.findDiary(diaryId);
+    @Transactional
+    public void update(Long diaryId, String title, LocalDate travelDate, String mainText, String weather
+            , String travelDestination, LocalDateTime lastModifiedDate) {
+        Diary diary = diaryRepository.findOne(diaryId);
 
-    }*/
+        diary.updateDiary(title, travelDate, mainText, weather, travelDestination, lastModifiedDate);
+    }
 }
