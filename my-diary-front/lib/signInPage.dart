@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:uuid/uuid.dart';
@@ -182,8 +183,8 @@ class _SignInPageState extends State<SignInPage> {
     final clientState = Uuid().v4();
     final url = Uri.https('kauth.kakao.com', '/oauth/authorize', {
       'response_type': 'code',
-      'client_id': 'client_id', // Input Your Client_ID
-      'redirect_uri': 'redirect_uri', //  Input Your Redirect URI
+      'client_id': dotenv.get('KAKAO_CLIENT_ID'), // Input Your Client_ID
+      'redirect_uri': dotenv.get('KAKAO_REDIRECT_URI'), //  Input Your Redirect URI
       'state': clientState,
     });
     final result = await FlutterWebAuth.authenticate(
