@@ -1,8 +1,8 @@
 package kr.ac.kumoh.oiyo.mydiaryback.controller;
 
 
-import kr.ac.kumoh.oiyo.mydiaryback.domain.KakaoDTO;
-import kr.ac.kumoh.oiyo.mydiaryback.domain.User;
+import kr.ac.kumoh.oiyo.mydiaryback.repository.KakaoDTO;
+import kr.ac.kumoh.oiyo.mydiaryback.repository.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
@@ -24,26 +24,31 @@ public class MainController {
     }
 
     @RequestMapping("kakao/login")
-    public KakaoDTO kakaoSignIn(@RequestParam("code") String code) {
+    @ResponseBody
+    public User kakaoSignIn(@RequestParam("code") String code) {
 //        String accessToken = kakaoService.getAccessKakaoToken(code);
 
         Map<String,Object> userInfo = kakaoService.getKakaoUserInfo(code);
 //        System.out.println("###access_Token#### : " + accessToken);
+        String name = userInfo.get("nickname").toString();
+        String email = userInfo.get("email").toString();
 
-        System.out.println("###nickname#### : " + userInfo.get("nickname"));
-        System.out.println("###email#### : " + userInfo.get("email"));
+        System.out.println("###nickname#### : " + name);
+        System.out.println("###email#### : " + email);
         System.out.println("###id#### ; " + userInfo.get("id"));
 
 //        토큰에서 받은 정보로 KakaoDTO build
         KakaoDTO kakaoDTO = KakaoDTO.builder()
-                .k_email(userInfo.get("email").toString())
-                .k_name(userInfo.get("nickname").toString())
+                .k_name(name)
+                .k_email(email)
                 .build();
 
+        User kakaoUser = kakaoService.registerKakaoUserIfNeed(kakaoDTO);
 
 
 
-        return kakaoDTO;
+
+        return kakaoUser;
 
     }
 

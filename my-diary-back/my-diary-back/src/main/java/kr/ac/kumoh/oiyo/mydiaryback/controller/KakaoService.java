@@ -1,13 +1,9 @@
 package kr.ac.kumoh.oiyo.mydiaryback.controller;
 
-import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.UserRecord;
-import com.google.firebase.auth.UserRecord.CreateRequest;
-import com.google.firebase.auth.UserRecord.UpdateRequest;
-
-import kr.ac.kumoh.oiyo.mydiaryback.domain.User;
-import kr.ac.kumoh.oiyo.mydiaryback.domain.UserRepository;
+import kr.ac.kumoh.oiyo.mydiaryback.repository.KakaoDTO;
+import kr.ac.kumoh.oiyo.mydiaryback.repository.User;
+import kr.ac.kumoh.oiyo.mydiaryback.repository.UserRepository;
+import kr.ac.kumoh.oiyo.mydiaryback.repository.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +14,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.http.HttpHeaders;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.LogManager;
@@ -34,7 +29,7 @@ public class KakaoService {
     private static final Logger log = LogManager.getLogManager().getLogger(String.valueOf(KakaoService.class));
 
     @Autowired
-    private UserRepository mr;
+    private UserRepository userRepository;
 
 //    getAccessToken()과 getUserInfo()를 호출한다.
 //    public Map<String, Object> execKakaoLogin(String authorize_code){
@@ -199,6 +194,24 @@ public class KakaoService {
             e.printStackTrace();
         }
         return access_Token;
+    }
+
+    public User registerKakaoUserIfNeed (KakaoDTO kakaoUserInfo)
+    {
+        String kakaoEmail = kakaoUserInfo.getK_email();
+        String nickname = kakaoUserInfo.getK_name();
+        User kakaoUser = userRepository.findByEmail(kakaoEmail).orElse(null);
+
+//        회원이 없으면 회원가입
+        if(kakaoUser == null) {
+            kakaoUser = User.builder()
+                    .email(kakaoEmail)
+                    .username(nickname)
+                    .role(UserRole.USER)
+                    .build();
+            userRepository.save(kakaoUser);
+        }
+        return kakaoUser;
     }
 
 //    public String createFirebaseCustomToken(Map<String, Object> userInfo) throws Exception{

@@ -1,4 +1,4 @@
-package kr.ac.kumoh.oiyo.mydiaryback.domain;
+package kr.ac.kumoh.oiyo.mydiaryback.repository;
 
 import lombok.Builder;
 import lombok.Data;
