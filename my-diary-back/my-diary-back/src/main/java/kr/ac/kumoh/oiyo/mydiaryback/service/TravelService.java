@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TravelService {
@@ -20,6 +22,20 @@ public class TravelService {
 
     public Travel findOne(Long travelId) {
         return travelRepository.findOne(travelId);
+    }
+
+    /**
+     * 사용자의 모든 여행 조회
+     * 로그인하고 지도에 여행지 마커 표시할 때 사용
+     * @param memberId 사용자의 ID (pk)
+     * @return 해당 사용자의 모든 여행 기록 조회
+     */
+    public List<Travel> inquiryTravelsByMember(String memberId) {
+        return travelRepository.findTravelsByMember(memberId);
+    }
+
+    public List<Travel> inquiryTravelsByCoordinate(String travelLatitude, String travelLongitude) {
+        return travelRepository.findTravelsByCoordinate(travelLatitude, travelLongitude);
     }
 
     @Transactional

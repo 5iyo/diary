@@ -1,5 +1,6 @@
 package kr.ac.kumoh.oiyo.mydiaryback.api;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.Member;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.Travel;
 import kr.ac.kumoh.oiyo.mydiaryback.service.MemberService;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -56,6 +59,80 @@ public class TravelApiController {
         travelService.deleteTravel(travelId);
 
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/api/travels/{id}")
+    public ResponseEntity inquiryTravelsInMap(@PathVariable("id") String memberId) {
+        List<Travel> travels = travelService.inquiryTravelsByMember(memberId);
+
+        List<TravelDto> collect = travels.stream()
+                .map(t -> new TravelDto(t))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity(collect, HttpStatus.OK);
+    }
+
+    @GetMapping("/api/travels")
+    public ResponseEntity inquiryTravelsByCoordinate(@RequestBody @Valid FindTravelsRequest findTravelsRequest) {
+
+        String travelLatitude = findTravelsRequest.getTravelLatitude();
+        String travelLongitude = findTravelsRequest.getTravelLongitude();
+
+        List<Travel> travels = travelService.inquiryTravelsByCoordinate(travelLatitude, travelLongitude);
+
+        List<TravelListDto> collect = travels.stream()
+                .map(t -> new TravelListDto(t))
+                .collect(Collectors.toList());
+
+        Result result = new Result(collect);
+
+        return new ResponseEntity(result, HttpStatus.OK);
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Result<T> {
+        private T travels;
+    }
+
+    @Data
+    static class FindTravelsRequest {
+        private String travelLatitude;
+        private String travelLongitude;
+    }
+
+    @Data
+    static class TravelListDto {
+        private String travelTitle;
+        private String travelImage;
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        private LocalDate travelStartDate;
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        private LocalDate travelEndDate;
+
+        public TravelListDto(Travel travel) {
+            this.travelTitle = travel.getTravelTitle();
+            this.travelImage = travel.getTravelImage();
+            this.travelStartDate = travel.getTravelStartDate();
+            this.travelEndDate = travel.getTravelEndDate();
+        }
+    }
+
+    @Data
+    static class TravelDto {
+        private String travelTitle;
+        private String travelArea;
+        private String travelLatitude;
+        private String travelLongitude;
+        private String travelImage;
+
+        public TravelDto(Travel travel) {
+            this.travelTitle = travel.getTravelTitle();
+            this.travelArea = travel.getTravelArea();
+            this.travelLatitude = travel.getTravelLatitude();
+            this.travelLongitude = travel.getTravelLongitude();
+            this.travelImage = travel.getTravelImage();
+        }
     }
 
     @Data

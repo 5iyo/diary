@@ -39,6 +39,14 @@ public class TravelRepository {
                 .getResultList();
     }
 
+    public List<Travel> findTravelsByCoordinate(String travelLatitude, String travelLongitude) {
+       return em.createQuery("select t from Travel t where t.travelLatitude = :travelLatitude and t.travelLongitude = :travelLongitude"
+                        , Travel.class)
+                .setParameter("travelLatitude", travelLatitude)
+                .setParameter("travelLongitude", travelLongitude)
+                .getResultList();
+    }
+
     public void delete(Long travelId) {
         Travel findTravel = findOne(travelId);
         em.remove(findTravel);
