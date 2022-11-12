@@ -1,4 +1,4 @@
-package kr.ac.kumoh.oiyo.mydiaryback.controller;
+package kr.ac.kumoh.oiyo.mydiaryback.service;
 
 import kr.ac.kumoh.oiyo.mydiaryback.repository.KakaoDTO;
 import kr.ac.kumoh.oiyo.mydiaryback.repository.User;
@@ -22,6 +22,7 @@ import java.util.Map;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class KakaoService {
@@ -167,6 +168,7 @@ public class KakaoService {
         return access_Token;
     }
 
+    @Transactional
     public User registerKakaoUserIfNeed (KakaoDTO kakaoUserInfo)
     {
         String kakaoEmail = kakaoUserInfo.getK_email();

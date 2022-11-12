@@ -3,6 +3,7 @@ package kr.ac.kumoh.oiyo.mydiaryback.controller;
 
 import kr.ac.kumoh.oiyo.mydiaryback.repository.KakaoDTO;
 import kr.ac.kumoh.oiyo.mydiaryback.repository.User;
+import kr.ac.kumoh.oiyo.mydiaryback.service.KakaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
@@ -43,9 +44,11 @@ public class MainController {
                 .k_email(email)
                 .build();
 
+//        카카오로 회원가입 처리
         User kakaoUser = kakaoService.registerKakaoUserIfNeed(kakaoDTO);
 
-
+//        강제 로그인 처리
+//        Authentication authentication = kakaoService.forceLogin(kakaoUser);
 
 
         return kakaoUser;
