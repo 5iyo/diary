@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_webservice/places.dart' as place;
+import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
-import 'package:location/location.dart';
 
 class GeocodingPage extends StatefulWidget {
   const GeocodingPage({Key? key}) : super(key: key);
@@ -26,7 +25,6 @@ class _GeocodingPageState extends State<GeocodingPage> {
   final List<Marker> markers = [];
 
   addMarker(LatLng coordinate, InfoWindow infoWindow) {
-    print("${coordinate.latitude}, ${coordinate.longitude}");
     setState(() {
       markers.add(Marker(
         position: coordinate,
@@ -70,6 +68,7 @@ class _GeocodingPageState extends State<GeocodingPage> {
       },
       markers: markers.toSet(),
       zoomControlsEnabled: false,
+      mapToolbarEnabled: false,
       // 클릭한 위치가 중앙에 표시
 /*        onCameraMove: (position) {
           if ((position.target.longitude < 131.5222 &&
@@ -87,37 +86,40 @@ class _GeocodingPageState extends State<GeocodingPage> {
   final Mode _mode = Mode.overlay;
 
   Future _searchPlaces() async {
-    place.Prediction? p = await PlacesAutocomplete.show(
-        context: context,
-        apiKey: dotenv.get('GOOGLE_MAP_KEY'),
-        onError: onError,
-        mode: _mode,
-        language: 'kr',
-        strictbounds: false,
-        types: [""],
-        decoration: const InputDecoration(
-          hintText: 'Search',
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            borderSide: BorderSide(width: 2, color: Colors.grey),
-          ),
+    Prediction? p = await PlacesAutocomplete.show(
+      context: context,
+      apiKey: dotenv.get('GOOGLE_MAP_KEY'),
+      onError: onError,
+      mode: _mode,
+      language: 'kr',
+      strictbounds: false,
+      types: [],
+      decoration: const InputDecoration(
+        hintText: 'Search',
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          borderSide: BorderSide(width: 2, color: Colors.white),
         ),
-        components: [place.Component(place.Component.country, "kr")]);
+      ),
+      components: [Component(Component.country, "kr")],
+      region: "kr",
+      logo: Column(),
+      offset: 0,
+    );
     if (p != null) {
       displayPrediction(p);
     }
   }
 
-  void onError(place.PlacesAutocompleteResponse response) {
+  void onError(PlacesAutocompleteResponse response) {
     print("${response.errorMessage}");
   }
 
-  Future displayPrediction(place.Prediction p) async {
-    place.GoogleMapsPlaces places = place.GoogleMapsPlaces(
+  Future displayPrediction(Prediction p) async {
+    GoogleMapsPlaces places = GoogleMapsPlaces(
         apiKey: dotenv.get('GOOGLE_MAP_KEY'),
         apiHeaders: await const GoogleApiHeaders().getHeaders());
-    place.PlacesDetailsResponse detail =
-        await places.getDetailsByPlaceId(p.placeId!);
+    PlacesDetailsResponse detail = await places.getDetailsByPlaceId(p.placeId!);
 
     final lat = detail.result.geometry!.location.lat;
     final lng = detail.result.geometry!.location.lng;

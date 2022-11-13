@@ -9,5 +9,8 @@ A new Flutter project.
 
 # API key 설정
 1. my-diary-front\android\local.properties 수정
-
 2. my-diary-front\.env 추가
+
+# null safety 허용
+1. Run → Edit Configurations 에 들어간다
+2. Additional run args : --no-sound-null-safety
