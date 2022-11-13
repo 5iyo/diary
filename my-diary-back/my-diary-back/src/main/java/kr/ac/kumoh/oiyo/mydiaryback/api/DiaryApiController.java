@@ -68,13 +68,12 @@ public class DiaryApiController {
     @GetMapping("/api/diaries/{id}/inquiry-diary-list")
     public ResponseEntity inquiryDiaryList(@PathVariable("id") Long travelId) {
 
-        Travel findTravel = travelService.findOne(travelId);
+        Travel findTravel = travelService.findTravel(travelId);
 
-        List<Diary> diaries = diaryService.readDiaryList(travelId);
+        List<Diary> diaries = findTravel.getDiaries();
 
         List<DiariesDto> collect = diaries.stream()
-                .map(d -> new DiariesDto(d.getId(), d.getTitle(), d.getTravelDate()
-                        , d.getTravelDestination(), d.getWeather()))
+                .map(DiariesDto::new)
                 .collect(Collectors.toList());
 
         String travelTitle = findTravel.getTravelTitle();
@@ -193,6 +192,14 @@ public class DiaryApiController {
         private LocalDate travelDate;
         private String travelDestination;
         private String weather;
+
+        public DiariesDto(Diary diary) {
+            diaryId = diary.getId();
+            title = diary.getTitle();
+            travelDate = diary.getTravelDate();
+            travelDestination = diary.getTravelDestination();
+            weather = diary.getWeather();
+        }
     }
 
     @Data

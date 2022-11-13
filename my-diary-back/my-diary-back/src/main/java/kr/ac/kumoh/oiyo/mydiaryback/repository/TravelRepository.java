@@ -27,6 +27,12 @@ public class TravelRepository {
         return em.find(Travel.class, travelId);
     }
 
+    public Travel findTravel(Long travelId) {
+        return em.createQuery("select t from Travel t join fetch t.diaries where t.id = :travelId", Travel.class)
+                .setParameter("travelId", travelId)
+                .getSingleResult();
+    }
+
     /**
      * 사용자의 모든 여행 조회
      * 로그인하고 지도에 여행지 마커 표시할 때 사용

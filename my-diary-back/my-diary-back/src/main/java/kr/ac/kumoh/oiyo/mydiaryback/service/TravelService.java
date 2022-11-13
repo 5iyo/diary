@@ -24,6 +24,10 @@ public class TravelService {
         return travelRepository.findOne(travelId);
     }
 
+    public Travel findTravel(Long travelId) {
+        return travelRepository.findTravel(travelId);
+    }
+
     /**
      * 사용자의 모든 여행 조회
      * 로그인하고 지도에 여행지 마커 표시할 때 사용
