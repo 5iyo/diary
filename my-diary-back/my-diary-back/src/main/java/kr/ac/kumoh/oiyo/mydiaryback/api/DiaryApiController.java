@@ -29,8 +29,6 @@ public class DiaryApiController {
 
     private final TravelService travelService;
 
-    private final DiaryImageService diaryImageService;
-
     // 일기 생성 api
     @PostMapping("/api/diaries/{id}")
     public ResponseEntity saveDiary(@PathVariable("id") Long travelId, @RequestBody @Valid CreateDiaryRequest request) {
