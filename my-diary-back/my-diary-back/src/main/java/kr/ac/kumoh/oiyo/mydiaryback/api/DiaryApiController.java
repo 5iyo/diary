@@ -114,9 +114,9 @@ public class DiaryApiController {
 
         diaryService.update(diaryId, title, travelDate, mainText, weather, travelDestination, lastModifiedDate);
 
-        Diary findDiary = diaryService.findOne(diaryId);
+        Diary findDiary = diaryService.findDiary(diaryId);
 
-        List<DiaryImage> images = diaryImageService.inquiryImagesByDiary(diaryId);
+        List<DiaryImage> images = findDiary.getDiaryImages();
 
         List<DiaryImageDto> collect = images.stream()
                 .map(di -> new DiaryImageDto(di.getId(), di.getImageFile()))
