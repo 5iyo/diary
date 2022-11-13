@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:my_diary_front/diaryImagePage.dart';
 import 'package:my_diary_front/diaryInfoPage.dart';
+import 'package:my_diary_front/geocodingPage.dart';
 import 'package:my_diary_front/homePage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -26,11 +27,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
-      initialRoute: '/HomePage',
+      initialRoute: '/geocodingPage',
       routes: {
         '/HomePage': (context) => HomePage(),
         '/diaryInfoPage': (context) => DiaryInfoPage(),
         '/diaryImagePage': (context) => DiaryImagePage(),
+        '/geocodingPage': (context) => GeocodingPage(),
       },
     );
   }

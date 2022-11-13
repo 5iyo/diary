@@ -13,6 +13,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   # google_map
   google_maps_flutter: ^2.2.1
+  flutter_google_places: ^0.3.0
   # location
   location: ^4.4.0
   # http
