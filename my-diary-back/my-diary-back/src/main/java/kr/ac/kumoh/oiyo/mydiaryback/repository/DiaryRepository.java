@@ -46,7 +46,7 @@ public class DiaryRepository {
      * @return 조회한 diary 엔티티 객체
      */
     public Diary findDiary(Long diaryId) {
-        return em.createQuery("select d from Diary d join fetch d.travel where d.id = :diaryId", Diary.class)
+        return em.createQuery("select d from Diary d join fetch d.diaryImages where d.id = :diaryId", Diary.class)
                 .setParameter("diaryId", diaryId)
                 .getSingleResult();
     }

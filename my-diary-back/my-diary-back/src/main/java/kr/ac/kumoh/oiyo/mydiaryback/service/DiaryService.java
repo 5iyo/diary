@@ -35,7 +35,7 @@ public class DiaryService {
      * @return
      */
     // 조회
-    public Diary readDiary(Long diaryId) {
+    public Diary findDiary(Long diaryId) {
 
         return diaryRepository.findDiary(diaryId);
     }

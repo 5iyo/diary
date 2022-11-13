@@ -89,10 +89,9 @@ public class DiaryApiController {
     // 특정 일기 조회 api
     @GetMapping("/api/diaries/{id}")
     public ResponseEntity inquiryDiary(@PathVariable("id") Long diaryId) {
-        Diary diary = diaryService.findOne(diaryId);
+        Diary diary = diaryService.findDiary(diaryId);
 
-        // 이미지 조회
-        List<DiaryImage> images = diaryImageService.inquiryImagesByDiary(diaryId);
+        List<DiaryImage> images = diary.getDiaryImages();
 
         List<DiaryImageDto> collect = images.stream()
                 .map(di -> new DiaryImageDto(di.getId(), di.getImageFile()))
