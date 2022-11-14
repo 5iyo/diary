@@ -59,7 +59,7 @@ public class Diary extends BaseEntity {
     }
 
     /* 연관관계 편의 메서드 */
-    public void setTravel(Travel travel) {
+    private void setTravel(Travel travel) {
         if (this.travel != null) {
             this.travel.getDiaries().remove(this);
         }
