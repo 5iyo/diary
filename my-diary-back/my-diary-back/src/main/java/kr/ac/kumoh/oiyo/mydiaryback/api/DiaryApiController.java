@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.Diary;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.DiaryImage;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.Travel;
-import kr.ac.kumoh.oiyo.mydiaryback.service.DiaryImageService;
 import kr.ac.kumoh.oiyo.mydiaryback.service.DiaryService;
 import kr.ac.kumoh.oiyo.mydiaryback.service.TravelService;
 import lombok.AllArgsConstructor;
@@ -44,10 +43,10 @@ public class DiaryApiController {
         List<String> images = request.getImages();
 
         for (String image : images) {
-            new DiaryImage(diary, image);
+            DiaryImage.createDiaryImage(diary, image);
         }
 
-        diaryService.saveDiary(diary);
+        diaryService.save(diary);
 
         CreateDiaryResponse createDiaryResponse = new CreateDiaryResponse(diary.getId());
 
