@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -19,12 +20,20 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  late Dio _dio;
+
+  @override
+  void initState() {
+    _dio = Dio(BaseOptions(baseUrl: dotenv.get('SERVER_URI')));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             'Sign In',
             style: TextStyle(color: Colors.grey),
           ),
@@ -179,20 +188,26 @@ class _SignInPageState extends State<SignInPage> {
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
-  Future<UserCredential> _kakaoSignIn() async {
+  Future _kakaoSignIn() async {
     final clientState = Uuid().v4();
     final url = Uri.https('kauth.kakao.com', '/oauth/authorize', {
       'response_type': 'code',
-      'client_id': dotenv.get('KAKAO_CLIENT_ID'), // Input Your Client_ID
-      'redirect_uri': dotenv.get('KAKAO_REDIRECT_URI'), //  Input Your Redirect URI
+      'client_id': dotenv.get('KAKAO_CLIENT_ID'),
+      // Input Your Client_ID
+      'redirect_uri': dotenv.get('KAKAO_REDIRECT_URI'),
+      //  Input Your Redirect URI
       'state': clientState,
     });
-    final result = await FlutterWebAuth.authenticate(
+    final authResponse = await FlutterWebAuth.authenticate(
         url: url.toString(), callbackUrlScheme: "webauthcallback");
 
-    final params = Uri.parse(result).queryParameters;
+    final code = Uri.parse(authResponse).queryParameters['code'];
+
+    final response = await _dio.request('/kakao/login',
+        data: {code: code}, options: Options(method: 'POST'));
+/*    final params = Uri.parse(authResponse).queryParameters;
     print(params);
     return await FirebaseAuth.instance
-        .signInWithCustomToken(params['customToken']!);
+        .signInWithCustomToken(params['customToken']!);*/
   }
 }
