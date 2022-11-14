@@ -1,7 +1,6 @@
 package kr.ac.kumoh.oiyo.mydiaryback.service;
 
 import kr.ac.kumoh.oiyo.mydiaryback.domain.Diary;
-import kr.ac.kumoh.oiyo.mydiaryback.repository.DiaryImageRepository;
 import kr.ac.kumoh.oiyo.mydiaryback.repository.DiaryRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -18,11 +17,9 @@ public class DiaryService {
 
     private final DiaryRepository diaryRepository;
 
-    private final DiaryImageRepository diaryImageRepository;
-
     // 저장
     @Transactional
-    public Long saveDiary(Diary diary) {
+    public Long save(Diary diary) {
         diaryRepository.save(diary);
         return diary.getId();
     }
