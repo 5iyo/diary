@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:my_diary_front/view/pages/post/travel_list_page.dart';
+import 'package:my_diary_front/view/pages/post/write_page.dart';
+import 'package:my_diary_front/view/pages/user/user_info.dart';
+import 'package:get/get.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -28,10 +32,7 @@ class _MapPageState extends State<MapPage> {
               position: coordinate,
               markerId: MarkerId((id).toString()),
               onTap: () {
-                Navigator.pushNamed(
-                    context,
-                    '/diaryPage'
-                );
+                Get.to(()=>TravelListPage());
               }
           )
       );
@@ -56,6 +57,50 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Diary"),
+        centerTitle: true,
+        elevation: 0.0,
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: AssetImage('img/핑구.png'),
+              ),
+              accountName: Text('Pingu'),
+              accountEmail: Text('pingu@pingu.com'),
+              onDetailsPressed: (){
+                print('arrow is clicked');
+              },
+              decoration: BoxDecoration(
+                  color: Colors.blueGrey[400]
+              ),
+            ),
+            ListTile(
+              title: Text('회원 정보 보기'),
+              onTap: () {
+                Navigator.pop(context);
+                Get.to(()=>UserInfo());
+              },
+            ),
+            ListTile(
+              title: Text('일기쓰기'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context)=>WritePage())
+                );
+              },
+            ),
+            ListTile(
+              title: Text('로그아웃'),
+            )
+          ],
+        ),
+      ),
       body: GoogleMap(
         initialCameraPosition: _initialPosition,
         mapType: MapType.hybrid,

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:my_diary_front/diaryImagePage.dart';
-import 'package:my_diary_front/diaryInfoPage.dart';
+import 'package:my_diary_front/view/pages/post/diaryImagePage.dart';
+import 'package:my_diary_front/view/pages/post/diaryInfoPage.dart';
 import 'package:my_diary_front/signInPage.dart';
-import 'mapPage.dart';
+import 'view/pages/post/mapPage.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -14,12 +15,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primaryColor: Colors.white,
+        primarySwatch: Colors.blueGrey,
       ),
-      initialRoute: '/signInPage',
+      initialRoute: '/mapPage',
       routes: {
         '/signInPage': (context) => SignInPage(),
         '/mapPage': (context) => MapPage(),
