@@ -14,6 +14,7 @@ dependencies:
   # google_map
   google_maps_flutter: ^2.2.1
   flutter_google_places: ^0.3.0
+  google_maps_cluster_manager: ^3.0.0+1
   # location
   location: ^4.4.0
   # http

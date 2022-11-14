@@ -5,6 +5,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 
+// cluster manager : http://47.240.41.80/packages/google_maps_cluster_manager/example
+
 class GeocodingPage extends StatefulWidget {
   const GeocodingPage({Key? key}) : super(key: key);
 
@@ -69,17 +71,6 @@ class _GeocodingPageState extends State<GeocodingPage> {
       markers: markers.toSet(),
       zoomControlsEnabled: false,
       mapToolbarEnabled: false,
-      // 클릭한 위치가 중앙에 표시
-/*        onCameraMove: (position) {
-          if ((position.target.longitude < 131.5222 &&
-                  position.target.longitude > 124.1051) &&
-              (position.target.latitude < 43.0042 &&
-                  position.target.latitude > 33.0643)) {
-            print("${position.target.latitude}, ${position.target.longitude}");
-          } else {
-            print("${position.target.latitude}, ${position.target.longitude}");
-          }
-        }*/
     );
   }
 

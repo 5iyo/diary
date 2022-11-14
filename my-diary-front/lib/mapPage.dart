@@ -47,7 +47,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
     setState(() {
       markers.add(Marker(
         position: coordinate,
-        markerId: MarkerId((id).toString()),
+        markerId: MarkerId((id++).toString()),
         infoWindow: infoWindow,
       ));
     });
@@ -68,6 +68,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: _buildAppBar(),
@@ -80,8 +81,9 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
   AppBar _buildAppBar() {
     return AppBar(
       title: const Text(
-        '로그인',
+        'OIYO My Diary',
       ),
+      centerTitle: true,
       leading: Builder(builder: (context) {
         return IconButton(
           onPressed: () {
@@ -90,6 +92,14 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
           icon: const Icon(Icons.menu),
         );
       }),
+      actions: [
+        IconButton(
+            onPressed: () {
+              _controller.animateCamera(
+                  CameraUpdate.newCameraPosition(_initialPosition));
+            },
+            icon: const Icon(Icons.refresh))
+      ],
     );
   }
 
@@ -178,9 +188,14 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
       mapToolbarEnabled: false,
       // 클릭한 위치가 중앙에 표시
       onTap: (coordinate) {
+        addMarker(coordinate,InfoWindow());
         FocusScope.of(context).unfocus();
         _controller.animateCamera(CameraUpdate.newLatLng(coordinate));
       },
+      cameraTargetBounds: CameraTargetBounds(LatLngBounds(
+          southwest: LatLng(33.0643, 124.3636),
+          northeast: LatLng(38.3640, 131.5222))),
+      minMaxZoomPreference: const MinMaxZoomPreference(7.0, 15.0),
     );
   }
 
