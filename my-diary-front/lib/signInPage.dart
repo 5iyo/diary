@@ -22,7 +22,7 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   void initState() {
-    _dio = Dio(BaseOptions(baseUrl: dotenv.get('SERVER_URI')));
+    _dio = Dio(BaseOptions(baseUrl: dotenv.get('SERVER_URI'), contentType: 'application/x-www-form-urlencoded'));
     super.initState();
   }
 
@@ -190,26 +190,7 @@ class _SignInPageState extends State<SignInPage> {
     String authCode = await AuthCodeClient.instance.request();
     print("response : " + authCode);
     final response = await _dio.request('/kakao/login',
-        data: {'code': authCode}, options: Options(method: 'POST'));
-/*    final clientState = Uuid().v4();
-    final url = Uri.https('kauth.kakao.com', '/oauth/authorize', {
-      'response_type': 'code',
-      'client_id': dotenv.get('KAKAO_CLIENT_ID'),
-      // Input Your Client_ID
-      'redirect_uri': dotenv.get('KAKAO_REDIRECT_URI'),
-      //  Input Your Redirect URI
-      'state': clientState,
-    });
-    final authResponse = await FlutterWebAuth.authenticate(
-        url: url.toString(), callbackUrlScheme: "webauthcallback");
-
-    final code = Uri.parse(authResponse).queryParameters['code'];
-
-    final response = await _dio.request('/kakao/login',
-        data: {code: code}, options: Options(method: 'POST'));*/
-/*    final params = Uri.parse(authResponse).queryParameters;
-    print(params);
-    return await FirebaseAuth.instance
-        .signInWithCustomToken(params['customToken']!);*/
+        data: {'code':authCode}, options: Options(method: 'POST'));
+    print(response);
   }
 }
