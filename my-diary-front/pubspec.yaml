@@ -36,6 +36,13 @@ dependencies:
   # floating action bubble
   floating_action_bubble: ^1.1.4
 
+  get: ^4.6.5
+  validators: ^3.0.0
+  http: ^0.13.5
+  intl: ^0.17.0
+  syncfusion_flutter_datepicker: ^20.3.56
+  image_picker: ^0.8.6
+  dotted_border: ^2.0.0+3
 
 dev_dependencies:
   flutter_test:
@@ -51,3 +58,4 @@ flutter:
     - img/naver_icon.png
     - img/kakao_icon.png
     - img/google_icon.png
+    - img/핑구.png
