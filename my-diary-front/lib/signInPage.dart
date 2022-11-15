@@ -187,10 +187,16 @@ class _SignInPageState extends State<SignInPage> {
   }*/
 
   Future _kakaoSignIn() async {
-    String authCode = await AuthCodeClient.instance.request();
+    print("####???????####");
+    OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
+    print("####AccessToken####" + token.accessToken);
+    final response = await _dio.request('/kakao/login',
+        data: {'accessToken':token.accessToken}, options: Options(method: 'POST'));
+    print(response);
+/*    String authCode = await AuthCodeClient.instance.request();
     print("response : " + authCode);
     final response = await _dio.request('/kakao/login',
         data: {'code':authCode}, options: Options(method: 'POST'));
-    print(response);
+    print(response);*/
   }
 }
