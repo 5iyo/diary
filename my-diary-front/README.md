@@ -4,13 +4,14 @@ A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+# 안드로이드 sdk 버전 설정
+1. C:\src\flutter\packages\flutter_tools\gradle\flutter.gradle 수정
 
-A few resources to get you started if this is your first Flutter project:
+# API key 설정
+1. my-diary-front\android\local.properties 수정
+2. my-diary-front\android\app\google-services.json 추가
+3. my-diary-front\.env 추가
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# null safety 허용
+1. Run → Edit Configurations 에 들어간다
+2. Additional run args : --no-sound-null-safety
