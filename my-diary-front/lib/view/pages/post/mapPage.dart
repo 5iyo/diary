@@ -1,12 +1,15 @@
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
+import 'package:location/location.dart' as loc;
 import 'package:my_diary_front/view/pages/post/travel_list_page.dart';
 import 'package:my_diary_front/view/pages/post/write_page.dart';
 import 'package:my_diary_front/view/pages/user/user_info.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_webservice/places.dart';
+import 'package:google_api_headers/google_api_headers.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -152,9 +155,6 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
           )
         ],
       ),
-    ),
-        ],
-      ),
     );
   }
 
@@ -218,6 +218,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
           titleStyle: TextStyle(fontSize: 16, color: Colors.white),
           onPress: () {
             _animationController.reverse();
+            _searchPlaces();
           },
         ),
       ],
@@ -256,8 +257,39 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
           borderSide: BorderSide(width: 2, color: Colors.white),
         ),
-        backgroundColor: Colors.white,
       ),
+      components: [Component(Component.country, "kr")],
+      region: "kr",
+      logo: Column(),
+      offset: 0,
     );
+    if (p != null) {
+      displayPrediction(p);
+    }
+  }
+
+  void onError(PlacesAutocompleteResponse response) {
+    print("${response.errorMessage}");
+  }
+
+  Future displayPrediction(Prediction p) async {
+    GoogleMapsPlaces places = GoogleMapsPlaces(
+        apiKey: dotenv.get('GOOGLE_MAP_KEY'),
+        apiHeaders: await const GoogleApiHeaders().getHeaders());
+    PlacesDetailsResponse detail = await places.getDetailsByPlaceId(p.placeId!);
+
+    final lat = detail.result.geometry!.location.lat;
+    final lng = detail.result.geometry!.location.lng;
+
+    addMarker(
+        LatLng(lat, lng),
+        InfoWindow(
+            title: detail.result.name,
+            onTap: () {
+              Navigator.pushNamed(context, '/diaryInfoPage');
+            }));
+
+    _controller
+        .animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lng), 14.0));
   }
 }

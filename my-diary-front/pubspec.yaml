@@ -22,15 +22,12 @@ dependencies:
   #swipe animation
   flutter_swiper: ^1.1.6
   swipe_cards: ^1.0.0
-  # firebase_google
+  # google login
   google_sign_in: ^5.4.2
-  # firebase
-  firebase_core: ^2.1.1
-  firebase_auth: ^4.1.1
-  # firebase_kakao
-  flutter_web_auth: ^0.5.0
-  uuid: ^3.0.6
+  # kakao login
   flutter_secure_storage: ^6.0.0
+  kakao_flutter_sdk: ^1.2.2
+
   # .env
   flutter_dotenv: ^5.0.2
   # floating action bubble
@@ -38,11 +35,11 @@ dependencies:
 
   get: ^4.6.5
   validators: ^3.0.0
-  http: ^0.13.5
   intl: ^0.17.0
   syncfusion_flutter_datepicker: ^20.3.56
   image_picker: ^0.8.6
   dotted_border: ^2.0.0+3
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:

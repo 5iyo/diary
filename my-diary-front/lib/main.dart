@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:my_diary_front/diaryImagePage.dart';
-import 'package:my_diary_front/diaryInfoPage.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:my_diary_front/geocodingPage.dart';
 import 'package:my_diary_front/homePage.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:my_diary_front/mapPage.dart';
 import 'package:my_diary_front/view/pages/post/diaryImagePage.dart';
 import 'package:my_diary_front/view/pages/post/diaryInfoPage.dart';
 import 'package:my_diary_front/signInPage.dart';
@@ -13,6 +10,9 @@ import 'view/pages/post/mapPage.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
+  KakaoSdk.init(nativeAppKey: dotenv.get("KAKAO_CLIENT_ID"));
   runApp(const MyApp());
 }
 
@@ -33,9 +33,9 @@ class MyApp extends StatelessWidget {
               elevation: 0.0,
               titleTextStyle:
                   TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
-      initialRoute: '/mapPage',
+      initialRoute: '/signInPage',
       routes: {
-        '/homePage': (context) => HomePage(),
+//        '/homePage': (context) => HomePage(),
         '/signInPage': (context) => SignInPage(),
         '/mapPage': (context) => MapPage(),
         '/diaryInfoPage': (context) => DiaryInfoPage(),

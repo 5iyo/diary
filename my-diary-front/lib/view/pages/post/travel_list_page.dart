@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
-const host = "http://192.168.20.3:8080";
+const host = "http://10.0.2.2:8080";
 
 
 Future<DiaryList> fetchTravelList(int id) async {

@@ -15,7 +15,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
-const host = "http://192.168.25.38:8080";
+const host = "http://202.31.200.143:8080";
 
 Future <WriteResp> save(int id, String title, String date, String content, String weather, String travel, List<String> images) async{
   WriteReq writereq = WriteReq(title, date, content, weather, travel, images);

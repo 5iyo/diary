@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
-const host = "http://192.168.20.3:8080";
+const host = "http://202.31.200.143:8080";
 
 Future<Diary> fetchDiary(int id) async {
   var url = '$host/api/diaries/$id';
