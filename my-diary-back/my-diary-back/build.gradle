@@ -21,6 +21,7 @@ dependencies {
     compileOnly("org.springframework.boot:spring-boot-devtools")
     implementation 'org.projectlombok:lombok'
     implementation 'com.google.firebase:firebase-admin:9.1.0'
+    annotationProcessor 'org.projectlombok:lombok:'
 }
 
 tasks.named('test') {
