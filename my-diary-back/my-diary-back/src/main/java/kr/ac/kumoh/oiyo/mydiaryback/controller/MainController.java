@@ -1,9 +1,11 @@
 package kr.ac.kumoh.oiyo.mydiaryback.controller;
 
 
+import kr.ac.kumoh.oiyo.mydiaryback.repository.GoogleDTO;
 import kr.ac.kumoh.oiyo.mydiaryback.repository.KakaoDTO;
 import kr.ac.kumoh.oiyo.mydiaryback.repository.NaverDTO;
 import kr.ac.kumoh.oiyo.mydiaryback.repository.User;
+import kr.ac.kumoh.oiyo.mydiaryback.service.GoogleService;
 import kr.ac.kumoh.oiyo.mydiaryback.service.KakaoService;
 import kr.ac.kumoh.oiyo.mydiaryback.service.NaverService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +19,14 @@ import java.util.Map;
 
 @Controller
 public class MainController {
+
     @Autowired
     KakaoService kakaoService;
     @Autowired
     NaverService naverService;
+
+    @Autowired
+    GoogleService googleService;
 
     @RequestMapping("test")
     @ResponseBody
@@ -31,10 +37,8 @@ public class MainController {
     @RequestMapping("kakao/login")
     @ResponseBody
     public User kakaoSignIn(@RequestParam("code") String code) {
-//        String accessToken = kakaoService.getAccessKakaoToken(code);
-
         Map<String,Object> userInfo = kakaoService.getKakaoUserInfo(code);
-//        System.out.println("###access_Token#### : " + accessToken);
+//        System.out.println("###access_Token#### : " + code);
         String name = userInfo.get("nickname").toString();
         String email = userInfo.get("email").toString();
 
@@ -61,10 +65,8 @@ public class MainController {
     @RequestMapping("naver/login")
     @ResponseBody
     public User naverSignIn(@RequestParam("code") String code) {
-//        String accessToken = kakaoService.getAccessKakaoToken(code);
-
         Map<String,Object> userInfo = naverService.getNaverUserInfo(code);
-//        System.out.println("###access_Token#### : " + accessToken);
+//        System.out.println("###access_Token#### : " + code);
         String name = userInfo.get("name").toString();
         String email = userInfo.get("email").toString();
 
@@ -72,22 +74,43 @@ public class MainController {
         System.out.println("###email#### : " + email);
         System.out.println("###id#### ; " + userInfo.get("id"));
 
-//        토큰에서 받은 정보로 KakaoDTO build
+//        토큰에서 받은 정보로 NaverDTO build
         NaverDTO naverDTO = NaverDTO.builder()
-                .N_name(name)
-                .N_email(email)
+                .n_name(name)
+                .n_email(email)
                 .build();
 
-//        카카오로 회원가입 처리
+//        네이버로 회원가입 처리
         User naverUser = naverService.registerNaverUserIfNeed(naverDTO);
 
 //        강제 로그인 처리
-//        Authentication authentication = naverService.forceLogin(naverUser);
-
 
         return naverUser;
     }
 
+    @RequestMapping("google/login")
+    @ResponseBody
+    public User googleSignIn(@RequestParam("code") String code) {
+        Map<String,Object> userInfo = googleService.getGoogleUserInfo(code);
+//        System.out.println("###access_Token#### : " + code);
+        String name = userInfo.get("nickname").toString();
+        String email = userInfo.get("email").toString();
 
+        System.out.println("###nickname#### : " + name);
+        System.out.println("###email#### : " + email);
+        System.out.println("###id#### ; " + userInfo.get("id"));
 
+//        토큰에서 받은 정보로 GoogleDTO build
+        GoogleDTO googleDTO = GoogleDTO.builder()
+                .g_name(name)
+                .g_email(email)
+                .build();
+
+//        구글로 회원가입 처리
+        User googleUser = googleService.registerGoogleUserIfNeed(googleDTO);
+        
+//        강제 로그인 처리
+
+        return googleUser;
+    }
 }
