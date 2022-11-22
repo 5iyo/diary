@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class NaverDTO {
-    private String N_name;
-    private String N_email;
+    private String n_name;
+    private String n_email;
 
 }

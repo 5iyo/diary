@@ -38,7 +38,7 @@ public class KakaoService {
 
 //    인가 코드를 받아서 카카오에 AccessToken을 요청하고,
 //    전달 받은 AccessToken을 return한다.
-    public String getAccessKakaoToken(String authorize_code){
+    public String getAccessKakaoToken(String authorizeCode){
         String access_Token = "";
         String refresh_Token = "";
         String reqURL = "https://kauth.kakao.com/oauth/token";
@@ -57,7 +57,7 @@ public class KakaoService {
             sb.append("grant_type=authorization_code");
             sb.append("&client_id="+CLIENT_ID);
             sb.append("&redirect_uri="+REDIRECT_URI);
-            sb.append("&code="+authorize_code);
+            sb.append("&code="+authorizeCode);
             bw.write(sb.toString());
             bw.flush();
 
@@ -93,7 +93,7 @@ public class KakaoService {
     }
 
 //    AccessToken을 받아서 User정보를 획득하고 return한다.
-    public Map<String, Object> getKakaoUserInfo(String access_Token){
+    public Map<String, Object> getKakaoUserInfo(String accessToken){
         //요청하는 클라이언트마다 가진 정보가 다를 수 있기에 HashMap을 사용
         Map<String,Object> userInfo = new HashMap<>();
         String reqURL = "https://kapi.kakao.com/v2/user/me";
@@ -103,7 +103,7 @@ public class KakaoService {
             conn.setRequestMethod("GET");
 
             //요청에 필요한 Header에 포함될 내용
-            conn.setRequestProperty("Authorization", "Bearer " + access_Token);
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
 
             int responseCode = conn.getResponseCode();
             System.out.println("responseCode : " + responseCode);
@@ -134,7 +134,7 @@ public class KakaoService {
         return userInfo;
     }
 
-    public String kakaoLogout(String access_Token) {
+    public String kakaoLogout(String accessToken) {
         String reqURL = "https://kapi.kakao.com/v1/user/logout";
         try{
             URL url = new URL(reqURL);
@@ -146,7 +146,7 @@ public class KakaoService {
             conn.setDoOutput(true);
 
 //            요청에 필요한 Header에 포함될 내용
-             conn.setRequestProperty("Authorization", "Bearer "+access_Token);
+             conn.setRequestProperty("Authorization", "Bearer "+accessToken);
 
 //             결과 코드가 200이라면 성공
             int responseCode = conn.getResponseCode();
@@ -165,7 +165,7 @@ public class KakaoService {
         }catch (IOException e){
             e.printStackTrace();
         }
-        return access_Token;
+        return accessToken;
     }
 
     @Transactional

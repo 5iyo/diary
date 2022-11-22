@@ -29,7 +29,7 @@ public class NaverService {
     @Autowired
     private UserRepository userRepository;
 
-    public Map<String, Object> getNaverUserInfo(String access_Token){
+    public Map<String, Object> getNaverUserInfo(String accessToken){
         //요청하는 클라이언트마다 가진 정보가 다를 수 있기에 HashMap을 사용
         Map<String,Object> userInfo = new HashMap<>();
         String reqURL = "https://openapi.naver.com/v1/nid/me";
@@ -39,7 +39,7 @@ public class NaverService {
             conn.setRequestMethod("GET");
 
             //요청에 필요한 Header에 포함될 내용
-            conn.setRequestProperty("Authorization", "Bearer " + access_Token);
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
 
             int responseCode = conn.getResponseCode();
             System.out.println("responseCode : " + responseCode);
