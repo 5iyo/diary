@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
@@ -130,7 +131,7 @@ class _SignInPageState extends State<SignInPage> {
                               height: 50,
                               fit: BoxFit.fitHeight,
                             ),
-                            onPressed: () {},
+                            onPressed: () => _naverSignIn(),
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
                                 elevation: 0.0),
@@ -152,7 +153,7 @@ class _SignInPageState extends State<SignInPage> {
                               height: 50,
                               fit: BoxFit.fitHeight,
                             ),
-                            onPressed: () {},//=> _googleSignIn(),
+                            onPressed: () => _googleSignIn(),//=> _googleSignIn(),
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
                                 elevation: 0.0),
@@ -168,28 +169,43 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-/*  Future<UserCredential> _googleSignIn() async {
+  Future _googleSignIn() async {
     // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
+    final GoogleSignInAccount? account = await GoogleSignIn().signIn();
     // Obtain the auth details from the request
     final GoogleSignInAuthentication googleAuth =
-        await googleUser!.authentication;
-
+        await account!.authentication;
+    print("####AccessToken####${googleAuth.accessToken}");
     // Create a new credential
-    final credential = GoogleAuthProvider.credential(
+    final response = await _dio.request('/google/login',
+        data: {'accessToken':googleAuth.accessToken}, options: Options(method: 'POST'));
+/*    final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
-    );
+    );*/
+  }
 
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
-  }*/
+  Future _naverSignIn() async {
+    // Trigger the authentication flow
+    NaverAccessToken res = await FlutterNaverLogin.currentAccessToken;
+    if(res.accessToken == ""){
+      final NaverLoginResult result = await FlutterNaverLogin.logIn();
+      res = await FlutterNaverLogin.currentAccessToken;
+    }
+    print("####AccessToken####${res.accessToken}");
+    // Create a new credential
+    final response = await _dio.request('/naver/login',
+        data: {'accessToken':res.accessToken}, options: Options(method: 'POST'));
+/*    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );*/
+  }
 
   Future _kakaoSignIn() async {
     print("####???????####");
     OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
-    print("####AccessToken####" + token.accessToken);
+    print("####AccessToken####${token.accessToken}");
     final response = await _dio.request('/kakao/login',
         data: {'accessToken':token.accessToken}, options: Options(method: 'POST'));
     print(response);

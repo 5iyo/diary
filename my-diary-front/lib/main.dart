@@ -13,6 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   KakaoSdk.init(nativeAppKey: dotenv.get("KAKAO_CLIENT_ID"));
+  
   runApp(const MyApp());
 }
 
