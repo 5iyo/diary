@@ -49,6 +49,7 @@ public class MainController {
         KakaoDTO kakaoDTO = KakaoDTO.builder()
                 .k_name(name)
                 .k_email(email)
+                .k_image(image)
                 .build();
 
 //        카카오로 회원가입 처리
