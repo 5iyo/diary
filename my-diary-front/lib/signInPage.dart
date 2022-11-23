@@ -1,4 +1,5 @@
-import 'package:dio/dio.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_naver_login/flutter_naver_login.dart';
@@ -6,6 +7,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:my_diary_front/data.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -21,12 +24,10 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  late Dio _dio;
   late DiaryStream _diaryStream;
 
   @override
   void initState() {
-    _dio = Dio(BaseOptions(baseUrl: dotenv.get('SERVER_URI'), contentType: 'application/x-www-form-urlencoded'));
     super.initState();
   }
 
@@ -117,7 +118,7 @@ class _SignInPageState extends State<SignInPage> {
                       )),
                   Padding(
                       padding:
-                          const EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 20.0),
+                      const EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 20.0),
                       child: Container(
                         height: 1.0,
                         width: 500.0,
@@ -125,7 +126,7 @@ class _SignInPageState extends State<SignInPage> {
                       )),
                   Padding(
                       padding:
-                          const EdgeInsets.fromLTRB(50.0, 20.0, 50.0, 20.0),
+                      const EdgeInsets.fromLTRB(50.0, 20.0, 50.0, 20.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -178,13 +179,15 @@ class _SignInPageState extends State<SignInPage> {
     final GoogleSignInAccount? account = await GoogleSignIn().signIn();
     // Obtain the auth details from the request
     final GoogleSignInAuthentication googleAuth =
-        await account!.authentication;
+    await account!.authentication;
     print("####AccessToken####${googleAuth.accessToken}");
     // Create a new credential
-    final response = await _dio.request('/google/login',
-        data: {'accessToken':googleAuth.accessToken}, options: Options(method: 'POST'));
-    _diaryStream.addEvent(response.toString());
-    print("####Response####$response");
+    Uri url = Uri.parse('${dotenv.get('SERVER_URI')}/google/login');
+    await http.post(url, body: {"accessToken" : googleAuth.accessToken}).then((value) {
+      final response = jsonDecode(utf8.decode(value.bodyBytes)) as Map;
+      _diaryStream.addEvent(response.toString());
+      print("####Response####$response");
+    });
 /*    final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
@@ -205,10 +208,12 @@ class _SignInPageState extends State<SignInPage> {
     }
     print("####AccessToken####${res.accessToken}");
     // Create a new credential
-    final response = await _dio.request('/naver/login',
-        data: {'accessToken':res.accessToken}, options: Options(method: 'POST'));
-    _diaryStream.addEvent(response.toString());
-    print("####Response####$response");
+    Uri url = Uri.parse('${dotenv.get('SERVER_URI')}/naver/login');
+    await http.post(url, body: {"accessToken" : res.accessToken}).then((value) {
+      final response = jsonDecode(utf8.decode(value.bodyBytes)) as Map;
+      _diaryStream.addEvent(response.toString());
+      print("####Response####$response");
+    });
 /*    final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
@@ -218,10 +223,12 @@ class _SignInPageState extends State<SignInPage> {
   Future _kakaoSignIn() async {
     OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
     print("####AccessToken####${token.accessToken}");
-    final response = await _dio.request('/kakao/login',
-        data: {'accessToken':token.accessToken}, options: Options(method: 'POST'));
-    _diaryStream.addEvent(response.toString());
-    print("####Response####$response");
+    Uri url = Uri.parse('${dotenv.get('SERVER_URI')}/kakao/login');
+    await http.post(url, body: {"accessToken" : token.accessToken}).then((value) {
+      final response = jsonDecode(utf8.decode(value.bodyBytes)) as Map;
+      _diaryStream.addEvent(response.toString());
+      print("####Response####$response");
+    });
 /*    String authCode = await AuthCodeClient.instance.request();
     print("response : " + authCode);
     final response = await _dio.request('/kakao/login',
