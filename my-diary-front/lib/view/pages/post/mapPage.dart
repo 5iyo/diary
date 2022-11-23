@@ -4,12 +4,14 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
+import 'package:my_diary_front/data.dart';
 import 'package:my_diary_front/view/pages/post/travel_list_page.dart';
 import 'package:my_diary_front/view/pages/post/write_page.dart';
 import 'package:my_diary_front/view/pages/user/user_info.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
+import 'package:provider/provider.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -19,6 +21,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
+  late MainViewModel _mainViewModel;
   // 애플리케이션에서 지도를 이동하기 위한 컨트롤러
   late GoogleMapController _controller;
   int id = 1;
@@ -80,7 +83,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-
+    _mainViewModel = Provider.of<MainViewModel>(context, listen: true);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: _buildAppBar(),
@@ -125,8 +128,8 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
             currentAccountPicture: CircleAvatar(
               backgroundImage: AssetImage('img/핑구.png'),
             ),
-            accountName: Text('Pingu'),
-            accountEmail: Text('pingu@pingu.com'),
+            accountName: Text(_mainViewModel.diaryUser!.name),
+            accountEmail: Text(_mainViewModel.diaryUser!.email),
             onDetailsPressed: (){
               print('arrow is clicked');
             },
@@ -152,6 +155,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
           ),
           ListTile(
             title: Text('로그아웃'),
+            onTap: () => _mainViewModel.logout(),
           )
         ],
       ),

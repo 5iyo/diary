@@ -10,7 +10,6 @@ import 'package:my_diary_front/signInPage.dart';
 import 'view/pages/post/mapPage.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:provider/provider.dart';
-import 'package:my_diary_front/data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,8 +25,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return Provider<DiaryStream>.value(
-      value: DiaryStream().init(),
+    return Provider<MainViewModel>.value(
+      value: MainViewModel(),
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
