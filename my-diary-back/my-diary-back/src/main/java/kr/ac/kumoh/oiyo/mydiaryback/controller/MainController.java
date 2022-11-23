@@ -32,7 +32,7 @@ public class MainController {
         return "연결성공";
     }
 
-    @RequestMapping("kakao/login")
+    @RequestMapping(value = "kakao/login", produces = "application/json;charset=utf8")
     @ResponseBody
     public User kakaoSignIn(@RequestParam("accessToken") String accessToken) {
         Map<String,Object> userInfo = kakaoService.getKakaoUserInfo(accessToken);
@@ -60,7 +60,7 @@ public class MainController {
         return kakaoUser;
     }
 
-    @RequestMapping("naver/login")
+    @RequestMapping(value = "naver/login", produces = "application/json;charset=utf8")
     @ResponseBody
     public User naverSignIn(@RequestParam("accessToken") String accessToken) {
         Map<String,Object> userInfo = naverService.getNaverUserInfo(accessToken);
@@ -86,7 +86,7 @@ public class MainController {
         return naverUser;
     }
 
-    @RequestMapping("google/login")
+    @RequestMapping(value = "google/login", produces = "application/json;charset=utf8")
     @ResponseBody
     public User googleSignIn(@RequestParam("accessToken") String accessToken) {
         Map<String,Object> userInfo = googleService.getGoogleUserInfo(accessToken);
