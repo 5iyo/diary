@@ -10,7 +10,7 @@ A new Flutter project.
 # API key 설정
 1. my-diary-front\android\local.properties 수정
 2. my-diary-front\android\app\google-services.json 추가
-3. my-diary-front\.env 추가
+3. my-diary-front\.env 추가 + .env 파일 SERVER_URI 본인 환경에 맞게 수정 필요
 
 # null safety 허용
 1. Run → Edit Configurations 에 들어간다
