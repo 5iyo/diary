@@ -25,9 +25,13 @@ dependencies:
   # google login
   google_sign_in: ^5.4.2
   # kakao login
-  flutter_secure_storage: ^6.0.0
   kakao_flutter_sdk: ^1.2.2
-
+  # naver login
+  flutter_naver_login: ^1.7.0
+  # secure storage
+  flutter_secure_storage: ^6.0.0
+  # provider
+  provider: ^6.0.4
   # .env
   flutter_dotenv: ^5.0.2
   # floating action bubble
@@ -40,7 +44,6 @@ dependencies:
   image_picker: ^0.8.6
   dotted_border: ^2.0.0+3
   http: ^0.13.5
-  flutter_naver_login: ^1.7.0
 
 dev_dependencies:
   flutter_test:

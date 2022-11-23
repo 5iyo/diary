@@ -4,6 +4,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:my_diary_front/data.dart';
+import 'package:provider/provider.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -20,6 +22,7 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   late Dio _dio;
+  late DiaryStream _diaryStream;
 
   @override
   void initState() {
@@ -29,6 +32,7 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
+    _diaryStream = Provider.of<DiaryStream>(context, listen: true);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -179,6 +183,8 @@ class _SignInPageState extends State<SignInPage> {
     // Create a new credential
     final response = await _dio.request('/google/login',
         data: {'accessToken':googleAuth.accessToken}, options: Options(method: 'POST'));
+    _diaryStream.addEvent(response.toString());
+    print("####Response####$response");
 /*    final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
@@ -188,14 +194,21 @@ class _SignInPageState extends State<SignInPage> {
   Future _naverSignIn() async {
     // Trigger the authentication flow
     NaverAccessToken res = await FlutterNaverLogin.currentAccessToken;
+    print(res);
     if(res.accessToken == ""){
-      final NaverLoginResult result = await FlutterNaverLogin.logIn();
+      if(res.refreshToken == "") {
+        final NaverLoginResult result = await FlutterNaverLogin.logIn();
+      } else {
+        await FlutterNaverLogin.refreshAccessTokenWithRefreshToken();
+      }
       res = await FlutterNaverLogin.currentAccessToken;
     }
     print("####AccessToken####${res.accessToken}");
     // Create a new credential
     final response = await _dio.request('/naver/login',
         data: {'accessToken':res.accessToken}, options: Options(method: 'POST'));
+    _diaryStream.addEvent(response.toString());
+    print("####Response####$response");
 /*    final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
@@ -203,12 +216,12 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Future _kakaoSignIn() async {
-    print("####???????####");
     OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
     print("####AccessToken####${token.accessToken}");
     final response = await _dio.request('/kakao/login',
         data: {'accessToken':token.accessToken}, options: Options(method: 'POST'));
-    print(response);
+    _diaryStream.addEvent(response.toString());
+    print("####Response####$response");
 /*    String authCode = await AuthCodeClient.instance.request();
     print("response : " + authCode);
     final response = await _dio.request('/kakao/login',
