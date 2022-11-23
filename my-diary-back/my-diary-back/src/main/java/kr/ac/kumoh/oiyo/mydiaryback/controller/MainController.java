@@ -1,10 +1,7 @@
 package kr.ac.kumoh.oiyo.mydiaryback.controller;
 
 
-import kr.ac.kumoh.oiyo.mydiaryback.repository.GoogleDTO;
-import kr.ac.kumoh.oiyo.mydiaryback.repository.KakaoDTO;
-import kr.ac.kumoh.oiyo.mydiaryback.repository.NaverDTO;
-import kr.ac.kumoh.oiyo.mydiaryback.repository.User;
+import kr.ac.kumoh.oiyo.mydiaryback.repository.*;
 import kr.ac.kumoh.oiyo.mydiaryback.service.GoogleService;
 import kr.ac.kumoh.oiyo.mydiaryback.service.KakaoService;
 import kr.ac.kumoh.oiyo.mydiaryback.service.NaverService;
@@ -27,6 +24,7 @@ public class MainController {
 
     @Autowired
     GoogleService googleService;
+
 
     @RequestMapping("test")
     @ResponseBody
@@ -93,7 +91,7 @@ public class MainController {
     public User googleSignIn(@RequestParam("accessToken") String accessToken) {
         Map<String,Object> userInfo = googleService.getGoogleUserInfo(accessToken);
 //        System.out.println("###access_Token#### : " + code);
-        String name = userInfo.get("nickname").toString();
+        String name = userInfo.get("name").toString();
         String email = userInfo.get("email").toString();
 
         System.out.println("###nickname#### : " + name);
