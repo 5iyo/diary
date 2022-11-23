@@ -5,14 +5,11 @@ import kr.ac.kumoh.oiyo.mydiaryback.repository.User;
 import kr.ac.kumoh.oiyo.mydiaryback.repository.UserRepository;
 import kr.ac.kumoh.oiyo.mydiaryback.repository.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
@@ -26,71 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class KakaoService {
-    @Value("${social.kakao.env.client-id}")
-    private String CLIENT_ID;
-
-    @Value("${social.kakao.env.redirect-uri}")
-    private String REDIRECT_URI;
-
     @Autowired
     private UserRepository userRepository;
-
-
-//    인가 코드를 받아서 카카오에 AccessToken을 요청하고,
-//    전달 받은 AccessToken을 return한다.
-    public String getAccessKakaoToken(String authorizeCode){
-        String access_Token = "";
-        String refresh_Token = "";
-        String reqURL = "https://kauth.kakao.com/oauth/token";
-
-        try {
-            URL url = new URL(reqURL);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            //POST요청을 위해 기본값이 false인 setDoOutPut을 true로 설정
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-
-            //POST 요청에 필요로 요구하는 파라미터 스트림을 통해 전송
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
-            StringBuilder sb = new StringBuilder();
-            sb.append("grant_type=authorization_code");
-            sb.append("&client_id="+CLIENT_ID);
-            sb.append("&redirect_uri="+REDIRECT_URI);
-            sb.append("&code="+authorizeCode);
-            bw.write(sb.toString());
-            bw.flush();
-
-            //결과 코드가 200이면 성공
-            int responseCode = conn.getResponseCode();
-            System.out.println("responseCode : "+responseCode);
-
-            //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
-            BufferedReader br = new BufferedReader((new InputStreamReader(conn.getInputStream())));
-            String line = "";
-            String result = "";
-
-            while((line = br.readLine()) != null){
-                result += line;
-            }
-            System.out.println("responsebody : "+result);
-
-            //Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
-            JsonElement element = JsonParser.parseString(result);
-
-            access_Token = element.getAsJsonObject().get("access_token").getAsString();
-            refresh_Token = element.getAsJsonObject().get("refresh_token").getAsString();
-
-            System.out.println("access_token : " + access_Token);
-            System.out.println("refresh_token : " + refresh_Token);
-
-            br.close();
-            bw.close();
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-        return access_Token;
-    }
 
 //    AccessToken을 받아서 User정보를 획득하고 return한다.
     public Map<String, Object> getKakaoUserInfo(String accessToken){

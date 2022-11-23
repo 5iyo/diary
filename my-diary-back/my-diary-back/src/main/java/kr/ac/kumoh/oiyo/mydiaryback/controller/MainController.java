@@ -36,8 +36,8 @@ public class MainController {
 
     @RequestMapping("kakao/login")
     @ResponseBody
-    public User kakaoSignIn(@RequestParam("code") String code) {
-        Map<String,Object> userInfo = kakaoService.getKakaoUserInfo(code);
+    public User kakaoSignIn(@RequestParam("accessToken") String accessToken) {
+        Map<String,Object> userInfo = kakaoService.getKakaoUserInfo(accessToken);
 //        System.out.println("###access_Token#### : " + code);
         String name = userInfo.get("nickname").toString();
         String email = userInfo.get("email").toString();
@@ -64,8 +64,8 @@ public class MainController {
 
     @RequestMapping("naver/login")
     @ResponseBody
-    public User naverSignIn(@RequestParam("code") String code) {
-        Map<String,Object> userInfo = naverService.getNaverUserInfo(code);
+    public User naverSignIn(@RequestParam("accessToken") String accessToken) {
+        Map<String,Object> userInfo = naverService.getNaverUserInfo(accessToken);
 //        System.out.println("###access_Token#### : " + code);
         String name = userInfo.get("name").toString();
         String email = userInfo.get("email").toString();
@@ -90,8 +90,8 @@ public class MainController {
 
     @RequestMapping("google/login")
     @ResponseBody
-    public User googleSignIn(@RequestParam("code") String code) {
-        Map<String,Object> userInfo = googleService.getGoogleUserInfo(code);
+    public User googleSignIn(@RequestParam("accessToken") String accessToken) {
+        Map<String,Object> userInfo = googleService.getGoogleUserInfo(accessToken);
 //        System.out.println("###access_Token#### : " + code);
         String name = userInfo.get("nickname").toString();
         String email = userInfo.get("email").toString();

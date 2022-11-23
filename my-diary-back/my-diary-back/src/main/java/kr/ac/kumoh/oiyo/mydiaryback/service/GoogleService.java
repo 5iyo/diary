@@ -1,11 +1,9 @@
 package kr.ac.kumoh.oiyo.mydiaryback.service;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import kr.ac.kumoh.oiyo.mydiaryback.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +17,6 @@ import java.util.Map;
 
 @Service
 public class GoogleService {
-    @Value("${social.google.env.client-id}")
-    private String CLIENT_ID;
-
-    @Value("${social.google.env.redirect-uri}")
-    private String REDIRECT_URI;
-
     @Autowired
     private UserRepository userRepository;
 

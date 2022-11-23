@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import kr.ac.kumoh.oiyo.mydiaryback.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +18,6 @@ import java.util.Map;
 
 @Service
 public class NaverService {
-
-    @Value("${social.naver.env.client-id}")
-    private String CLIENT_ID;
-
-    @Value("${social.naver.env.redirect-uri}")
-    private String REDIRECT_URI;
 
     @Autowired
     private UserRepository userRepository;
