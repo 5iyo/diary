@@ -6,6 +6,7 @@ A new Flutter project.
 
 # 안드로이드 sdk 버전 설정
 1. C:\src\flutter\packages\flutter_tools\gradle\flutter.gradle 수정
+2. compile, min, targetSdkVersion을 33으로 수정한다.
 
    ...
    class FlutterExtension {
