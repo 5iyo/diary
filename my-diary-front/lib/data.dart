@@ -17,10 +17,11 @@ class MainViewModel {
   }
 
   Future login(SocialLogin social) async {
+    socialLogin = social;
     await social.login().then((value) {
       if(value != null) {
-        _stream.addEvent(value);
         diaryUser = DiaryUser.fromJson(jsonDecode(value));
+        _stream.addEvent(value);
       }
     });
   }
@@ -55,6 +56,7 @@ class NaverLogin implements SocialLogin {
   @override
   Future<String?> login() async {
     NaverAccessToken res = await FlutterNaverLogin.currentAccessToken;
+    print("#####$res");
     if(res.accessToken == ""){
       if(res.refreshToken == "") {
         await FlutterNaverLogin.logIn();
@@ -99,12 +101,14 @@ class DiaryUser {
   String email;
   String name;
   String role;
+  String? image;
 
   DiaryUser({
     required this.id,
     required this.email,
     required this.name,
     required this.role,
+    required this.image
   });
 
   factory DiaryUser.fromJson(Map<String, dynamic> json) {
@@ -112,7 +116,8 @@ class DiaryUser {
         id: json['id'],
         email: json['email'],
         name: json['username'],
-        role: json['role']);
+        role: json['role'],
+        image: json['profileImage']);
   }
 }
 

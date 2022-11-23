@@ -22,6 +22,7 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
   late MainViewModel _mainViewModel;
+
   // 애플리케이션에서 지도를 이동하기 위한 컨트롤러
   late GoogleMapController _controller;
   int id = 1;
@@ -52,19 +53,16 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
 
   addMarker(coordinate, InfoWindow infoWindow) {
     setState(() {
-      markers.add(
-          Marker(
-              position: coordinate,
-              markerId: MarkerId((id).toString()),
-              onTap: () {
+      markers.add(Marker(
+          position: coordinate,
+          markerId: MarkerId((id).toString()),
+          onTap: () {
 /*                Navigator.pushNamed(
                     context,
                     '/diaryPage'
                 );*/
-                Get.to(()=>TravelListPage());
-              }
-          )
-      );
+            Get.to(() => TravelListPage());
+          }));
     });
   }
 
@@ -126,31 +124,29 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
         children: <Widget>[
           UserAccountsDrawerHeader(
             currentAccountPicture: CircleAvatar(
-              backgroundImage: AssetImage('img/핑구.png'),
+              backgroundImage: _mainViewModel.diaryUser!.image == null
+                  ? const AssetImage('img/핑구.png')
+                  : Image.network(_mainViewModel.diaryUser!.image!).image,
             ),
             accountName: Text(_mainViewModel.diaryUser!.name),
             accountEmail: Text(_mainViewModel.diaryUser!.email),
-            onDetailsPressed: (){
+            onDetailsPressed: () {
               print('arrow is clicked');
             },
-            decoration: BoxDecoration(
-                color: Colors.blueGrey[400]
-            ),
+            decoration: BoxDecoration(color: Colors.blueGrey[400]),
           ),
           ListTile(
             title: Text('회원 정보 보기'),
             onTap: () {
               Navigator.pop(context);
-              Get.to(()=>UserInfo());
+              Get.to(() => UserInfo());
             },
           ),
           ListTile(
             title: Text('일기쓰기'),
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context)=>WritePage())
-              );
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => WritePage()));
             },
           ),
           ListTile(
@@ -176,7 +172,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
       mapToolbarEnabled: false,
       // 클릭한 위치가 중앙에 표시
       onTap: (coordinate) {
-        addMarker(coordinate,InfoWindow());
+        addMarker(coordinate, InfoWindow());
         FocusScope.of(context).unfocus();
         _controller.animateCamera(CameraUpdate.newLatLng(coordinate));
       },
