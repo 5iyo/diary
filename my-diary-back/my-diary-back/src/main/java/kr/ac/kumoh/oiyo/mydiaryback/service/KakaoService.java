@@ -108,6 +108,7 @@ public class KakaoService {
     {
         String kakaoEmail = kakaoUserInfo.getK_email();
         String nickname = kakaoUserInfo.getK_name();
+        String image = kakaoUserInfo.getK_image();
         User kakaoUser = userRepository.findByEmail(kakaoEmail).orElse(null);
 
 //        회원이 없으면 회원가입
@@ -115,6 +116,7 @@ public class KakaoService {
             kakaoUser = User.builder()
                     .email(kakaoEmail)
                     .username(nickname)
+                    .profileImage(image)
                     .role(UserRole.USER)
                     .build();
             userRepository.save(kakaoUser);

@@ -68,6 +68,7 @@ public class NaverService {
     {
         String naverEmail = naverUserInfo.getN_email();
         String nickname = naverUserInfo.getN_name();
+        String image = naverUserInfo.getN_image();
         User naverUser = userRepository.findByEmail(naverEmail).orElse(null);
 
 //        회원이 없으면 회원가입
@@ -75,6 +76,7 @@ public class NaverService {
             naverUser = User.builder()
                     .email(naverEmail)
                     .username(nickname)
+                    .profileImage(image)
                     .role(UserRole.USER)
                     .build();
             userRepository.save(naverUser);

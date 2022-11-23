@@ -21,13 +21,17 @@ public class User extends BaseEntity {
     @Column
     private String username;
 
+    @Column
+    private String profileImage;
+
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
     @Builder
-    public User(String username, String email, UserRole role){
+    public User(String username, String email, UserRole role, String profileImage){
         this.username = username;
         this.email = email;
+        this.profileImage = profileImage;
         this.role = role;
     }
 

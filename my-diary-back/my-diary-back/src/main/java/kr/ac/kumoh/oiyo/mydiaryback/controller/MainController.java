@@ -39,6 +39,7 @@ public class MainController {
 //        System.out.println("###access_Token#### : " + code);
         String name = userInfo.get("nickname").toString();
         String email = userInfo.get("email").toString();
+        String image = userInfo.get("profile_image").toString();
 
         System.out.println("###nickname#### : " + name);
         System.out.println("###email#### : " + email);
@@ -67,6 +68,7 @@ public class MainController {
 //        System.out.println("###access_Token#### : " + code);
         String name = userInfo.get("name").toString();
         String email = userInfo.get("email").toString();
+        String image = userInfo.get("profile_image").toString();
 
         System.out.println("###nickname#### : " + name);
         System.out.println("###email#### : " + email);
@@ -76,6 +78,7 @@ public class MainController {
         NaverDTO naverDTO = NaverDTO.builder()
                 .n_name(name)
                 .n_email(email)
+                .n_image(image)
                 .build();
 
 //        네이버로 회원가입 처리
@@ -93,6 +96,7 @@ public class MainController {
 //        System.out.println("###access_Token#### : " + code);
         String name = userInfo.get("name").toString();
         String email = userInfo.get("email").toString();
+        String image = userInfo.get("profile_image").toString();
 
         System.out.println("###nickname#### : " + name);
         System.out.println("###email#### : " + email);
@@ -102,6 +106,7 @@ public class MainController {
         GoogleDTO googleDTO = GoogleDTO.builder()
                 .g_name(name)
                 .g_email(email)
+                .g_image(image)
                 .build();
 
 //        구글로 회원가입 처리

@@ -8,6 +8,7 @@ import lombok.Data;
 public class GoogleDTO {
     private String g_name;
     private String g_email;
+    private String g_image;
 
 //   public String id;
 //    public String email;

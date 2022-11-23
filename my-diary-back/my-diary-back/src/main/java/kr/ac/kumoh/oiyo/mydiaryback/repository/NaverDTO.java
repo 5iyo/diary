@@ -8,5 +8,6 @@ import lombok.Data;
 public class NaverDTO {
     private String n_name;
     private String n_email;
+    private String n_image;
 
 }

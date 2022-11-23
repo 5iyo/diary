@@ -65,6 +65,7 @@ public class GoogleService {
     {
         String googleEmail = googleUserInfo.getG_email();
         String nickname = googleUserInfo.getG_name();
+        String image = googleUserInfo.getG_image();
         User googleUser = userRepository.findByEmail(googleEmail).orElse(null);
 
 //        회원이 없으면 회원가입
@@ -72,6 +73,7 @@ public class GoogleService {
             googleUser = User.builder()
                     .email(googleEmail)
                     .username(nickname)
+                    .profileImage(image)
                     .role(UserRole.USER)
                     .build();
             userRepository.save(googleUser);
