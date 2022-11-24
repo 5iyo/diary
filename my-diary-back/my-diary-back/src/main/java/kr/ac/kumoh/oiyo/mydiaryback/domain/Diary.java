@@ -17,7 +17,7 @@ import java.util.List;
 public class Diary extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "DIARY_ID")
     private Long id;
 
@@ -38,7 +38,7 @@ public class Diary extends BaseEntity {
     
     // 여행
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TRIP_ID")
+    @JoinColumn(name = "TRAVEL_ID")
     private Travel travel;
 
     // 사진들
