@@ -69,12 +69,12 @@ public class Diary extends BaseEntity {
 
     //== 수정 메서드 ==//
     public void updateDiary(String title, LocalDate travelDate, String mainText, String weather
-            , String travelDestination, LocalDateTime lastModifiedDate) {
+            , String travelDestination) {
         this.title = title;
         this.travelDate = travelDate;
         this.mainText = mainText;
         this.weather = weather;
         this.travelDestination = travelDestination;
-        this.setLastModifiedDate(lastModifiedDate);
+        this.setLastModifiedDate(LocalDateTime.now());
     }
 }

@@ -68,9 +68,9 @@ public class DiaryService {
      */
     @Transactional
     public void update(Long diaryId, String title, LocalDate travelDate, String mainText, String weather
-            , String travelDestination, LocalDateTime lastModifiedDate) {
+            , String travelDestination) {
         Diary diary = diaryRepository.findOne(diaryId);
 
-        diary.updateDiary(title, travelDate, mainText, weather, travelDestination, lastModifiedDate);
+        diary.updateDiary(title, travelDate, mainText, weather, travelDestination);
     }
 }
