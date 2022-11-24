@@ -13,13 +13,35 @@ dependencies:
   cupertino_icons: ^1.0.2
   # google_map
   google_maps_flutter: ^2.2.1
+  flutter_google_places: ^0.3.0
+  google_maps_cluster_manager: ^3.0.0+1
   # location
   location: ^4.4.0
-  # http
-  dio: ^4.0.6
   #swipe animation
   flutter_swiper: ^1.1.6
   swipe_cards: ^1.0.0
+  # google login
+  google_sign_in: ^5.4.2
+  # kakao login
+  kakao_flutter_sdk: ^1.2.2
+  # naver login
+  flutter_naver_login: ^1.7.0
+  # secure storage
+  flutter_secure_storage: ^6.0.0
+  # provider
+  provider: ^6.0.4
+  # .env
+  flutter_dotenv: ^5.0.2
+  # floating action bubble
+  floating_action_bubble: ^1.1.4
+
+  get: ^4.6.5
+  validators: ^3.0.0
+  intl: ^0.17.0
+  syncfusion_flutter_datepicker: ^20.3.56
+  image_picker: ^0.8.6
+  dotted_border: ^2.0.0+3
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:
@@ -31,6 +53,8 @@ flutter:
 
   uses-material-design: true
   assets:
+    - .env
     - img/naver_icon.png
     - img/kakao_icon.png
     - img/google_icon.png
+    - img/핑구.png
