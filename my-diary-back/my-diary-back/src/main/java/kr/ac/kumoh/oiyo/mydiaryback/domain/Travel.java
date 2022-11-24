@@ -15,8 +15,8 @@ import java.util.List;
 public class Travel extends BaseEntity {
 
     @Id
-    @GeneratedValue
-    @Column(name = "TRIP_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "TRAVEL_ID")
     private Long id;
 
     // Member

@@ -8,10 +8,11 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "DIARY_IMAGE")
 public class DiaryImage {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "DIARY_IMAGE_ID")
     private Long id;
 
