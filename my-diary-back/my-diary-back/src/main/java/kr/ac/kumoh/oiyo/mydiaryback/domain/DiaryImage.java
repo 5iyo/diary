@@ -8,10 +8,11 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "DIARY_IMAGE")
 public class DiaryImage {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "DIARY_IMAGE_ID")
     private Long id;
 
@@ -21,13 +22,17 @@ public class DiaryImage {
 
     private String imageFile;
 
+    public static DiaryImage createDiaryImage(Diary diary, String imageFile) {
+        return new DiaryImage(diary, imageFile);
+    }
+
     public DiaryImage(Diary diary, String imageFile) {
         setDiary(diary);
         this.imageFile = imageFile;
     }
 
     /* 연관관계 편의 메서드 */
-    public void setDiary(Diary diary) {
+    private void setDiary(Diary diary) {
         if (this.diary != null) {
             this.diary.getDiaryImages().remove(this);
         }

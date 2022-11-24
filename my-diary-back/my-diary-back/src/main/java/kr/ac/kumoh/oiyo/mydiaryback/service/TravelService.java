@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -40,6 +41,13 @@ public class TravelService {
 
     public List<Travel> inquiryTravelsByCoordinate(String travelLatitude, String travelLongitude) {
         return travelRepository.findTravelsByCoordinate(travelLatitude, travelLongitude);
+    }
+
+    @Transactional
+    public void update(Long travelId, String travelTitle, String travelImage, LocalDate travelStartDate, LocalDate travelEndDate) {
+        Travel findTravel = travelRepository.findOne(travelId);
+
+        findTravel.updateTravel(travelTitle, travelImage, travelStartDate, travelEndDate);
     }
 
     @Transactional

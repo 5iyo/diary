@@ -1,6 +1,7 @@
 package kr.ac.kumoh.oiyo.mydiaryback.api;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.Member;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.Travel;
 import kr.ac.kumoh.oiyo.mydiaryback.service.MemberService;
@@ -27,7 +28,13 @@ public class TravelApiController {
 
     private final MemberService memberService;
 
-    @PostMapping("/api/travels/{id}")
+    /**
+     * 여행 추가
+     * @param memberId 사용자 ID (PK)
+     * @param createTravelRequest REQUEST BODY
+     * @return
+     */
+    @PostMapping("/api/user/{id}/travels")
     public ResponseEntity saveTravel(@PathVariable("id") String memberId, @RequestBody @Valid CreateTravelRequest createTravelRequest) {
 
         Member member = memberService.findOne(memberId);
@@ -53,6 +60,12 @@ public class TravelApiController {
 
     }
 
+
+    /**
+     * 여행 삭제
+     * @param travelId 여행 ID (PK)
+     * @return
+     */
     @DeleteMapping("/api/travels/{id}")
     public ResponseEntity deleteTravel(@PathVariable("id") Long travelId) {
 
@@ -61,19 +74,29 @@ public class TravelApiController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping("/api/travels/{id}")
-    public ResponseEntity inquiryTravelsInMap(@PathVariable("id") String memberId) {
+    /**
+     * 여행 목록 조회 (지도 마커 표시용)
+     * @param memberId 사용자 ID (PK)
+     * @return
+     */
+    @GetMapping("/api/user/{id}/inquire-travels")
+    public ResponseEntity inquireTravelsInMap(@PathVariable("id") String memberId) {
         List<Travel> travels = travelService.inquiryTravelsByMember(memberId);
 
-        List<TravelDto> collect = travels.stream()
-                .map(t -> new TravelDto(t))
+        List<TravelCoordinateDto> collect = travels.stream()
+                .map(t -> new TravelCoordinateDto(t))
                 .collect(Collectors.toList());
 
         return new ResponseEntity(collect, HttpStatus.OK);
     }
 
+    /**
+     * 여행 목록 출력 (지도 마커 클릭 시)
+     * @param findTravelsRequest REQUEST BODY
+     * @return
+     */
     @GetMapping("/api/travels")
-    public ResponseEntity inquiryTravelsByCoordinate(@RequestBody @Valid FindTravelsRequest findTravelsRequest) {
+    public ResponseEntity inquireTravelsByCoordinate(FindTravelsRequest findTravelsRequest) {
 
         String travelLatitude = findTravelsRequest.getTravelLatitude();
         String travelLongitude = findTravelsRequest.getTravelLongitude();
@@ -89,10 +112,70 @@ public class TravelApiController {
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
+
+    /**
+     * 특정 여행 조회
+     *
+     * @param travelId 여행 ID (PK)
+     * @return
+     */
+    @GetMapping("/api/travels/{id}")
+    public ResponseEntity inquireTravel(@PathVariable("id") Long travelId) {
+
+        Travel findTravel = travelService.findOne(travelId);
+
+        TravelDto travelDto = new TravelDto(findTravel);
+
+        return new ResponseEntity(travelDto, HttpStatus.OK);
+    }
+
+    /**
+     * 특정 여행 수정
+     * @param travelId 여행 ID (PK)
+     * @param updateTravelRequest REQUEST BODY (수정할 내용)
+     * @return
+     */
+    @PatchMapping("/api/travels/{id}")
+    public ResponseEntity modifyTravel(@PathVariable("id") Long travelId, @RequestBody @Valid UpdateTravelRequest updateTravelRequest) {
+        String travelTitle = updateTravelRequest.getTravelTitle();
+        String travelImage = updateTravelRequest.getTravelImage();
+        LocalDate travelStartDate = updateTravelRequest.getTravelStartDate();
+        LocalDate travelEndDate = updateTravelRequest.getTravelEndDate();
+
+        travelService.update(travelId, travelTitle, travelImage, travelStartDate, travelEndDate);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
     @Data
     @AllArgsConstructor
     static class Result<T> {
         private T travels;
+    }
+
+    @Data
+    static class UpdateTravelRequest {
+        private String travelTitle;
+        private String travelImage;
+        private LocalDate travelStartDate;
+        private LocalDate travelEndDate;
+    }
+
+    @Data
+    static class TravelDto {
+        private String travelTitle;
+        private String travelArea;
+        private String travelImage;
+        private LocalDate travelStartDate;
+        private LocalDate travelEndDate;
+
+        public TravelDto(Travel travel) {
+            this.travelTitle = travel.getTravelTitle();
+            this.travelArea = travel.getTravelArea();
+            this.travelImage = travel.getTravelImage();
+            this.travelStartDate = travel.getTravelStartDate();
+            this.travelEndDate = travel.getTravelEndDate();
+        }
     }
 
     @Data
@@ -103,6 +186,8 @@ public class TravelApiController {
 
     @Data
     static class TravelListDto {
+
+        private Long travelId;
         private String travelTitle;
         private String travelImage;
         @JsonFormat(pattern = "yyyy-MM-dd")
@@ -111,6 +196,7 @@ public class TravelApiController {
         private LocalDate travelEndDate;
 
         public TravelListDto(Travel travel) {
+            this.travelId = travel.getId();
             this.travelTitle = travel.getTravelTitle();
             this.travelImage = travel.getTravelImage();
             this.travelStartDate = travel.getTravelStartDate();
@@ -119,14 +205,14 @@ public class TravelApiController {
     }
 
     @Data
-    static class TravelDto {
+    static class TravelCoordinateDto {
         private String travelTitle;
         private String travelArea;
         private String travelLatitude;
         private String travelLongitude;
         private String travelImage;
 
-        public TravelDto(Travel travel) {
+        public TravelCoordinateDto(Travel travel) {
             this.travelTitle = travel.getTravelTitle();
             this.travelArea = travel.getTravelArea();
             this.travelLatitude = travel.getTravelLatitude();

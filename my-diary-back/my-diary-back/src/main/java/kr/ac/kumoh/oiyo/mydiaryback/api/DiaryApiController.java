@@ -1,10 +1,17 @@
 package kr.ac.kumoh.oiyo.mydiaryback.api;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.Diary;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.DiaryImage;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.Travel;
-import kr.ac.kumoh.oiyo.mydiaryback.service.DiaryImageService;
 import kr.ac.kumoh.oiyo.mydiaryback.service.DiaryService;
 import kr.ac.kumoh.oiyo.mydiaryback.service.TravelService;
 import lombok.AllArgsConstructor;
@@ -30,6 +37,13 @@ public class DiaryApiController {
     private final TravelService travelService;
 
     // 일기 생성 api
+
+    /**
+     * 일기 생성
+     * @param travelId 여행 ID (PK)
+     * @param request REQUEST BODY
+     * @return 일기 ID (PK) 반환
+     */
     @PostMapping("/api/diaries/{id}")
     public ResponseEntity saveDiary(@PathVariable("id") Long travelId, @RequestBody @Valid CreateDiaryRequest request) {
 
@@ -44,17 +58,21 @@ public class DiaryApiController {
         List<String> images = request.getImages();
 
         for (String image : images) {
-            new DiaryImage(diary, image);
+            DiaryImage.createDiaryImage(diary, image);
         }
 
-        diaryService.saveDiary(diary);
+        diaryService.save(diary);
 
         CreateDiaryResponse createDiaryResponse = new CreateDiaryResponse(diary.getId());
 
         return new ResponseEntity(createDiaryResponse, HttpStatus.CREATED);
     }
 
-    // 일기 삭제 api
+    /**
+     * 일기 삭제
+     * @param diaryId 일기 ID (PK)
+     * @return
+     */
     @DeleteMapping("/api/diaries/{id}")
     public ResponseEntity deleteDiary(@PathVariable("id") Long diaryId) {
         diaryService.deleteDiary(diaryId);
@@ -62,9 +80,13 @@ public class DiaryApiController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    // 일기 목록 조회 api
+    /**
+     * 일기 목록 조회
+     * @param travelId 여행 ID (PK)
+     * @return 일기 정보
+     */
     @GetMapping("/api/diaries/{id}/inquiry-diary-list")
-    public ResponseEntity inquiryDiaryList(@PathVariable("id") Long travelId) {
+    public ResponseEntity inquireDiaryList(@PathVariable("id") Long travelId) {
 
         Travel findTravel = travelService.findTravel(travelId);
 
@@ -85,8 +107,14 @@ public class DiaryApiController {
     }
 
     // 특정 일기 조회 api
+
+    /**
+     * 특정 일기 조회
+     * @param diaryId 일기 ID (PK)
+     * @return 일기 정보
+     */
     @GetMapping("/api/diaries/{id}")
-    public ResponseEntity inquiryDiary(@PathVariable("id") Long diaryId) {
+    public ResponseEntity inquireDiary(@PathVariable("id") Long diaryId) {
         Diary diary = diaryService.findDiary(diaryId);
 
         List<DiaryImage> images = diary.getDiaryImages();
@@ -100,6 +128,12 @@ public class DiaryApiController {
         return new ResponseEntity(diaryDto, HttpStatus.OK);
     }
 
+    /**
+     * 일기 수정
+     * @param diaryId 일기 ID (PK)
+     * @param request REQUEST BODY
+     * @return
+     */
     @PatchMapping("/api/diaries/{id}")
     public ResponseEntity modifyDiary(@PathVariable("id") Long diaryId, @RequestBody @Valid UpdateDiaryRequest request){
 
@@ -108,21 +142,10 @@ public class DiaryApiController {
         String mainText = request.getMainText();
         String weather = request.getWeather();
         String travelDestination = request.getTravelDestination();
-        LocalDateTime lastModifiedDate = LocalDateTime.now();
 
-        diaryService.update(diaryId, title, travelDate, mainText, weather, travelDestination, lastModifiedDate);
+        diaryService.update(diaryId, title, travelDate, mainText, weather, travelDestination);
 
-        Diary findDiary = diaryService.findDiary(diaryId);
-
-        List<DiaryImage> images = findDiary.getDiaryImages();
-
-        List<DiaryImageDto> collect = images.stream()
-                .map(di -> new DiaryImageDto(di.getId(), di.getImageFile()))
-                .collect(Collectors.toList());
-
-        DiaryDto diaryDto = new DiaryDto(findDiary, collect);
-
-        return new ResponseEntity(diaryDto, HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @Data

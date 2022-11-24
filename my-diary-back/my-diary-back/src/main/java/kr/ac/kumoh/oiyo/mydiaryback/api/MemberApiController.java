@@ -1,6 +1,5 @@
 package kr.ac.kumoh.oiyo.mydiaryback.api;
 
-import kr.ac.kumoh.oiyo.mydiaryback.domain.Address;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.Member;
 import kr.ac.kumoh.oiyo.mydiaryback.service.MemberService;
 import lombok.AllArgsConstructor;

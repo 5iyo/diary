@@ -17,7 +17,7 @@ import java.util.List;
 public class Diary extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "DIARY_ID")
     private Long id;
 
@@ -38,7 +38,7 @@ public class Diary extends BaseEntity {
     
     // 여행
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TRIP_ID")
+    @JoinColumn(name = "TRAVEL_ID")
     private Travel travel;
 
     // 사진들
@@ -59,7 +59,7 @@ public class Diary extends BaseEntity {
     }
 
     /* 연관관계 편의 메서드 */
-    public void setTravel(Travel travel) {
+    private void setTravel(Travel travel) {
         if (this.travel != null) {
             this.travel.getDiaries().remove(this);
         }
@@ -69,12 +69,12 @@ public class Diary extends BaseEntity {
 
     //== 수정 메서드 ==//
     public void updateDiary(String title, LocalDate travelDate, String mainText, String weather
-            , String travelDestination, LocalDateTime lastModifiedDate) {
+            , String travelDestination) {
         this.title = title;
         this.travelDate = travelDate;
         this.mainText = mainText;
         this.weather = weather;
         this.travelDestination = travelDestination;
-        this.setLastModifiedDate(lastModifiedDate);
+        this.setLastModifiedDate(LocalDateTime.now());
     }
 }
