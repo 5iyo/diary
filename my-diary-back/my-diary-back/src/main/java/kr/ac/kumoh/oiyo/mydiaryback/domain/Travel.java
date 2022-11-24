@@ -71,4 +71,13 @@ public class Travel extends BaseEntity {
         this.member = member;
         member.getTravels().add(this);
     }
+
+    //== 수정 메서드 ==//
+    public void updateTravel(String travelTitle, String travelImage, LocalDate travelStartDate, LocalDate travelEndDate) {
+        this.travelTitle = travelTitle;
+        this.travelImage = travelImage;
+        this.travelStartDate = travelStartDate;
+        this.travelEndDate = travelEndDate;
+        this.setLastModifiedDate(LocalDateTime.now());
+    }
 }
