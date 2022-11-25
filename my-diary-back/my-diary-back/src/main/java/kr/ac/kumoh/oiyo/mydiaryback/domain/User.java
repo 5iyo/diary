@@ -1,4 +1,4 @@
-package kr.ac.kumoh.oiyo.mydiaryback.repository;
+package kr.ac.kumoh.oiyo.mydiaryback.domain;
 
 
 import lombok.Builder;
@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -15,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "MEMBER_ID")
     private Long id;
 
     @Column
@@ -37,6 +40,9 @@ public class User extends BaseEntity {
 
     @Column
     private String address;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Travel> travels = new ArrayList<>();
 
     @Builder
     public User(String username, String email, UserRole role, String profileImage){

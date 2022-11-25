@@ -1,11 +1,15 @@
 package kr.ac.kumoh.oiyo.mydiaryback.service;
 
-import kr.ac.kumoh.oiyo.mydiaryback.repository.KakaoDTO;
-import kr.ac.kumoh.oiyo.mydiaryback.repository.User;
-import kr.ac.kumoh.oiyo.mydiaryback.repository.UserRepository;
-import kr.ac.kumoh.oiyo.mydiaryback.repository.UserRole;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.KakaoDTO;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.User;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.UserRepository;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,12 +19,6 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class KakaoService {

@@ -1,14 +1,6 @@
 package kr.ac.kumoh.oiyo.mydiaryback.api;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.Diary;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.DiaryImage;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.Travel;
@@ -51,7 +43,7 @@ public class DiaryApiController {
 
         LocalDateTime now = LocalDateTime.now();
 
-        Diary diary = new Diary(now, now, request.getTitle(), request.getTravelDate(),
+        Diary diary = new Diary(request.getTitle(), request.getTravelDate(),
                 request.getMainText(), request.getWeather(), request.getTravelDestination(), travel);
 
         // 이미지 생성

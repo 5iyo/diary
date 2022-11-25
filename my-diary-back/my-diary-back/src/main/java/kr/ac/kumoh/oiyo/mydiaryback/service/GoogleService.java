@@ -2,7 +2,10 @@ package kr.ac.kumoh.oiyo.mydiaryback.service;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import kr.ac.kumoh.oiyo.mydiaryback.repository.*;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.GoogleDTO;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.User;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.UserRepository;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

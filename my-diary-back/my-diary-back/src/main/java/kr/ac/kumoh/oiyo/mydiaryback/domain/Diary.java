@@ -1,13 +1,10 @@
 package kr.ac.kumoh.oiyo.mydiaryback.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,9 +44,8 @@ public class Diary extends BaseEntity {
 
     // 동행자 보류 (공유할 때 필요!!)
 
-    public Diary(LocalDateTime createDate, LocalDateTime lastModifiedDate, String title, LocalDate travelDate
+    public Diary(String title, LocalDate travelDate
             , String mainText, String weather, String travelDestination, Travel travel) {
-        super(createDate, lastModifiedDate);
         this.title = title;
         this.travelDate = travelDate;
         this.mainText = mainText;
@@ -75,6 +71,5 @@ public class Diary extends BaseEntity {
         this.mainText = mainText;
         this.weather = weather;
         this.travelDestination = travelDestination;
-        this.setLastModifiedDate(LocalDateTime.now());
     }
 }

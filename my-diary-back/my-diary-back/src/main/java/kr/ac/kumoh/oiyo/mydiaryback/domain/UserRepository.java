@@ -1,4 +1,4 @@
-package kr.ac.kumoh.oiyo.mydiaryback.repository;
+package kr.ac.kumoh.oiyo.mydiaryback.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

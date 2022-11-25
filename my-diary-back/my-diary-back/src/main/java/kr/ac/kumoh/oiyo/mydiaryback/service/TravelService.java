@@ -1,7 +1,7 @@
 package kr.ac.kumoh.oiyo.mydiaryback.service;
 
 import kr.ac.kumoh.oiyo.mydiaryback.domain.Travel;
-import kr.ac.kumoh.oiyo.mydiaryback.repository.TravelRepository;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.TravelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

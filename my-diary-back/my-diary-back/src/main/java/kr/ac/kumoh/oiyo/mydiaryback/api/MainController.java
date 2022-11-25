@@ -1,7 +1,10 @@
-package kr.ac.kumoh.oiyo.mydiaryback.controller;
+package kr.ac.kumoh.oiyo.mydiaryback.api;
 
 
-import kr.ac.kumoh.oiyo.mydiaryback.repository.*;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.GoogleDTO;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.KakaoDTO;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.NaverDTO;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.User;
 import kr.ac.kumoh.oiyo.mydiaryback.service.GoogleService;
 import kr.ac.kumoh.oiyo.mydiaryback.service.KakaoService;
 import kr.ac.kumoh.oiyo.mydiaryback.service.NaverService;

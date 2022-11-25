@@ -1,14 +1,12 @@
 package kr.ac.kumoh.oiyo.mydiaryback.service;
 
 import kr.ac.kumoh.oiyo.mydiaryback.domain.Diary;
-import kr.ac.kumoh.oiyo.mydiaryback.repository.DiaryRepository;
-
+import kr.ac.kumoh.oiyo.mydiaryback.domain.DiaryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service

@@ -1,4 +1,4 @@
-package kr.ac.kumoh.oiyo.mydiaryback.controller;
+package kr.ac.kumoh.oiyo.mydiaryback.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-public class ApiController {
+public class WeatherApiController {
     public Map<String, String> locationList = Map.ofEntries(
             Map.entry("Seoul", "서울"),
             Map.entry("Incheon", "인천"),
@@ -138,7 +139,11 @@ public class ApiController {
             Map.entry("Jeju", "제주")
     );
 
-    private ServiceKey serviceKey = new ServiceKey();
+    @Value("${weather.key}")
+    private String serviceKey;
+
+    @Value("${travel.key}")
+    private String travelKey;
 
     @GetMapping("/apiTest")
     public Response recommend() throws JSONException {
@@ -146,7 +151,7 @@ public class ApiController {
         List<String> clearLocationList = new ArrayList<>();
         List<ClearLocationInfoDTO> clearLocationInfoDTOList = new ArrayList<>();
         String url = "https://api.openweathermap.org/data/2.5/weather" ;
-        String weatherKey = serviceKey.getWeatherKey();
+        String weatherKey = serviceKey;
 
         /*
          * 맑음 지역 필터링
@@ -229,7 +234,6 @@ public class ApiController {
 
         for (int i = 0; i < clearLocationList.toArray().length; i++) {
             String apiUrl = "http://apis.data.go.kr/B551011/KorService/searchKeyword";
-            String travelKey = this.serviceKey.getTravelKey();
 
             StringBuilder urlBuilder = new StringBuilder(apiUrl);
             try {

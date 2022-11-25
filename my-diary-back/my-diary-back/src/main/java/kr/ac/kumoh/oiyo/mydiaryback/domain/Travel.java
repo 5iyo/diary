@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class Travel extends BaseEntity {
     // Member
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
-    private Member member;
+    private User user;
 
     // Diary
     @OneToMany(mappedBy = "travel", cascade = CascadeType.REMOVE, orphanRemoval = true)
@@ -50,11 +49,10 @@ public class Travel extends BaseEntity {
     // 여행 종료 날짜
     private LocalDate travelEndDate;
 
-    public Travel(LocalDateTime createDate, LocalDateTime lastModifiedDate, Member member, String travelTitle
+    public Travel(User user, String travelTitle
             , String travelArea, String travelLatitude, String travelLongitude, String travelImage
             , LocalDate travelStartDate, LocalDate travelEndDate) {
-        super(createDate, lastModifiedDate);
-        setMember(member);
+        setMember(user);
         this.travelTitle = travelTitle;
         this.travelArea = travelArea;
         this.travelLatitude = travelLatitude;
@@ -65,11 +63,11 @@ public class Travel extends BaseEntity {
     }
 
     /* 연관관계 편의 메서드 */
-    private void setMember(Member member) {
-        if(this.member != null)
-            this.member.getTravels().remove(this);
-        this.member = member;
-        member.getTravels().add(this);
+    private void setMember(User user) {
+        if(this.user != null)
+            this.user.getTravels().remove(this);
+        this.user = user;
+        user.getTravels().add(this);
     }
 
     //== 수정 메서드 ==//
@@ -78,6 +76,5 @@ public class Travel extends BaseEntity {
         this.travelImage = travelImage;
         this.travelStartDate = travelStartDate;
         this.travelEndDate = travelEndDate;
-        this.setLastModifiedDate(LocalDateTime.now());
     }
 }

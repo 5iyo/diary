@@ -1,7 +1,7 @@
-package kr.ac.kumoh.oiyo.mydiaryback.controller;
+package kr.ac.kumoh.oiyo.mydiaryback.api;
 
-import kr.ac.kumoh.oiyo.mydiaryback.repository.PostUserInfoDto;
-import kr.ac.kumoh.oiyo.mydiaryback.repository.User;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.PostUserInfoDto;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.User;
 import kr.ac.kumoh.oiyo.mydiaryback.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;

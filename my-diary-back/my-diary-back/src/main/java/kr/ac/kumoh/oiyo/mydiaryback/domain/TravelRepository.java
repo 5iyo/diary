@@ -1,6 +1,5 @@
-package kr.ac.kumoh.oiyo.mydiaryback.repository;
+package kr.ac.kumoh.oiyo.mydiaryback.domain;
 
-import kr.ac.kumoh.oiyo.mydiaryback.domain.Travel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -40,7 +39,7 @@ public class TravelRepository {
      * @return 해당 사용자의 모든 여행 기록 조회
      */
     public List<Travel> findTravelsByMember(String memberId) {
-        return em.createQuery("select t from Travel t join t.member m on m.id = :mId", Travel.class)
+        return em.createQuery("select t from Travel t join t.user m on m.id = :mId", Travel.class)
                 .setParameter("mId", memberId)
                 .getResultList();
     }

@@ -1,6 +1,5 @@
-package kr.ac.kumoh.oiyo.mydiaryback.repository;
+package kr.ac.kumoh.oiyo.mydiaryback.domain;
 
-import kr.ac.kumoh.oiyo.mydiaryback.domain.Diary;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

@@ -1,11 +1,10 @@
 package kr.ac.kumoh.oiyo.mydiaryback.api;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.ac.kumoh.oiyo.mydiaryback.domain.Member;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.Travel;
-import kr.ac.kumoh.oiyo.mydiaryback.service.MemberService;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.User;
 import kr.ac.kumoh.oiyo.mydiaryback.service.TravelService;
+import kr.ac.kumoh.oiyo.mydiaryback.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +24,7 @@ public class TravelApiController {
 
     private final TravelService travelService;
 
-    private final MemberService memberService;
+    private final UserService userService;
 
     /**
      * 여행 추가
@@ -37,9 +35,7 @@ public class TravelApiController {
     @PostMapping("/api/user/{id}/travels")
     public ResponseEntity saveTravel(@PathVariable("id") String memberId, @RequestBody @Valid CreateTravelRequest createTravelRequest) {
 
-        Member member = memberService.findOne(memberId);
-
-        LocalDateTime now = LocalDateTime.now();
+        User user = userService.findUserbyId(Long.parseLong(memberId));
 
         String travelTitle = createTravelRequest.getTravelTitle();
         String travelArea = createTravelRequest.getTravelArea();
@@ -49,7 +45,7 @@ public class TravelApiController {
         LocalDate travelStartDate = createTravelRequest.getTravelStartDate();
         LocalDate travelEndDate = createTravelRequest.getTravelEndDate();
 
-        Travel travel = new Travel(now, now, member, travelTitle, travelArea, travelLatitude,
+        Travel travel = new Travel(user, travelTitle, travelArea, travelLatitude,
                 travelLongitude, travelImage, travelStartDate, travelEndDate);
 
         Long saveTravelId = travelService.saveTravel(travel);
