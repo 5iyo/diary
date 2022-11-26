@@ -1,9 +1,9 @@
-package kr.ac.kumoh.oiyo.mydiaryback.service;
+package kr.ac.kumoh.oiyo.mydiaryback.service.social;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import kr.ac.kumoh.oiyo.mydiaryback.domain.NaverDTO;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.dto.NaverDto;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.User;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.UserRepository;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.UserRole;
@@ -67,7 +67,7 @@ public class NaverService {
     }
 
     @Transactional
-    public User registerNaverUserIfNeed (NaverDTO naverUserInfo)
+    public User registerNaverUserIfNeed (NaverDto naverUserInfo)
     {
         String naverEmail = naverUserInfo.getN_email();
         String nickname = naverUserInfo.getN_name();

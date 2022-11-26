@@ -1,6 +1,6 @@
 package kr.ac.kumoh.oiyo.mydiaryback.service;
 
-import kr.ac.kumoh.oiyo.mydiaryback.domain.PostUserInfoDto;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.dto.PostUserInfoDto;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.User;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

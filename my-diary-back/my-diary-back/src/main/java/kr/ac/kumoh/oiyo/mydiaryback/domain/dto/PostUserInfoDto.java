@@ -1,4 +1,4 @@
-package kr.ac.kumoh.oiyo.mydiaryback.domain;
+package kr.ac.kumoh.oiyo.mydiaryback.domain.dto;
 
 import lombok.Data;
 

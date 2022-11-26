@@ -1,6 +1,6 @@
 package kr.ac.kumoh.oiyo.mydiaryback.api;
 
-import kr.ac.kumoh.oiyo.mydiaryback.domain.PostUserInfoDto;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.dto.PostUserInfoDto;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.User;
 import kr.ac.kumoh.oiyo.mydiaryback.service.UserService;
 import lombok.RequiredArgsConstructor;

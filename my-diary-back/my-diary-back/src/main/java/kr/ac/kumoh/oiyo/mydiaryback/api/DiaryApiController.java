@@ -41,8 +41,6 @@ public class DiaryApiController {
 
         Travel travel = travelService.findOne(travelId);
 
-        LocalDateTime now = LocalDateTime.now();
-
         Diary diary = new Diary(request.getTitle(), request.getTravelDate(),
                 request.getMainText(), request.getWeather(), request.getTravelDestination(), travel);
 

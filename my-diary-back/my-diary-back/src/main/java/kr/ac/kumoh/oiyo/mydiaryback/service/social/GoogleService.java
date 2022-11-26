@@ -1,8 +1,8 @@
-package kr.ac.kumoh.oiyo.mydiaryback.service;
+package kr.ac.kumoh.oiyo.mydiaryback.service.social;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import kr.ac.kumoh.oiyo.mydiaryback.domain.GoogleDTO;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.dto.GoogleDto;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.User;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.UserRepository;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.UserRole;
@@ -64,7 +64,7 @@ public class GoogleService {
     }
 
     @Transactional
-    public User registerGoogleUserIfNeed (GoogleDTO googleUserInfo)
+    public User registerGoogleUserIfNeed (GoogleDto googleUserInfo)
     {
         String googleEmail = googleUserInfo.getG_email();
         String nickname = googleUserInfo.getG_name();

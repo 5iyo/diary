@@ -1,9 +1,9 @@
-package kr.ac.kumoh.oiyo.mydiaryback.service;
+package kr.ac.kumoh.oiyo.mydiaryback.service.social;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import kr.ac.kumoh.oiyo.mydiaryback.domain.KakaoDTO;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.dto.KakaoDto;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.User;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.UserRepository;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.UserRole;
@@ -103,7 +103,7 @@ public class KakaoService {
     }
 
     @Transactional
-    public User registerKakaoUserIfNeed (KakaoDTO kakaoUserInfo)
+    public User registerKakaoUserIfNeed (KakaoDto kakaoUserInfo)
     {
         String kakaoEmail = kakaoUserInfo.getK_email();
         String nickname = kakaoUserInfo.getK_name();

@@ -1,13 +1,13 @@
 package kr.ac.kumoh.oiyo.mydiaryback.api;
 
 
-import kr.ac.kumoh.oiyo.mydiaryback.domain.GoogleDTO;
-import kr.ac.kumoh.oiyo.mydiaryback.domain.KakaoDTO;
-import kr.ac.kumoh.oiyo.mydiaryback.domain.NaverDTO;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.dto.GoogleDto;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.dto.KakaoDto;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.dto.NaverDto;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.User;
-import kr.ac.kumoh.oiyo.mydiaryback.service.GoogleService;
-import kr.ac.kumoh.oiyo.mydiaryback.service.KakaoService;
-import kr.ac.kumoh.oiyo.mydiaryback.service.NaverService;
+import kr.ac.kumoh.oiyo.mydiaryback.service.social.GoogleService;
+import kr.ac.kumoh.oiyo.mydiaryback.service.social.KakaoService;
+import kr.ac.kumoh.oiyo.mydiaryback.service.social.NaverService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
@@ -49,7 +49,7 @@ public class MainController {
         System.out.println("###id#### ; " + userInfo.get("id"));
 
 //        토큰에서 받은 정보로 KakaoDTO build
-        KakaoDTO kakaoDTO = KakaoDTO.builder()
+        KakaoDto kakaoDTO = KakaoDto.builder()
                 .k_name(name)
                 .k_email(email)
                 .k_image(image)
@@ -79,7 +79,7 @@ public class MainController {
         System.out.println("###id#### ; " + userInfo.get("id"));
 
 //        토큰에서 받은 정보로 NaverDTO build
-        NaverDTO naverDTO = NaverDTO.builder()
+        NaverDto naverDTO = NaverDto.builder()
                 .n_name(name)
                 .n_email(email)
                 .n_image(image)
@@ -107,7 +107,7 @@ public class MainController {
         System.out.println("###id#### ; " + userInfo.get("id"));
 
 //        토큰에서 받은 정보로 GoogleDTO build
-        GoogleDTO googleDTO = GoogleDTO.builder()
+        GoogleDto googleDTO = GoogleDto.builder()
                 .g_name(name)
                 .g_email(email)
                 .g_image(image)

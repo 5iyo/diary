@@ -1,11 +1,11 @@
-package kr.ac.kumoh.oiyo.mydiaryback.domain;
+package kr.ac.kumoh.oiyo.mydiaryback.domain.dto;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class GoogleDTO {
+public class GoogleDto {
     private String g_name;
     private String g_email;
     private String g_image;
