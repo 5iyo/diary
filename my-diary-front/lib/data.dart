@@ -19,7 +19,7 @@ class MainViewModel {
   Future login(SocialLogin social) async {
     socialLogin = social;
     await social.login().then((value) {
-      if(value != null) {
+      if (value != null) {
         diaryUser = DiaryUser.fromJson(jsonDecode(value));
         _stream.addEvent(value);
       }
@@ -34,6 +34,7 @@ class MainViewModel {
 
 abstract class SocialLogin {
   Future<String?> login();
+
   Future logout();
 }
 
@@ -42,7 +43,8 @@ class KakaoLogin implements SocialLogin {
   Future<String?> login() async {
     OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
     Uri url = Uri.parse('${dotenv.get('SERVER_URI')}/kakao/login');
-    final response = await http.post(url, body: {"accessToken" : token.accessToken});
+    final response =
+    await http.post(url, body: {"accessToken": token.accessToken});
     return utf8.decode(response.bodyBytes);
   }
 
@@ -57,8 +59,8 @@ class NaverLogin implements SocialLogin {
   Future<String?> login() async {
     NaverAccessToken res = await FlutterNaverLogin.currentAccessToken;
     print("#####$res");
-    if(res.accessToken == ""){
-      if(res.refreshToken == "") {
+    if (res.accessToken == "") {
+      if (res.refreshToken == "") {
         await FlutterNaverLogin.logIn();
       } else {
         await FlutterNaverLogin.refreshAccessTokenWithRefreshToken();
@@ -67,7 +69,8 @@ class NaverLogin implements SocialLogin {
     }
     // Create a new credential
     Uri url = Uri.parse('${dotenv.get('SERVER_URI')}/naver/login');
-    final response = await http.post(url, body: {"accessToken" : res.accessToken});
+    final response =
+    await http.post(url, body: {"accessToken": res.accessToken});
     return utf8.decode(response.bodyBytes);
   }
 
@@ -82,11 +85,11 @@ class GoogleLogin implements SocialLogin {
   Future<String?> login() async {
     final GoogleSignInAccount? account = await GoogleSignIn().signIn();
     // Obtain the auth details from the request
-    final GoogleSignInAuthentication googleAuth =
-        await account!.authentication;
+    final GoogleSignInAuthentication googleAuth = await account!.authentication;
     // Create a new credential
     Uri url = Uri.parse('${dotenv.get('SERVER_URI')}/google/login');
-    final response = await http.post(url, body: {"accessToken" : googleAuth.accessToken});
+    final response =
+    await http.post(url, body: {"accessToken": googleAuth.accessToken});
     return utf8.decode(response.bodyBytes);
   }
 
@@ -102,14 +105,17 @@ class DiaryUser {
   String name;
   String role;
   String? image;
+  String birthDate;
+  String introduction;
 
-  DiaryUser({
-    required this.id,
-    required this.email,
-    required this.name,
-    required this.role,
-    required this.image
-  });
+  DiaryUser(
+      {required this.id,
+        required this.email,
+        required this.name,
+        required this.role,
+        required this.image,
+        required this.birthDate,
+        required this.introduction});
 
   factory DiaryUser.fromJson(Map<String, dynamic> json) {
     return DiaryUser(
@@ -117,7 +123,9 @@ class DiaryUser {
         email: json['email'],
         name: json['username'],
         role: json['role'],
-        image: json['profileImage']);
+        image: json['profileImage'],
+        birthDate: json['birthDate'] ?? "",
+        introduction: json['introduction'] ?? "");
   }
 }
 
