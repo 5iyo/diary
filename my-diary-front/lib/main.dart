@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primaryColor: Colors.white,
-        primarySwatch: Colors.blueGrey,
+        primarySwatch: Colors.grey,
       ),
       initialRoute: '/mapPage',
       routes: {

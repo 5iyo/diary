@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:my_diary_front/view/pages/post/travel_list_page.dart';
+import 'package:my_diary_front/view/pages/post/travel_page.dart';
 import 'package:my_diary_front/view/pages/post/write_page.dart';
 import 'package:my_diary_front/view/pages/user/user_info.dart';
 import 'package:get/get.dart';
@@ -58,10 +60,13 @@ class _MapPageState extends State<MapPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Diary"),
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        title: Text("Diary", style: TextStyle(color: Colors.white)),
         centerTitle: true,
+        backgroundColor: Colors.transparent,
         elevation: 0.0,
       ),
+      extendBodyBehindAppBar: true,
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -76,7 +81,7 @@ class _MapPageState extends State<MapPage> {
                 print('arrow is clicked');
               },
               decoration: BoxDecoration(
-                  color: Colors.blueGrey[400]
+                  color: Colors.grey
               ),
             ),
             ListTile(
@@ -84,15 +89,6 @@ class _MapPageState extends State<MapPage> {
               onTap: () {
                 Navigator.pop(context);
                 Get.to(()=>UserInfo());
-              },
-            ),
-            ListTile(
-              title: Text('일기쓰기'),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context)=>WritePage())
-                );
               },
             ),
             ListTile(
@@ -117,17 +113,24 @@ class _MapPageState extends State<MapPage> {
           addMarker(coordinate);
         },
       ),
-      floatingActionButton: FloatingActionButton(
-
-        onPressed: () {
-          _currentLocation();
-        },
-        child: Icon(
-          Icons.my_location,
-          color: Colors.black,
+      floatingActionButton:
+        FloatingActionButton(
+          onPressed: () {
+            String member = "member";
+            Get.to(()=>TravelPage(member));
+          },
+          child: Icon(Icons.add, color: Colors.white),
         ),
-        backgroundColor: Colors.white,
-      ),
+        // FloatingActionButton(
+        //   onPressed: () {
+        //     _currentLocation();
+        //   },
+        //   child: Icon(
+        //     Icons.my_location,
+        //     color: Colors.black,
+        //   ),
+        //   backgroundColor: Colors.white,
+        // ),
     );
   }
 }
