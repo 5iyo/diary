@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -5,11 +7,9 @@ import 'package:my_diary_front/controller/dto/DiaryListResp.dart';
 import 'package:my_diary_front/view/pages/post/diary_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_diary_front/view/pages/post/write_page.dart';
-import 'dart:async';
 import 'dart:convert';
 
-
-const host = "http://192.168.20.7:8080";
+const host = "http://192.168.20.3:8080";
 
 
 Future<DiaryList> fetchDiaryList(int id) async {

@@ -20,7 +20,7 @@ Future<TravelList> fetchTravelList() async {
   Map<String, String> queryParams = {
     "travelLatitude": "35.8561",
     "travelLongitude": "129.224"
-  };
+  }; // 마커 좌표
   final response = await http.get(
     Uri.http('$get_host', 'api/travels', queryParams),
   );
@@ -53,6 +53,8 @@ class Menu {
 }
 
 class TravelListPage extends StatefulWidget {
+  
+  // 좌표 받아야함
 
   @override
   State<TravelListPage> createState() => _TravelListPage();
