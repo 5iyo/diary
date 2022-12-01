@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.BufferedReader;
@@ -222,31 +223,28 @@ public class WeatherApiController {
     }
 
     /**
-     * 반경 50KM 내 여행지 추천
-     * @param recommendDTO
+     *
+     * @param mapX
+     * @param mapY
      * @return
      */
     @GetMapping("/recommend")
-    public Response recommendTravel(RecommendDTO recommendDTO) {
+    public Response recommendTravel(@RequestParam String mapX, @RequestParam String mapY) {
         String resultTravel = "";
         String apiUrl = "http://apis.data.go.kr/B551011/KorService/locationBasedList";
         List<TravelInfoDTO> travelDTOList = new ArrayList<>();
 
         StringBuilder urlBuilder = new StringBuilder(apiUrl);
         try {
-            String x = recommendDTO.getX();
-            String y = recommendDTO.getY();
 
             urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + travelKey);
             urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("30", "UTF-8"));
             urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8"));
             urlBuilder.append("&" + URLEncoder.encode("MobileOS", "UTF-8") + "=" + URLEncoder.encode("ETC", "UTF-8"));
             urlBuilder.append("&" + URLEncoder.encode("MobileApp", "UTF-8") + "=" + URLEncoder.encode("5IYO", "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("mapX", "UTF-8") + "=" + URLEncoder.encode(mapX, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("mapY", "UTF-8") + "=" + URLEncoder.encode(mapY, "UTF-8"));
             urlBuilder.append("&" + URLEncoder.encode("_type", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8"));
-            urlBuilder.append("&" + URLEncoder.encode("listYN", "UTF-8") + "=" + URLEncoder.encode("Y", "UTF-8"));
-            urlBuilder.append("&" + URLEncoder.encode("arrange", "UTF-8") + "=" + URLEncoder.encode("C", "UTF-8"));
-            urlBuilder.append("&" + URLEncoder.encode("mapX", "UTF-8") + "=" + URLEncoder.encode(x, "UTF-8"));
-            urlBuilder.append("&" + URLEncoder.encode("mapY", "UTF-8") + "=" + URLEncoder.encode(y, "UTF-8"));
             urlBuilder.append("&" + URLEncoder.encode("radius", "UTF-8") + "=" + URLEncoder.encode("50000", "UTF-8"));
 
             URL url2 = new URL(urlBuilder.toString());
