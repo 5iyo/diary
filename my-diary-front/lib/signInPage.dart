@@ -37,9 +37,9 @@ class _SignInPageState extends State<SignInPage> {
           elevation: 0.0,
         ),
         body: Center(
-          child: GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
-            child: SingleChildScrollView(
+          child: SingleChildScrollView(
+            child: GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -110,7 +110,7 @@ class _SignInPageState extends State<SignInPage> {
                       )),
                   Padding(
                       padding:
-                          const EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 20.0),
+                      const EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 20.0),
                       child: Container(
                         height: 1.0,
                         width: 500.0,
@@ -118,7 +118,7 @@ class _SignInPageState extends State<SignInPage> {
                       )),
                   Padding(
                       padding:
-                          const EdgeInsets.fromLTRB(50.0, 20.0, 50.0, 20.0),
+                      const EdgeInsets.fromLTRB(50.0, 20.0, 50.0, 20.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
