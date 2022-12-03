@@ -20,6 +20,7 @@ public class DiaryImage {
     @JoinColumn(name = "DIARY_ID")
     private Diary diary;
 
+    @Column(columnDefinition = "LONGTEXT")
     private String imageFile;
 
     public static DiaryImage createDiaryImage(Diary diary, String imageFile) {

@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
 import 'package:my_diary_front/data.dart';
 import 'package:my_diary_front/view/pages/post/travel_list_page.dart';
+import 'package:my_diary_front/view/pages/post/travel_page.dart';
 import 'package:my_diary_front/view/pages/post/write_page.dart';
 import 'package:my_diary_front/view/pages/user/user_info.dart';
 import 'package:get/get.dart';
@@ -146,7 +147,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
             title: Text('일기쓰기'),
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => WritePage()));
+                  MaterialPageRoute(builder: (context) => TravelPage("")));
             },
           ),
           ListTile(

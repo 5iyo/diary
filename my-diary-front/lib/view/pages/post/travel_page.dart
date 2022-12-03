@@ -1,62 +1,48 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:my_diary_front/controller/dio_write.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:my_diary_front/controller/dio_travel.dart';
+import 'package:my_diary_front/controller/dto/TravelResp.dart';
 import 'package:my_diary_front/util/validator_util.dart';
 import 'package:my_diary_front/view/components/custom_date_picker.dart';
 import 'package:my_diary_front/view/components/custom_elevated_button.dart';
 import 'package:my_diary_front/view/components/custom_text_form_field.dart';
-import 'package:my_diary_front/view/components/custom_textarea.dart';
-import 'package:my_diary_front/view/pages/post/diary_list_page.dart';
-import 'package:my_diary_front/controller/dto/WriteResp.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-
+import 'package:my_diary_front/view/pages/post/travel_list_page.dart';
 import 'dart:async';
-import 'dart:convert';
 
-class WritePage extends StatefulWidget {
+class TravelPage extends StatefulWidget {
 
-  final int id;
-  const WritePage(this.id);
+  final String id;
+  const TravelPage(this.id);
 
   @override
-  State<WritePage> createState() => _WritePageState(id);
+  State<TravelPage> createState() => _TravelPageState(id);
 }
 
-class _WritePageState extends State<WritePage> {
-  final int id;
-  _WritePageState(this.id);
+class _TravelPageState extends State<TravelPage> {
+
+  final String id;
+  _TravelPageState(this.id);
 
   final _formKey = GlobalKey<FormState>();
 
   final _title = TextEditingController();
-  final _content = TextEditingController();
-  final _travel = TextEditingController();
-  final _date = TextEditingController();
+  //final _area = TextEditingController();
+  final _startdate = TextEditingController();
+  final _enddate = TextEditingController();
 
-  final _valueList = ['맑음', '흐림', '약간 흐림', '비', '눈', '바람'];
-  var _selectedValue = '맑음';
-
-  Future<WriteResp>? _writeresp;
-
-  List<File> userImages =[];
-  List<String> base64List = [];
-  int userBestImageIndex = 0;
-  ScrollController controller = ScrollController();
+  Future<TravelResp>? _travelresp;
+  List<File> travelImage = [];
+  List<String> base64 = [];
   final ImagePicker _picker = ImagePicker();
+  ScrollController controller = ScrollController();
 
   @override
-  void initState() {
-    controller = new ScrollController()..addListener((){
-      setState(() {
-        this.iconView();
-      });
-    });
-    super.initState();
-  }
-
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -67,14 +53,16 @@ class _WritePageState extends State<WritePage> {
       extendBodyBehindAppBar: true,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: (_writeresp == null) ? buildWrite() : buildFutureBuilder(),
+        child: (_travelresp == null) ? buildTravel() : buildFutureBuilder(),
       ),
     );
   }
 
-  Widget buildWrite() {
-    DioWrite dioWrite = DioWrite(id);
-    String init = "여행 날짜";
+  Widget buildTravel() {
+
+    DioTravel dioTravel = DioTravel(id);
+    String startinit = "여행 시작 날짜";
+    String endinit = "여행 종료 날짜";
 
     return Form(
       key: _formKey,
@@ -82,29 +70,14 @@ class _WritePageState extends State<WritePage> {
         children: [
           Row(
             children: <Widget>[
-              Expanded(child: CustomDatePicker(controller: _date, init: init, funValidator: validateDate())),
-              Expanded(child: DropdownButton(
-                value: _selectedValue,
-                items: _valueList.map(
-                      (value) {
-                    return DropdownMenuItem(
-                      value: value,
-                      child: Text(value),
-                    );
-                  },
-                ).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedValue = value!;
-                  });
-                },
-              )),
-              Expanded(child: TextFormField(
-                  controller: _travel,
-                  decoration: InputDecoration(
-                    hintText: "Travel",
-                  )
-              ),)
+              Expanded(child: CustomDatePicker(controller: _startdate, init: startinit, funValidator: validateDate())),
+              Expanded(child: CustomDatePicker(controller: _enddate, init: endinit, funValidator: validateDate())),
+              // Expanded(child: TextFormField(
+              //     controller: _area,
+              //     decoration: InputDecoration(
+              //       hintText: "여행지",
+              //     )
+              // ),)
             ],
           ),
           SizedBox(height: 10),
@@ -114,11 +87,6 @@ class _WritePageState extends State<WritePage> {
               funValidator: validateTitle()
           ),
           SizedBox(height: 5),
-          CustomTextArea(
-              controller: _content,
-              hint: "Content",
-              funValidator: validateContent()
-          ),
           SafeArea(
             child: SingleChildScrollView(
               child: Container(
@@ -131,21 +99,16 @@ class _WritePageState extends State<WritePage> {
                           Container(
                               width: MediaQuery.of(context).size.width,
                               height: 200.0,
-                              child: this.userImages.isEmpty
+                              child: this.travelImage.isEmpty
                                   ? Center(child: Text("이미지를 등록해주세요"))
                                   : ListView.builder(
                                   padding: EdgeInsets.all(10.0),
                                   scrollDirection: Axis.horizontal,
                                   controller: this.controller,
-                                  itemCount: this.userImages.length,
+                                  itemCount: this.travelImage.length,
                                   itemBuilder: (BuildContext context, int index) => Stack(
                                       children: <Widget>[
                                         GestureDetector(
-                                          onTap: (){
-                                            setState(() {
-                                              userBestImageIndex = index;
-                                            });
-                                          },
                                           child: Container(
                                             width: 200.0,
                                             child: Card(
@@ -153,7 +116,7 @@ class _WritePageState extends State<WritePage> {
                                               clipBehavior: Clip.antiAlias,
                                               borderOnForeground: false,
                                               child: Image.file(
-                                                  this.userImages[index], fit: BoxFit.cover
+                                                  this.travelImage[index], fit: BoxFit.cover
                                               ),
                                             ),
                                             padding: EdgeInsets.all(10.0),
@@ -165,8 +128,7 @@ class _WritePageState extends State<WritePage> {
                                           child: GestureDetector(
                                             onTap: (){
                                               setState(() {
-                                                userImages.remove(userImages[index]);
-                                                iconCountCheck();
+                                                travelImage.remove(travelImage[index]);
                                               });
                                             },
                                             child: Container(
@@ -188,20 +150,6 @@ class _WritePageState extends State<WritePage> {
                                   )
                               )
                           ),
-                          !this.nextIconView ? Container()
-                              : Positioned(
-                            top: 100.0,
-                            right: 10.0,
-                            child: Container(
-                              width: 30.0,
-                              height: 30.0,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(30.0)
-                              ),
-                              child: Icon(Icons.navigate_next),
-                            ),
-                          )
                         ]
                     ),
                   ],
@@ -214,10 +162,10 @@ class _WritePageState extends State<WritePage> {
               Expanded(
                 flex: 1,
                 child: IconButton(
-                  color: this.userImages.length >= 3
+                  color: this.travelImage.length >= 1
                       ? Colors.white
                       : Colors.grey,
-                  icon: this.userImages.length >=3 ?
+                  icon: this.travelImage.length >= 1 ?
                   Container(
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
@@ -234,18 +182,14 @@ class _WritePageState extends State<WritePage> {
                         CupertinoIcons.camera,
                         color: Theme.of(context).colorScheme.primary,
                       )),
-                  onPressed: this.userImages.length >= 3
+                  onPressed: this.travelImage.length >= 1
                       ? () => print("이미지 초과")
                       : () async{
                     bool? check = await showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title: Text("카메라 또는 갤러리를 통해 업로드할 수 있습니다"),
+                          title: Text("갤러리를 통해 업로드할 수 있습니다"),
                           actions: <Widget>[
-                            ElevatedButton(
-                              child: Text("촬영"),
-                              onPressed: () => Navigator.of(context).pop(true),
-                            ),
                             ElevatedButton(
                               child: Text("앨범"),
                               onPressed: () => Navigator.of(context).pop(false),
@@ -257,18 +201,10 @@ class _WritePageState extends State<WritePage> {
                           ],
                         )
                     ) ?? null;
-                    if(check == null) return;
-                    if(check){
-                      final pickcamera = await _picker.pickImage(source: ImageSource.camera);
-                      final cfile = File(pickcamera!.path.toString());
-                      userImages.add(cfile);
-                    }
-                    else{
-                      final pickgallery = await _picker.pickImage(source: ImageSource.gallery);
-                      final gfile = File(pickgallery!.path.toString());
-                      userImages.add(gfile);
-                    }
-                    iconCountCheck();
+                    final pickgallery = await _picker.pickImage(source: ImageSource.gallery);
+                    final gfile = File(pickgallery!.path.toString());
+                    travelImage.add(gfile);
+
                     return setState(() {});
                   },
                 ),
@@ -276,16 +212,15 @@ class _WritePageState extends State<WritePage> {
               Expanded(
                 flex: 3,
                 child: CustomElavatedButton(
-                  text: "글쓰기",
+                  text: "여행 만들기",
                   funPageRoute: () async {
-                    this.userImages.isEmpty? null
-                        : this.userImages.forEach(
-                            (e) => base64List.add("data:image/png;base64,${base64Encode(e.readAsBytesSync())}"));
-                    base64List.isEmpty ? base64List = [""] : base64List;
-                    _travel.text == null ? " " : _travel.text;
+                    this.travelImage.isEmpty? null
+                        : this.travelImage.forEach(
+                            (e) => base64.add("data:image/png;base64,${base64Encode(e.readAsBytesSync())}"));
+                    base64.isEmpty ? base64 = [""] : base64;
                     if (_formKey.currentState!.validate()) {
-                      _writeresp = dioWrite.dioWrite(_title.text, _date.text, _content.text, _selectedValue, _travel.text, base64List);
-                      Get.off(()=>DiaryListPage(id));
+                      _travelresp = dioTravel.dioTravel(_title.text, " ", "35.8561", "129.224", base64[0], _startdate.text, _enddate.text);
+                      Get.off(()=>TravelListPage());
                     }
                   },
                 ),
@@ -297,9 +232,9 @@ class _WritePageState extends State<WritePage> {
     );
   }
 
-  FutureBuilder<WriteResp> buildFutureBuilder() {
-    return FutureBuilder<WriteResp>(
-        future: _writeresp,
+  FutureBuilder<TravelResp> buildFutureBuilder() {
+    return FutureBuilder<TravelResp>(
+        future: _travelresp,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Text(snapshot.data!.id.toString());
@@ -309,27 +244,6 @@ class _WritePageState extends State<WritePage> {
           return const CircularProgressIndicator();
         }
     );
-  }
-
-  bool nextIconView = false;
-
-  void iconCountCheck(){
-    if(this.userImages.length >= 2){
-      nextIconView = true;
-      return;
-    }
-    nextIconView = false;
-    return;
-  }
-
-  void iconView(){
-    if(controller!.offset >= controller!.position.maxScrollExtent){
-      nextIconView = false;
-    }
-    else{
-      nextIconView = true;
-    }
-    return;
   }
 }
 

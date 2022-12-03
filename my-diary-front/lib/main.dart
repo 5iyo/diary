@@ -16,7 +16,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   KakaoSdk.init(nativeAppKey: dotenv.get("KAKAO_CLIENT_ID"));
-
+  
   runApp(const MyApp());
 }
 
@@ -32,13 +32,15 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
+            primaryColor: Colors.white,
+            primarySwatch: Colors.grey,
             scaffoldBackgroundColor: Colors.white,
             appBarTheme: const AppBarTheme(
                 shadowColor: Colors.transparent,
                 backgroundColor: Colors.transparent,
                 elevation: 0.0,
                 titleTextStyle:
-                TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
         initialRoute: '/userInfoPage',
         routes: {
           '/homePage': (context) => HomePage(),

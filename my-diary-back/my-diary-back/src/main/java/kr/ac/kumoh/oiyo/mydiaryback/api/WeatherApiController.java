@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.BufferedReader;
@@ -16,6 +17,7 @@ import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -140,22 +142,22 @@ public class WeatherApiController {
     );
 
     @Value("${weather.key}")
-    private String serviceKey;
+    private String weatherKey;
 
     @Value("${travel.key}")
     private String travelKey;
 
-    @GetMapping("/apiTest")
-    public Response recommend() throws JSONException {
-
+    /**
+     * 맑음 지역 필터링
+     * @return
+     * @throws JSONException
+     */
+    @GetMapping("/weather/clear")
+    public Response clearWeather () throws JSONException {
         List<String> clearLocationList = new ArrayList<>();
         List<ClearLocationInfoDTO> clearLocationInfoDTOList = new ArrayList<>();
-        String url = "https://api.openweathermap.org/data/2.5/weather" ;
-        String weatherKey = serviceKey;
+        String url = "https://api.openweathermap.org/data/2.5/weather";
 
-        /*
-         * 맑음 지역 필터링
-         */
         try {
             Iterator<String> iterator = locationList.keySet().iterator();
             while (iterator.hasNext()) {
@@ -164,7 +166,7 @@ public class WeatherApiController {
 
                 urlStringBuilder.append("?" + URLEncoder.encode("q", "UTF-8") + "=" + URLEncoder.encode(location, "UTF-8"));
                 urlStringBuilder.append("&" + URLEncoder.encode("appid", "UTF-8") + "=" + weatherKey);
-                urlStringBuilder.append("&" + URLEncoder.encode("units", "UTF-8") + "=" + URLEncoder.encode("metric", "UTF-8") );
+                urlStringBuilder.append("&" + URLEncoder.encode("units", "UTF-8") + "=" + URLEncoder.encode("metric", "UTF-8"));
 
                 URL url1 = new URL(urlStringBuilder.toString());
 
@@ -174,14 +176,12 @@ public class WeatherApiController {
                 BufferedReader br;
 
                 if (urlConnection.getResponseCode() >= 200 && urlConnection.getResponseCode() <= 300) {
-                    br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                    br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), StandardCharsets.UTF_8));
                 } else {
-                    br = new BufferedReader(new InputStreamReader(urlConnection.getErrorStream()));
+                    br = new BufferedReader(new InputStreamReader(urlConnection.getErrorStream(), StandardCharsets.UTF_8));
                 }
 
-
                 // 날씨 api 반환 결과
-
                 StringBuilder result = new StringBuilder();
                 String returnLine;
                 while ((returnLine = br.readLine()) != null) {
@@ -220,86 +220,104 @@ public class WeatherApiController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        JSONArray clearJsonArray = new JSONArray();
-        for (String s : clearLocationList) {
-            clearJsonArray.put(s);
-        }
-
-        /*
-         * 관광지 추천
-         */
-        String resultTravel = "";
-        List<ClearDTO<String>> results = new ArrayList<>();
-
-        for (int i = 0; i < clearLocationList.toArray().length; i++) {
-            String apiUrl = "http://apis.data.go.kr/B551011/KorService/searchKeyword";
-
-            StringBuilder urlBuilder = new StringBuilder(apiUrl);
-            try {
-                urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + travelKey);
-                urlBuilder.append("&" + URLEncoder.encode("MobileOS", "UTF-8") + "=" + URLEncoder.encode("ETC", "UTF-8"));
-                urlBuilder.append("&" + URLEncoder.encode("MobileApp", "UTF-8") + "=" + URLEncoder.encode("5IYO", "UTF-8"));
-                urlBuilder.append("&" + URLEncoder.encode("listYN", "UTF-8") + "=" + URLEncoder.encode("Y", "UTF-8"));
-                urlBuilder.append("&" + URLEncoder.encode("arrange", "UTF-8") + "=" + URLEncoder.encode("C", "UTF-8"));
-                urlBuilder.append("&" + URLEncoder.encode("_type", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8"));
-                urlBuilder.append("&" + URLEncoder.encode("keyword", "UTF-8") + "=" + URLEncoder.encode(clearLocationList.get(i), "UTF-8"));
-
-                URL url2 = new URL(urlBuilder.toString());
-
-                HttpURLConnection conn = (HttpURLConnection) url2.openConnection();
-                conn.setRequestMethod("GET");
-
-                BufferedReader rd;
-                if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
-                    rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                } else {
-                    rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-                }
-
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = rd.readLine()) != null) {
-                    sb.append(line);
-                }
-                rd.close();
-                conn.disconnect();
-
-                resultTravel = sb.toString();
-
-                // json
-                JSONObject jsonObj = new JSONObject(resultTravel);
-                JSONObject response = jsonObj.getJSONObject("response");
-
-                JSONObject header = response.getJSONObject("header");
-                JSONObject body = response.getJSONObject("body");
-
-                JSONObject items = body.getJSONObject("items");
-                if (items.isEmpty()) continue;
-
-                JSONArray itemsJSONArray = items.getJSONArray("item");
-
-                List<String> travelDTOList = new ArrayList<>();
-
-                for (int j = 0; j < itemsJSONArray.length(); j++) {
-                    JSONObject itemObj = itemsJSONArray.getJSONObject(j);
-                    String title = itemObj.getString("title");
-                    travelDTOList.add(title);
-                }
-                String location = clearLocationInfoDTOList.get(i).getLocation();
-                String temp = clearLocationInfoDTOList.get(i).getTemp();
-
-                ClearLocationInfoDTO clear = new ClearLocationInfoDTO(temp, location);
-                ClearDTO<String> resultList = new ClearDTO(clear, travelDTOList);
-
-                results.add(resultList);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return new Response(results);
+        return new Response(clearLocationInfoDTOList);
     }
+
+    /**
+     *
+     * @param mapX
+     * @param mapY
+     * @return
+     */
+    @GetMapping("/recommend")
+    public Response recommendTravel(@RequestParam String mapX, @RequestParam String mapY) {
+        String resultTravel = "";
+        String apiUrl = "http://apis.data.go.kr/B551011/KorService/locationBasedList";
+        List<TravelInfoDTO> travelDTOList = new ArrayList<>();
+
+        StringBuilder urlBuilder = new StringBuilder(apiUrl);
+        try {
+
+            urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + travelKey);
+            urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("30", "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("MobileOS", "UTF-8") + "=" + URLEncoder.encode("ETC", "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("MobileApp", "UTF-8") + "=" + URLEncoder.encode("5IYO", "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("mapX", "UTF-8") + "=" + URLEncoder.encode(mapX, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("mapY", "UTF-8") + "=" + URLEncoder.encode(mapY, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("_type", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("radius", "UTF-8") + "=" + URLEncoder.encode("50000", "UTF-8"));
+
+            URL url2 = new URL(urlBuilder.toString());
+
+            HttpURLConnection conn = (HttpURLConnection) url2.openConnection();
+            conn.setRequestMethod("GET");
+
+            BufferedReader rd;
+            if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+                rd = new BufferedReader(new InputStreamReader(conn.getInputStream(),StandardCharsets.UTF_8));
+            } else {
+                rd = new BufferedReader(new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8));
+            }
+
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = rd.readLine()) != null) {
+                sb.append(line);
+            }
+            rd.close();
+            conn.disconnect();
+
+            resultTravel = sb.toString();
+
+            // json
+            JSONObject jsonObj = new JSONObject(resultTravel);
+            JSONObject response = jsonObj.getJSONObject("response");
+
+            JSONObject header = response.getJSONObject("header");
+            JSONObject body = response.getJSONObject("body");
+
+            JSONObject items = body.getJSONObject("items");
+
+            JSONArray itemsJSONArray = items.getJSONArray("item");
+
+            for (int j = 0; j < itemsJSONArray.length(); j++) {
+                JSONObject itemObj = itemsJSONArray.getJSONObject(j);
+
+                TravelInfoDTO infoDTO = new TravelInfoDTO();
+                String title = itemObj.getString("title");
+                String travelX = itemObj.getString("mapx");
+                String travelY = itemObj.getString("mapy");
+
+                infoDTO.setTitle(title);
+                infoDTO.setX(travelX);
+                infoDTO.setY(travelY);
+
+                travelDTOList.add(infoDTO);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new Response(travelDTOList);
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    static class TravelInfoDTO {
+        private String title;
+        private String x;
+        private String y;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class RecommendDTO {
+        private String x;
+        private String y;
+    }
+
 
     @Data
     @AllArgsConstructor
