@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -175,9 +176,9 @@ public class WeatherApiController {
                 BufferedReader br;
 
                 if (urlConnection.getResponseCode() >= 200 && urlConnection.getResponseCode() <= 300) {
-                    br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                    br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), StandardCharsets.UTF_8));
                 } else {
-                    br = new BufferedReader(new InputStreamReader(urlConnection.getErrorStream()));
+                    br = new BufferedReader(new InputStreamReader(urlConnection.getErrorStream(), StandardCharsets.UTF_8));
                 }
 
                 // 날씨 api 반환 결과
@@ -254,9 +255,9 @@ public class WeatherApiController {
 
             BufferedReader rd;
             if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
-                rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                rd = new BufferedReader(new InputStreamReader(conn.getInputStream(),StandardCharsets.UTF_8));
             } else {
-                rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+                rd = new BufferedReader(new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8));
             }
 
             StringBuilder sb = new StringBuilder();
