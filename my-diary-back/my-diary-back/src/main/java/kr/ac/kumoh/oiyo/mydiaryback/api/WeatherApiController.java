@@ -193,6 +193,13 @@ public class WeatherApiController {
                 // json 결과 파싱
                 JSONObject jsonObj = new JSONObject(result.toString());
                 JSONObject coordObj = jsonObj.getJSONObject("coord");
+
+                BigDecimal mapX = coordObj.getBigDecimal("lon");
+                BigDecimal mapY = coordObj.getBigDecimal("lat");
+                PosDTO posDTO = new PosDTO();
+                posDTO.setX(mapX.toString());
+                posDTO.setY(mapY.toString());
+
                 JSONArray weatherArray = jsonObj.getJSONArray("weather");
 
                 JSONObject tempArray = jsonObj.getJSONObject("main");
@@ -312,7 +319,8 @@ public class WeatherApiController {
 
     @Data
     @AllArgsConstructor
-    static class RecommendDTO {
+    @NoArgsConstructor
+    static class PosDTO {
         private String x;
         private String y;
     }
