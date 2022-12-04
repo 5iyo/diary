@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
                 elevation: 0.0,
                 titleTextStyle:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
-        initialRoute: '/userInfoPage',
+        initialRoute: '/homePage',
         routes: {
           '/homePage': (context) => HomePage(),
           '/signInPage': (context) => SignInPage(),

@@ -110,10 +110,9 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
       actions: [
         IconButton(
             onPressed: () {
-              _controller.animateCamera(
-                  CameraUpdate.newCameraPosition(_initialPosition));
+              // TODO : 소셜 공유 팝업 띄우기
             },
-            icon: const Icon(Icons.refresh))
+            icon: const Icon(Icons.share))
       ],
     );
   }

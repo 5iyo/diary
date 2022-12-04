@@ -28,6 +28,9 @@ def naverLoginApiId = localProperties.getProperty('naver.login.id')
 def naverLoginApiSecret = localProperties.getProperty('naver.login.secret')
 def naverLoginApiName = localProperties.getProperty('naver.login.name')
 
+def facebookAppId = localProperties.getProperty('facebook.app.id')
+def facebookAppName = localProperties.getProperty('facebook.app.name')
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
@@ -64,7 +67,8 @@ android {
         manifestPlaceholders["naverLoginApiId"] = naverLoginApiId
         manifestPlaceholders["naverLoginApiSecret"] = naverLoginApiSecret
         manifestPlaceholders["naverLoginApiName"] = naverLoginApiName
-
+        manifestPlaceholders["facebookAppId"] = facebookAppId
+        manifestPlaceholders["facebookAppName"] = facebookAppName
     }
 
     buildTypes {

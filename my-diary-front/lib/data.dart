@@ -6,6 +6,7 @@ import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:http/http.dart' as http;
+import 'package:my_diary_front/diaryShare.dart';
 
 class MainViewModel {
   final DiaryStream _stream = DiaryStream();
@@ -29,6 +30,10 @@ class MainViewModel {
   Future logout() async {
     await socialLogin?.logout();
     _stream.addEvent("");
+  }
+
+  Future share(DiarySocialShare diarySocialShare, DiaryScreenshot diaryShare) async {
+    await diarySocialShare.share(diaryShare);
   }
 }
 

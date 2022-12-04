@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_diary_front/data.dart';
 import 'package:provider/provider.dart';
+import 'package:screenshot/screenshot.dart';
+
+import 'diaryShare.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -17,6 +20,8 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   late MainViewModel _mainViewModel;
+
+  DiaryScreenshot diaryShare = DiaryScreenshot();
 
   @override
   void initState() {
@@ -102,11 +107,16 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                   Padding(
                       padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 10.0),
-                      child: ElevatedButton(
-                        onPressed: () => {},
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.grey),
-                        child: const Text('Sign In'),
+                      child: Screenshot(
+                        controller: diaryShare.screenshotController,
+                        child: ElevatedButton(
+                          onPressed: () => {
+                            _mainViewModel.share(DiaryInstagramShare(), diaryShare)
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.grey),
+                          child: const Text('Sign In'),
+                        ),
                       )),
                   Padding(
                       padding:
