@@ -17,9 +17,9 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("")
-    public Map<String, Object> updateUser(@RequestBody PostUserInfoDto updateDto){
+    public Map<String, Object> updateUser(@PathVariable("id") long id,@RequestBody PostUserInfoDto updateDto){
         Map<String, Object>response = new HashMap<>();
-         if(userService.updateUser(updateDto) == 1)
+         if(userService.updateUser(id, updateDto) == 1)
          {
              response.put("result","SUCCESS");
          }else{
@@ -30,8 +30,10 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Map<String, Object> findById(@PathVariable("id")User user){
+    public Map<String, Object> findById(@PathVariable("id")long userId){
         Map<String, Object> response = new HashMap<>();
+
+        User user = userService.findUserbyId(userId);
 
         if(user != null) {
             response.put("result","SUCCESS");
