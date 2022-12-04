@@ -14,6 +14,8 @@ import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:provider/provider.dart';
 
+import '../../../controller/dto/TravelList_travels.dart';
+
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
 
@@ -26,23 +28,25 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
 
   // 애플리케이션에서 지도를 이동하기 위한 컨트롤러
   late GoogleMapController _controller;
-  int id = 1;
+  int markerId = 1;
 
   // 이 값은 지도가 시작될 때 첫 번째 위치입니다.
-  final CameraPosition _initialPosition = CameraPosition(
+  final CameraPosition _initialPosition = const CameraPosition(
       target: LatLng(36.30808077893056, 127.66468472778797), zoom: 7.0);
 
   // 지도 클릭 시 표시할 장소에 대한 마커 목록
-  final List<Marker> markers = [];
+  late List<Marker> markers;
 
   late Animation<double> _animation;
   late AnimationController _animationController;
 
   @override
   void initState() {
+    markers = [];
+
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 260),
+      duration: const Duration(milliseconds: 260),
     );
 
     final curvedAnimation =
@@ -52,18 +56,19 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
     super.initState();
   }
 
-  addMarker(coordinate, InfoWindow infoWindow) {
+  addMarker(coordinate, InfoWindow infoWindow, [Travels? travels]) {
     setState(() {
-      markers.add(Marker(
-          position: coordinate,
-          markerId: MarkerId((id).toString()),
-          onTap: () {
-/*                Navigator.pushNamed(
-                    context,
-                    '/diaryPage'
-                );*/
-            Get.to(() => TravelListPage());
-          }));
+      markers.add(travels == null
+          ? Marker(
+              position: coordinate,
+              markerId: MarkerId((markerId).toString()),
+              infoWindow: infoWindow,
+            )
+          : Marker(
+              position: coordinate,
+              markerId: MarkerId((markerId++).toString()),
+              infoWindow: infoWindow,
+            ));
     });
   }
 
@@ -83,6 +88,18 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     _mainViewModel = Provider.of<MainViewModel>(context, listen: true);
+    _mainViewModel.diaryUser!.travels.travelMarkers!.map((e) => addMarker(
+        e.travelLatLng,
+        InfoWindow(
+            title: e.travelArea,
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => TravelListPage(
+                            travelLatLng: e.travelLatLng,
+                          )));
+            })));
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: _buildAppBar(),
@@ -125,11 +142,12 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
         children: <Widget>[
           UserAccountsDrawerHeader(
             currentAccountPicture: CircleAvatar(
-              backgroundImage: _mainViewModel.diaryUser!.image == null
+              backgroundImage: _mainViewModel.diaryUser!.profileImage == null
                   ? const AssetImage('img/핑구.png')
-                  : Image.network(_mainViewModel.diaryUser!.image!).image,
+                  : Image.network(_mainViewModel.diaryUser!.profileImage!)
+                      .image,
             ),
-            accountName: Text(_mainViewModel.diaryUser!.name),
+            accountName: Text(_mainViewModel.diaryUser!.username),
             accountEmail: Text(_mainViewModel.diaryUser!.email),
             onDetailsPressed: () {
               print('arrow is clicked');
@@ -137,21 +155,22 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
             decoration: BoxDecoration(color: Colors.blueGrey[400]),
           ),
           ListTile(
-            title: Text('회원 정보 보기'),
+            title: const Text('회원 정보 보기'),
             onTap: () {
               Navigator.pop(context);
-              Get.to(() => UserInfo());
+              Get.to(() => const UserInfo());
             },
           ),
           ListTile(
-            title: Text('일기쓰기'),
+            title: const Text('일기쓰기'),
             onTap: () {
+              //FixMe : 일기쓰기가 무슨 페이지로 가는 버튼인지 확실히 알아보기
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => TravelPage("")));
             },
           ),
           ListTile(
-            title: Text('로그아웃'),
+            title: const Text('로그아웃'),
             onTap: () => _mainViewModel.logout(),
           )
         ],
@@ -173,13 +192,12 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
       mapToolbarEnabled: false,
       // 클릭한 위치가 중앙에 표시
       onTap: (coordinate) {
-        addMarker(coordinate, InfoWindow());
         FocusScope.of(context).unfocus();
         _controller.animateCamera(CameraUpdate.newLatLng(coordinate));
       },
       cameraTargetBounds: CameraTargetBounds(LatLngBounds(
-          southwest: LatLng(33.0643, 124.3636),
-          northeast: LatLng(38.3640, 131.5222))),
+          southwest: const LatLng(33.0643, 124.3636),
+          northeast: const LatLng(38.3640, 131.5222))),
       minMaxZoomPreference: const MinMaxZoomPreference(7.0, 15.0),
     );
   }
@@ -190,24 +208,25 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
       items: <Bubble>[
         // Floating action menu item
         Bubble(
-          title: "Settings",
+          title: "Hot Places",
           iconColor: Colors.white,
           bubbleColor: Colors.white.withOpacity(0.4),
-          icon: Icons.settings,
-          titleStyle: TextStyle(fontSize: 16, color: Colors.white),
+          icon: Icons.local_fire_department_rounded,
+          titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
           onPress: () {
             _animationController.reverse();
           },
         ),
         // Floating action menu item
         Bubble(
-          title: "Profile",
+          title: "Add Travel",
           iconColor: Colors.white,
           bubbleColor: Colors.white.withOpacity(0.4),
-          icon: Icons.people,
-          titleStyle: TextStyle(fontSize: 16, color: Colors.white),
+          icon: Icons.add,
+          titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
           onPress: () {
             _animationController.reverse();
+            _searchPlaces();
           },
         ),
         //Floating action menu item
@@ -216,10 +235,12 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
           iconColor: Colors.white,
           bubbleColor: Colors.white.withOpacity(0.4),
           icon: Icons.home,
-          titleStyle: TextStyle(fontSize: 16, color: Colors.white),
-          onPress: () {
+          titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
+          onPress: () async {
             _animationController.reverse();
-            _searchPlaces();
+            // TODO : markers 새로 받아오기, 서버에서 travel list 받아오고 마커로 매핑
+            _controller.animateCamera(
+                CameraUpdate.newCameraPosition(_initialPosition));
           },
         ),
       ],
@@ -281,13 +302,15 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
 
     final lat = detail.result.geometry!.location.lat;
     final lng = detail.result.geometry!.location.lng;
+    final latLng = LatLng(lat, lng);
 
     addMarker(
-        LatLng(lat, lng),
+        latLng,
         InfoWindow(
             title: detail.result.name,
             onTap: () {
-              Navigator.pushNamed(context, '/diaryInfoPage');
+              Get.to(() => TravelListPage(travelLatLng: latLng));
+//              Navigator.pushNamed(context, '/diaryInfoPage');
             }));
 
     _controller

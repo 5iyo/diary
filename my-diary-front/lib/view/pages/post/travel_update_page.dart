@@ -229,7 +229,7 @@ class _TravelUpdatePageState extends State<TravelUpdatePage> {
                   funPageRoute: () async {
                     if (_formKey.currentState!.validate()) {
                       dioTravelUpdate.dioTravelUpdate(_title.text, travelImage[0], _startdate.text, _enddate.text);
-                      Get.off(()=>TravelListPage());
+                      Get.off(()=>TravelUpdatePage(id, title, image));
                     }
                   },
                 ),

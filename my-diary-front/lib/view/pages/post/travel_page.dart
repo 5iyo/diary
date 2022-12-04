@@ -220,7 +220,7 @@ class _TravelPageState extends State<TravelPage> {
                     base64.isEmpty ? base64 = [""] : base64;
                     if (_formKey.currentState!.validate()) {
                       _travelresp = dioTravel.dioTravel(_title.text, " ", "35.8561", "129.224", base64[0], _startdate.text, _enddate.text);
-                      Get.off(()=>TravelListPage());
+                      Get.off(()=>TravelPage(id));
                     }
                   },
                 ),

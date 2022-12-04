@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:my_diary_front/data.dart';
 import 'package:provider/provider.dart';
 
@@ -21,11 +22,16 @@ class _UserInfoState extends State<UserInfo> {
   final TextEditingController _birthDateController = TextEditingController();
   final TextEditingController _introductionController = TextEditingController();
 
+  final _dateFormat = DateFormat("yyyy-MM-dd", 'ko');
+
   @override
   Widget build(BuildContext context) {
     _mainViewModel = Provider.of<MainViewModel>(context, listen: true);
-    _birthDateController.text = _mainViewModel.diaryUser!.birthDate;
-    _introductionController.text = _mainViewModel.diaryUser!.introduction;
+    _birthDateController.text = _mainViewModel.diaryUser!.birthDate == null
+        ? ""
+        : _dateFormat.format(_mainViewModel.diaryUser!.birthDate!);
+    _introductionController.text =
+        _mainViewModel.diaryUser!.profileIntroduction ?? "";
     return Scaffold(
       body: SingleChildScrollView(
         child: GestureDetector(
@@ -40,7 +46,7 @@ class _UserInfoState extends State<UserInfo> {
                           'img/핑구.png') /*_mainViewModel.diaryUser!.image == null
                         ? const AssetImage('img/핑구.png')
                         : Image.network(_mainViewModel.diaryUser!.image!).image,*/
-                  ),
+                      ),
                   accountName: Text("???"),
                   //Text(_mainViewModel.diaryUser!.name),
                   /*Row(children: [
