@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:my_diary_front/controller/dto/Diary_images.dart';
 
 class Diary {
   final int? id;
@@ -7,7 +8,7 @@ class Diary {
   final String? content;
   final String? weather;
   final String? travel;
-  final dynamic? images;
+  final List<Images>? images;
   final DateTime? created;
   final DateTime? updated;
 
@@ -21,9 +22,15 @@ class Diary {
         this.images,
         this.created,
         this.updated,
-      });
+      }
+      );
 
   factory Diary.fromJson(Map<String, dynamic> json) {
+
+    var list = (json["images"] ?? []) as List;
+    print(list.runtimeType);
+    List<Images> imagesList = list.map((i) => Images.fromJson(i)).toList();
+
     return Diary(
       id : json["diaryId"],
       title : json["title"],
@@ -31,7 +38,7 @@ class Diary {
       content: json["mainText"],
       weather : json["weather"],
       travel : json["travelDestination"],
-      images: json["images"],
+      images: imagesList,
       created: DateTime.parse(json["createDate"]),
       updated: DateTime.parse(json["lastModifiedDate"]),
     );

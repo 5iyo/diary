@@ -9,7 +9,10 @@
 
 ## 실행 방법
 ```sh
-run MyDiaryBackApplication.java
+cd my-diary-back\my-diary-back
+```
+```sh
+./gradlew bootRun
 ```
 
 

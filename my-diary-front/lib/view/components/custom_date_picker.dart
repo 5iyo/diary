@@ -6,17 +6,26 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class CustomDatePicker extends StatefulWidget {
 
-  const CustomDatePicker();
+  final controller;
+  final init;
+  final funValidator;
+
+  const CustomDatePicker({this.controller, this.init, this.funValidator});
 
   @override
-  State<CustomDatePicker> createState() => _CustomDatePicker();
+  State<CustomDatePicker> createState() => _CustomDatePicker(controller, init, funValidator);
 }
 
 class _CustomDatePicker extends State<CustomDatePicker> {
-  TextEditingController _DataTimeEditingController = TextEditingController();
+  //TextEditingController _DataTimeEditingController = TextEditingController();
   TextEditingController _EstimatedEditingController = TextEditingController();
 
   DateTime? tempPickedDate;
+
+  final controller;
+  final init;
+  final funValidator;
+  _CustomDatePicker(this.controller, this.init, this.funValidator);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +48,7 @@ class _CustomDatePicker extends State<CustomDatePicker> {
                 contentPadding: new EdgeInsets.symmetric(
                     vertical: 5.0, horizontal: 5.0),
                 isDense: true,
-                hintText: "여행 날짜",
+                hintText: "$init",
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey),
                 ),
@@ -47,7 +56,9 @@ class _CustomDatePicker extends State<CustomDatePicker> {
                   borderSide: BorderSide(color: Colors.red),
                 ),
               ),
-              controller: _DataTimeEditingController,
+              controller: controller,
+              validator: funValidator,
+              //_DataTimeEditingController,
             ),
           ),
         ),
@@ -79,9 +90,9 @@ class _CustomDatePicker extends State<CustomDatePicker> {
                     allowViewNavigation: false,
                     backgroundColor: ThemeData.light().scaffoldBackgroundColor,
                     initialSelectedDate: DateTime.now(),
-                    minDate: DateTime.now(),
+                    //minDate: DateTime.now(),
                     // 아래코드는 tempPickedDate를 전역으로 받아 시작일을 선택한 날자로 시작할 수 있음
-                    //minDate: tempPickedDate,
+                    minDate: tempPickedDate,
                     maxDate: DateTime.now().add(new Duration(days: 365)),
                     // 아래 코드는 선택시작일로부터 2주까지밖에 날자 선택이 안됌
                     //maxDate: tempPickedDate!.add(new Duration(days: 14)),
@@ -92,9 +103,9 @@ class _CustomDatePicker extends State<CustomDatePicker> {
                       setState(() {
                         _EstimatedEditingController.clear();
                         //tempPickedDate = args as DateTime?;
-                        _DataTimeEditingController.text = args.toString();
+                        controller.text = args.toString();
                         convertDateTimeDisplay(
-                            _DataTimeEditingController.text, '방문');
+                            controller.text, '방문');
                         Navigator.of(context).pop();
                       }),
                     },
@@ -112,7 +123,7 @@ class _CustomDatePicker extends State<CustomDatePicker> {
     final DateTime displayDate = displayFormater.parse(date);
     if (text == '방문') {
       _EstimatedEditingController.clear();
-      return _DataTimeEditingController.text =
+      return controller.text =
           serverFormater.format(displayDate);
     } else
       return _EstimatedEditingController.text =

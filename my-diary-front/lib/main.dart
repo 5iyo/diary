@@ -7,6 +7,7 @@ import 'package:my_diary_front/homePage.dart';
 import 'package:my_diary_front/view/pages/post/diaryImagePage.dart';
 import 'package:my_diary_front/view/pages/post/diaryInfoPage.dart';
 import 'package:my_diary_front/signInPage.dart';
+import 'package:my_diary_front/view/pages/user/user_info.dart';
 import 'view/pages/post/mapPage.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +32,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
+            primaryColor: Colors.white,
+            primarySwatch: Colors.grey,
             scaffoldBackgroundColor: Colors.white,
             appBarTheme: const AppBarTheme(
                 shadowColor: Colors.transparent,
@@ -38,7 +41,7 @@ class MyApp extends StatelessWidget {
                 elevation: 0.0,
                 titleTextStyle:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
-        initialRoute: '/homePage',
+        initialRoute: '/userInfoPage',
         routes: {
           '/homePage': (context) => HomePage(),
           '/signInPage': (context) => SignInPage(),
@@ -46,6 +49,7 @@ class MyApp extends StatelessWidget {
           '/diaryInfoPage': (context) => DiaryInfoPage(),
           '/diaryImagePage': (context) => DiaryImagePage(),
           '/geocodingPage': (context) => GeocodingPage(),
+          '/userInfoPage': (context) => UserInfo(),
         },
       ),
     );

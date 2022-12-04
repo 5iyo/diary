@@ -44,6 +44,7 @@ public class Travel extends BaseEntity {
 
     // 여행 대표 이미지
     // 일기 리스트 조회 화면에서 대표 이미지로 사용됨
+    @Column(columnDefinition = "LONGTEXT")
     private String travelImage;
 
     // 여행 시작 날짜
