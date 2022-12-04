@@ -80,7 +80,8 @@ class _UserInfoState extends State<UserInfo> {
                     funPageRoute: () async {
                       await _mainViewModel.diaryUser!.updateUserInfo(
                           _introductionController.text,
-                          _introductionController.text);
+                          _birthDateController.text);
+                      Navigator.pop(context);
                     },
                   ),
                 )
