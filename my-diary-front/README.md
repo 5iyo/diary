@@ -27,6 +27,9 @@ A new Flutter project.
    참고로 에뮬레이터 사용시 일반적으로 사용하는 localhost(127.0.0.1) 대신 10.0.2.2를 사용해야함
    에뮬레이터가 가상환경이라 컴퓨터 로컬에 접근하려면 에뮬레이터의 10.0.2.2를 통해야 함
 
+# Kakao 로그인 해시키 등록
+https://developers.kakao.com/docs/latest/ko/getting-started/sdk-android#add-key-hash
+
 # null safety 허용
 1. Run → Edit Configurations 에 들어간다
 2. Additional run args : --no-sound-null-safety

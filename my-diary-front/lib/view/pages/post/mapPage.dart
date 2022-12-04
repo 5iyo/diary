@@ -35,15 +35,14 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
       target: LatLng(36.30808077893056, 127.66468472778797), zoom: 7.0);
 
   // 지도 클릭 시 표시할 장소에 대한 마커 목록
-  late List<Marker> markers;
+  List<Marker> markers = [];
+  Set<Marker> setOfMarkers = {};
 
   late Animation<double> _animation;
   late AnimationController _animationController;
 
   @override
   void initState() {
-    markers = [];
-
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 260),
@@ -56,19 +55,20 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
     super.initState();
   }
 
-  addMarker(coordinate, InfoWindow infoWindow, [Travels? travels]) {
+  addMarker(coordinate, InfoWindow infoWindow, [TravelMarker? travelMarker]) {
+    markers.add(travelMarker == null
+        ? Marker(
+            position: coordinate,
+            markerId: MarkerId((markerId).toString()),
+            infoWindow: infoWindow,
+          )
+        : Marker(
+            position: coordinate,
+            markerId: MarkerId((markerId++).toString()),
+            infoWindow: infoWindow,
+          ));
     setState(() {
-      markers.add(travels == null
-          ? Marker(
-              position: coordinate,
-              markerId: MarkerId((markerId).toString()),
-              infoWindow: infoWindow,
-            )
-          : Marker(
-              position: coordinate,
-              markerId: MarkerId((markerId++).toString()),
-              infoWindow: infoWindow,
-            ));
+      setOfMarkers = markers.toSet();
     });
   }
 
@@ -86,21 +86,22 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
   }
 
   void initMarkers(TravelMarkerList list) {
-    setState(() {
-      markers.clear();
-      list.travelMarkers!.map((e) => addMarker(
-          e.travelLatLng,
-          InfoWindow(
-              title: e.travelArea,
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => TravelListPage(
-                          travelLatLng: e.travelLatLng,
-                        )));
-              })));
-    });
+    print("##############${markers.length}");
+    markers.clear();
+    print(markers.length);
+    list.travelMarkers!.map((e) => addMarker(
+        e.travelLatLng,
+        InfoWindow(
+            title: e.travelArea,
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => TravelListPage(
+                            travelLatLng: e.travelLatLng,
+                          )));
+            }),
+        e));
   }
 
   @override
@@ -192,13 +193,14 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
           _controller = controller;
         });
       },
-      markers: markers.toSet(),
+      markers: setOfMarkers,
       zoomControlsEnabled: false,
       mapToolbarEnabled: false,
       // 클릭한 위치가 중앙에 표시
       onTap: (coordinate) {
         FocusScope.of(context).unfocus();
         _controller.animateCamera(CameraUpdate.newLatLng(coordinate));
+        addMarker(coordinate, InfoWindow());
       },
       cameraTargetBounds: CameraTargetBounds(LatLngBounds(
           southwest: const LatLng(33.0643, 124.3636),
