@@ -20,6 +20,7 @@ class MainViewModel {
   Future login(SocialLogin social) async {
     socialLogin = social;
     await social.login().then((value) {
+      print(value);
       if (value != null) {
         diaryUser = DiaryUser.fromJson(jsonDecode(value));
         _stream.addEvent(value);

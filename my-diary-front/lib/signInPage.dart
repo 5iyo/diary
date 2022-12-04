@@ -21,7 +21,7 @@ class _SignInPageState extends State<SignInPage> {
 
   late MainViewModel _mainViewModel;
 
-  DiaryScreenshot diaryShare = DiaryScreenshot();
+  DiaryScreenshot diaryScreenshot = DiaryScreenshot();
 
   @override
   void initState() {
@@ -41,134 +41,140 @@ class _SignInPageState extends State<SignInPage> {
           backgroundColor: Colors.transparent,
           elevation: 0.0,
         ),
-        body: Center(
-          child: SingleChildScrollView(
-            child: GestureDetector(
-              onTap: () => FocusScope.of(context).unfocus(),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 50.0),
-                    child: TextField(
-                      controller: _emailController,
-                      onChanged: (text) {
-                        setState(() {
-                          emailText = text;
-                        });
-                      },
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                        hintText: 'Enter your email',
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(width: 1, color: Colors.grey),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(width: 1, color: Colors.grey),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 50.0),
-                    child: TextField(
-                      controller: _passwordController,
-                      onChanged: (text) {
-                        setState(() {
-                          passwordText = text;
-                        });
-                      },
-                      decoration: const InputDecoration(
-                        labelText: 'Password',
-                        hintText: 'Enter your password',
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(width: 1, color: Colors.grey),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(width: 1, color: Colors.grey),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                      ),
-                      keyboardType: TextInputType.visiblePassword,
-                      obscureText: true,
-                    ),
-                  ),
-                  Padding(
-                      padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 10.0),
-                      child: Screenshot(
-                        controller: diaryShare.screenshotController,
-                        child: ElevatedButton(
-                          onPressed: () => {
-                            _mainViewModel.share(DiaryInstagramShare(), diaryShare)
+        body: Screenshot(
+          controller: diaryScreenshot.screenshotController,
+          child: Center(
+            child: SingleChildScrollView(
+              child: GestureDetector(
+                onTap: () => FocusScope.of(context).unfocus(),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  color: Colors.white,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 50.0),
+                        child: TextField(
+                          controller: _emailController,
+                          onChanged: (text) {
+                            setState(() {
+                              emailText = text;
+                            });
                           },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.grey),
-                          child: const Text('Sign In'),
+                          decoration: const InputDecoration(
+                            labelText: 'Email',
+                            hintText: 'Enter your email',
+                            labelStyle: TextStyle(color: Colors.grey),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(width: 1, color: Colors.grey),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(width: 1, color: Colors.grey),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            ),
+                          ),
+                          keyboardType: TextInputType.emailAddress,
                         ),
-                      )),
-                  Padding(
-                      padding:
-                      const EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 20.0),
-                      child: Container(
-                        height: 1.0,
-                        width: 500.0,
-                        color: Colors.grey,
-                      )),
-                  Padding(
-                      padding:
-                      const EdgeInsets.fromLTRB(50.0, 20.0, 50.0, 20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () => _mainViewModel.login(NaverLogin()),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                elevation: 0.0),
-                            child: Image.asset(
-                              'img/naver_icon.png',
-                              height: 50,
-                              fit: BoxFit.fitHeight,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 50.0),
+                        child: TextField(
+                          controller: _passwordController,
+                          onChanged: (text) {
+                            setState(() {
+                              passwordText = text;
+                            });
+                          },
+                          decoration: const InputDecoration(
+                            labelText: 'Password',
+                            hintText: 'Enter your password',
+                            labelStyle: TextStyle(color: Colors.grey),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(width: 1, color: Colors.grey),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(width: 1, color: Colors.grey),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
                             ),
                           ),
-                          ElevatedButton(
-                            onPressed: () => _mainViewModel.login(KakaoLogin()),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                elevation: 0.0),
-                            child: Image.asset(
-                              'img/kakao_icon.png',
-                              height: 50,
-                              fit: BoxFit.fitHeight,
+                          keyboardType: TextInputType.visiblePassword,
+                          obscureText: true,
+                        ),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 10.0),
+                          child: ElevatedButton(
+                              onPressed: () {
+                                _mainViewModel.share(DiaryInstagramShare(), diaryScreenshot);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.grey),
+                              child: const Text('Sign In'),
                             ),
                           ),
-                          ElevatedButton(
-                            onPressed: () =>
-                                _mainViewModel.login(GoogleLogin()),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                elevation: 0.0),
-                            child: Image.asset(
-                              'img/google_icon.png',
-                              height: 50,
-                              fit: BoxFit.fitHeight,
-                            ),
-                          ),
-                        ],
-                      )),
-                ],
+                      Padding(
+                          padding:
+                          const EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 20.0),
+                          child: Container(
+                            height: 1.0,
+                            width: 500.0,
+                            color: Colors.grey,
+                          )),
+                      Padding(
+                          padding:
+                          const EdgeInsets.fromLTRB(50.0, 20.0, 50.0, 20.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () => _mainViewModel.login(NaverLogin()),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    elevation: 0.0),
+                                child: Image.asset(
+                                  'img/naver_icon.png',
+                                  height: 50,
+                                  fit: BoxFit.fitHeight,
+                                ),
+                              ),
+                              ElevatedButton(
+                                onPressed: () => _mainViewModel.login(KakaoLogin()),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    elevation: 0.0),
+                                child: Image.asset(
+                                  'img/kakao_icon.png',
+                                  height: 50,
+                                  fit: BoxFit.fitHeight,
+                                ),
+                              ),
+                              ElevatedButton(
+                                onPressed: () =>
+                                    _mainViewModel.login(GoogleLogin()),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    elevation: 0.0),
+                                child: Image.asset(
+                                  'img/google_icon.png',
+                                  height: 50,
+                                  fit: BoxFit.fitHeight,
+                                ),
+                              ),
+                            ],
+                          )),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),

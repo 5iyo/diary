@@ -13,6 +13,9 @@ import 'package:get/get.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:provider/provider.dart';
+import 'package:screenshot/screenshot.dart';
+
+import '../../../diaryShare.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -37,6 +40,8 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
 
   late Animation<double> _animation;
   late AnimationController _animationController;
+
+  DiaryScreenshot diaryScreenshot = DiaryScreenshot();
 
   @override
   void initState() {
@@ -87,7 +92,10 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
       extendBodyBehindAppBar: true,
       appBar: _buildAppBar(),
       drawer: _buildDrawer(),
-      body: _buildGoogleMap(),
+      body: Screenshot(
+        controller: diaryScreenshot.screenshotController,
+        child: _buildGoogleMap(),
+      ),
       floatingActionButton: _buildFloatingActionBubble(),
     );
   }
@@ -111,6 +119,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
         IconButton(
             onPressed: () {
               // TODO : 소셜 공유 팝업 띄우기
+              _mainViewModel.share(DiaryFacebookShare(), diaryScreenshot);
             },
             icon: const Icon(Icons.share))
       ],

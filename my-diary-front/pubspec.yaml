@@ -36,9 +36,8 @@ dependencies:
   floating_action_bubble: ^1.1.4
   # screenshot
   screenshot: ^1.2.3
-  path_provider: ^2.0.11
   # social_share
-  social_share_plugin: ^0.4.1+2
+  social_share: ^2.3.1
 
   get: ^4.6.5
   validators: ^3.0.0

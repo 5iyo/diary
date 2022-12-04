@@ -5,7 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:screenshot/screenshot.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:social_share_plugin/social_share_plugin.dart';
+import 'package:social_share/social_share.dart';
 
 class DiaryScreenshot {
   ScreenshotController screenshotController = ScreenshotController();
@@ -40,7 +40,8 @@ class DiaryInstagramShare implements DiarySocialShare {
       return;
     }
 
-    await SocialSharePlugin.shareToFeedInstagram(path: path);
+    await SocialShare.shareInstagramStory(appId: dotenv.get("FACEBOOK_APP_ID"), imagePath: path).then((value) => print(value));
+/*    await SocialSharePlugin.shareToFeedInstagram(path: path);*/
   }
 }
 
@@ -54,7 +55,7 @@ class DiaryFacebookShare implements DiarySocialShare {
     if (path == null) {
       return;
     }
-
-    await SocialSharePlugin.shareToFeedFacebook(path: path);
+    await SocialShare.shareFacebookStory(appId: dotenv.get("FACEBOOK_APP_ID"), imagePath: path).then((value) => print(value));
+/*    await SocialSharePlugin.shareToFeedFacebook(path: path);*/
   }
 }
