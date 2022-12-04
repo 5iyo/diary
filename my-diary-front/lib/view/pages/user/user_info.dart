@@ -42,20 +42,20 @@ class _UserInfoState extends State<UserInfo> {
               children: [
                 UserAccountsDrawerHeader(
                   currentAccountPicture: CircleAvatar(
-                      backgroundImage: const AssetImage(
-                          'img/핑구.png') /*_mainViewModel.diaryUser!.image == null
+                      backgroundImage: /*const AssetImage(
+                          'img/핑구.png') */_mainViewModel.diaryUser!.profileImage == null
                         ? const AssetImage('img/핑구.png')
-                        : Image.network(_mainViewModel.diaryUser!.image!).image,*/
+                        : Image.network(_mainViewModel.diaryUser!.profileImage!).image,
                       ),
-                  accountName: Text("???"),
-                  //Text(_mainViewModel.diaryUser!.name),
+                  accountName:/* Text("???"),*/
+                  Text(_mainViewModel.diaryUser!.username),
                   /*Row(children: [
                     Text("???"), //Text(_mainViewModel.diaryUser!.name),
                     Spacer(),
                     SizedBox(width: 200.0, child: CustomDatePicker()),
                   ]),*/
-                  accountEmail: Text("???"),
-                  //Text(_mainViewModel.diaryUser!.email),
+                  accountEmail: /*Text("???"),*/
+                  Text(_mainViewModel.diaryUser!.email),
                   decoration: BoxDecoration(color: Colors.blueGrey[400]),
                 ),
                 Padding(
@@ -77,8 +77,10 @@ class _UserInfoState extends State<UserInfo> {
                   padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
                   child: CustomElavatedButton(
                     text: '정보 수정',
-                    funPageRoute: () {
-                      // TODO : 정보 수정 http request 작성
+                    funPageRoute: () async {
+                      await _mainViewModel.diaryUser!.updateUserInfo(
+                          _introductionController.text,
+                          _introductionController.text);
                     },
                   ),
                 )

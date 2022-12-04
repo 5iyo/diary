@@ -11,6 +11,8 @@ import 'package:http/http.dart' as http;
 import 'controller/dio_travel.dart';
 import 'controller/dto/TravelListResp.dart';
 
+import 'package:dio/dio.dart';
+
 class MainViewModel {
   final DiaryStream _stream = DiaryStream();
   SocialLogin? socialLogin;
@@ -24,7 +26,7 @@ class MainViewModel {
     socialLogin = social;
     await social.login().then((value) {
       if (value != null) {
-        print(value);
+        print("####$value");
         diaryUser = DiaryUser.fromJson(jsonDecode(value));
         _stream.addEvent(value);
       }
@@ -158,6 +160,40 @@ class DiaryUser {
       travels: TravelMarkerList.fromJson(json['travels'] as List),
     );
   }
+
+  Future updateUserInfo(String profileIntroduction, String birthDate) async {
+    Dio dio = Dio();
+    String url = dotenv.get("SERVER_URI");
+    print(id);
+    print(profileIntroduction);
+    print(birthDate);
+    try {
+      Response response = await dio.post('$url/user/$id',
+      data: {
+        "email" : email,
+        "profileIntroduction" : profileIntroduction,
+        "birthDate" :birthDate,
+        "address" : address,
+      });
+      if(response.data["result"] == "SUCCESS"){
+        this.profileIntroduction = profileIntroduction;
+        this.birthDate = DateTime.parse(birthDate);
+      } else {
+        throw Exception('실패');
+      }
+    } catch (e) {
+      Exception(e);
+      print(e);
+      print("예외");
+    } finally {
+      dio.close();
+      print("끝");
+    }
+  }
+
+  Future getTravelMarkerList() async {
+    await travels.dioTravelMarkerList(id);
+  }
 }
 
 class TravelMarkerList {
@@ -167,11 +203,32 @@ class TravelMarkerList {
 
   factory TravelMarkerList.fromJson(List list) {
     print(list.runtimeType);
-    List<TravelMarker> travelMarkerList = list.map((e) => TravelMarker.fromJson(e)).toList();
+    List<TravelMarker> travelMarkerList =
+        list.map((e) => TravelMarker.fromJson(e)).toList();
 
-    return TravelMarkerList(
-        travelMarkers : travelMarkerList
-    );
+    return TravelMarkerList(travelMarkers: travelMarkerList);
+  }
+
+  Future dioTravelMarkerList(int id) async {
+    Dio dio = Dio();
+    String url = dotenv.get("SERVER_URI");
+    try {
+      Response response =
+          await dio.get('$url/api/user/$id/inquire-travels');
+      if (response.statusCode == 200) {
+        travelMarkers =
+            TravelMarkerList.fromJson(response.data as List).travelMarkers;
+      } else {
+        throw Exception('실패');
+      }
+    } catch (e) {
+      Exception(e);
+      print(e);
+      print("예외");
+    } finally {
+      dio.close();
+      print("끝");
+    }
   }
 }
 

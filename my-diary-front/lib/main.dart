@@ -11,6 +11,7 @@ import 'package:my_diary_front/view/pages/user/user_info.dart';
 import 'view/pages/post/mapPage.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,6 +52,15 @@ class MyApp extends StatelessWidget {
           '/geocodingPage': (context) => GeocodingPage(),
           '/userInfoPage': (context) => UserInfo(),
         },
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('ko', 'KR'),
+        ],
+        locale: const Locale('ko'),
       ),
     );
   }
