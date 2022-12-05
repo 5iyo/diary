@@ -82,6 +82,10 @@ public class DiaryApiController {
 
         List<Diary> diaries = findTravel.getDiaries();
 
+        if (diaries.isEmpty()) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+
         List<DiariesDto> collect = diaries.stream()
                 .map(DiariesDto::new)
                 .collect(Collectors.toList());
