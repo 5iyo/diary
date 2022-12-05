@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_diary_front/controller/dto/RecommendResp.dart';
 import 'package:http/http.dart' as http;
@@ -7,8 +8,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
-const get_host = "192.168.20.2:8080";
-const host = "http://192.168.20.2:8080";
+String? host = dotenv.env['SERVER_URI'];
+String? get_host = dotenv.env['SERVER_NAME'];
 
 Future<RecommendResp> fetchRecommend(String x, String y) async {
   Map<String, String> queryParams = {
