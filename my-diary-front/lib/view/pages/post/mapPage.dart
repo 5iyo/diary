@@ -14,6 +14,7 @@ import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:social_share/social_share.dart';
 
 import '../../../diaryShare.dart';
 
@@ -105,29 +106,34 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
       title: const Text(
         'OIYO My Diary',
       ),
+      backgroundColor: Colors.blueGrey[400]!.withOpacity(0.4),
       centerTitle: true,
-      elevation: 0.0,
+      shadowColor: Colors.black,
+      elevation: 8.0,
       leading: Builder(builder: (context) {
         return IconButton(
           onPressed: () {
             Scaffold.of(context).openDrawer();
           },
-          icon: const Icon(Icons.menu),
+          icon: const Icon(
+            Icons.menu,
+            color: Colors.white,
+          ),
         );
       }),
       actions: [
-        IconButton(
-            onPressed: () async {
-              // TODO : 소셜 공유 팝업 띄우기
-              await _controller
-                  .takeSnapshot()
-                  .then((value) => _mainViewModel.share(
-                        DiaryFacebookShare(),
-                        diaryScreenshot,
-                        value,
-                      ));
-            },
-            icon: const Icon(Icons.share))
+        DiarySocialShareViewModel().buildPopupMenu(
+          context,
+          (item) async {
+            await _controller
+                .takeSnapshot()
+                .then((value) => _mainViewModel.share(
+                      item,
+                      diaryScreenshot,
+                      value,
+                    ));
+          },
+        ),
       ],
     );
   }
@@ -205,7 +211,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
         Bubble(
           title: "Settings",
           iconColor: Colors.white,
-          bubbleColor: Colors.white.withOpacity(0.4),
+          bubbleColor: Colors.blueGrey[400]!.withOpacity(0.4),
           icon: Icons.settings,
           titleStyle: TextStyle(fontSize: 16, color: Colors.white),
           onPress: () {
@@ -216,7 +222,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
         Bubble(
           title: "Profile",
           iconColor: Colors.white,
-          bubbleColor: Colors.white.withOpacity(0.4),
+          bubbleColor: Colors.blueGrey[400]!.withOpacity(0.4),
           icon: Icons.people,
           titleStyle: TextStyle(fontSize: 16, color: Colors.white),
           onPress: () {
@@ -227,7 +233,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
         Bubble(
           title: "Home",
           iconColor: Colors.white,
-          bubbleColor: Colors.white.withOpacity(0.4),
+          bubbleColor: Colors.blueGrey[400]!.withOpacity(0.4),
           icon: Icons.home,
           titleStyle: TextStyle(fontSize: 16, color: Colors.white),
           onPress: () {
@@ -250,7 +256,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
 
       // Flaoting Action button Icon
       iconData: Icons.menu,
-      backGroundColor: Colors.white.withOpacity(0.4),
+      backGroundColor: Colors.blueGrey[400]!.withOpacity(0.4),
     );
   }
 
