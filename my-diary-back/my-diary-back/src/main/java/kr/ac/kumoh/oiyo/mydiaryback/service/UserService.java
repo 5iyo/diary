@@ -35,8 +35,8 @@ public class UserService {
     }
 
     @Transactional
-    public int updateUser(PostUserInfoDto updateUserInfo){
-        User user = userRepository.findByEmail(updateUserInfo.getEmail()).orElseThrow(()->{
+    public int updateUser(long id,PostUserInfoDto updateUserInfo){
+        User user = userRepository.findById(id).orElseThrow(()->{
             return new IllegalArgumentException("수정하기 위한 회원 찾기 실패!");
         });
 

@@ -16,22 +16,10 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
 
-    @DeleteMapping("/{id}")
-    public Map<String, Object> delete(@PathVariable("id") long id) {
-        Map<String, Object> response = new HashMap<>();
-        if(userService.delete(id) > 0) {
-            response.put("result","SUCCESS");
-        } else {
-            response.put("result","FAIL");
-            response.put("reason","일치하는 회원정보가 없습니다.");
-        }
-        return response;
-    }
-
-    @PostMapping("")
-    public Map<String, Object> updateUser(@RequestBody PostUserInfoDto updateDto){
+    @PostMapping("/{id}")
+    public Map<String, Object> updateUser(@PathVariable("id") String id,@RequestBody PostUserInfoDto updateDto){
         Map<String, Object>response = new HashMap<>();
-         if(userService.updateUser(updateDto) == 1)
+         if(userService.updateUser(Long.parseLong(id), updateDto) == 1)
          {
              response.put("result","SUCCESS");
          }else{
@@ -42,8 +30,10 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Map<String, Object> findById(@PathVariable("id")User user){
+    public Map<String, Object> findById(@PathVariable("id")long userId){
         Map<String, Object> response = new HashMap<>();
+
+        User user = userService.findUserbyId(userId);
 
         if(user != null) {
             response.put("result","SUCCESS");
