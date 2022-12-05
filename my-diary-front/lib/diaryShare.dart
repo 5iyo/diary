@@ -10,8 +10,14 @@ import 'package:social_share/social_share.dart';
 class DiaryScreenshot {
   ScreenshotController screenshotController = ScreenshotController();
 
-  Future<String?> screenshot() async {
-    var data = await screenshotController.capture();
+  Future<String?> screenshot([Uint8List? googleMapScreenshot]) async {
+    Uint8List? data;
+
+    if(googleMapScreenshot == null) {
+      data = await screenshotController.capture();
+    } else {
+      data = googleMapScreenshot;
+    }
 
     if (data == null) {
       return null;
@@ -26,13 +32,13 @@ class DiaryScreenshot {
 }
 
 abstract class DiarySocialShare {
-  Future share(DiaryScreenshot diaryShare);
+  Future share(DiaryScreenshot diaryShare, [Uint8List? googleMapScreenshot]);
 }
 
 class DiaryInstagramShare implements DiarySocialShare {
   @override
-  Future share(DiaryScreenshot diaryShare) async {
-    var path = await diaryShare.screenshot();
+  Future share(DiaryScreenshot diaryShare, [Uint8List? googleMapScreenshot]) async {
+    var path = await diaryShare.screenshot(googleMapScreenshot);
 
     print("####$path");
 
@@ -47,8 +53,8 @@ class DiaryInstagramShare implements DiarySocialShare {
 
 class DiaryFacebookShare implements DiarySocialShare {
   @override
-  Future share(DiaryScreenshot diaryShare) async {
-    var path = await diaryShare.screenshot();
+  Future share(DiaryScreenshot diaryShare, [Uint8List? googleMapScreenshot]) async {
+    var path = await diaryShare.screenshot(googleMapScreenshot);
 
     print(path);
 

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_naver_login/flutter_naver_login.dart';
@@ -33,8 +34,9 @@ class MainViewModel {
     _stream.addEvent("");
   }
 
-  Future share(DiarySocialShare diarySocialShare, DiaryScreenshot diaryShare) async {
-    await diarySocialShare.share(diaryShare);
+  Future share(DiarySocialShare diarySocialShare, DiaryScreenshot diaryShare,
+      [Uint8List? googleMapScreenshot]) async {
+    await diarySocialShare.share(diaryShare, googleMapScreenshot);
   }
 }
 
@@ -50,7 +52,7 @@ class KakaoLogin implements SocialLogin {
     OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
     Uri url = Uri.parse('${dotenv.get('SERVER_URI')}/kakao/login');
     final response =
-    await http.post(url, body: {"accessToken": token.accessToken});
+        await http.post(url, body: {"accessToken": token.accessToken});
     return utf8.decode(response.bodyBytes);
   }
 
@@ -76,7 +78,7 @@ class NaverLogin implements SocialLogin {
     // Create a new credential
     Uri url = Uri.parse('${dotenv.get('SERVER_URI')}/naver/login');
     final response =
-    await http.post(url, body: {"accessToken": res.accessToken});
+        await http.post(url, body: {"accessToken": res.accessToken});
     return utf8.decode(response.bodyBytes);
   }
 
@@ -95,7 +97,7 @@ class GoogleLogin implements SocialLogin {
     // Create a new credential
     Uri url = Uri.parse('${dotenv.get('SERVER_URI')}/google/login');
     final response =
-    await http.post(url, body: {"accessToken": googleAuth.accessToken});
+        await http.post(url, body: {"accessToken": googleAuth.accessToken});
     return utf8.decode(response.bodyBytes);
   }
 
@@ -116,12 +118,12 @@ class DiaryUser {
 
   DiaryUser(
       {required this.id,
-        required this.email,
-        required this.name,
-        required this.role,
-        required this.image,
-        required this.birthDate,
-        required this.introduction});
+      required this.email,
+      required this.name,
+      required this.role,
+      required this.image,
+      required this.birthDate,
+      required this.introduction});
 
   factory DiaryUser.fromJson(Map<String, dynamic> json) {
     return DiaryUser(

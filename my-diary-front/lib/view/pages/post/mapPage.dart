@@ -117,9 +117,15 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
       }),
       actions: [
         IconButton(
-            onPressed: () {
+            onPressed: () async {
               // TODO : 소셜 공유 팝업 띄우기
-              _mainViewModel.share(DiaryFacebookShare(), diaryScreenshot);
+              await _controller
+                  .takeSnapshot()
+                  .then((value) => _mainViewModel.share(
+                        DiaryFacebookShare(),
+                        diaryScreenshot,
+                        value,
+                      ));
             },
             icon: const Icon(Icons.share))
       ],
@@ -181,7 +187,6 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
       mapToolbarEnabled: false,
       // 클릭한 위치가 중앙에 표시
       onTap: (coordinate) {
-        addMarker(coordinate, InfoWindow());
         FocusScope.of(context).unfocus();
         _controller.animateCamera(CameraUpdate.newLatLng(coordinate));
       },
