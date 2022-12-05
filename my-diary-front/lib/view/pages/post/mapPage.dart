@@ -306,7 +306,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
       apiKey: dotenv.get('GOOGLE_MAP_KEY'),
       onError: onError,
       mode: _mode,
-      language: 'kr',
+      language: 'ko',
       strictbounds: false,
       types: [],
       decoration: const InputDecoration(
@@ -334,7 +334,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
     GoogleMapsPlaces places = GoogleMapsPlaces(
         apiKey: dotenv.get('GOOGLE_MAP_KEY'),
         apiHeaders: await const GoogleApiHeaders().getHeaders());
-    PlacesDetailsResponse detail = await places.getDetailsByPlaceId(p.placeId!);
+    PlacesDetailsResponse detail = await places.getDetailsByPlaceId(p.placeId!, language: "ko");
 
     final lat = detail.result.geometry!.location.lat;
     final lng = detail.result.geometry!.location.lng;
