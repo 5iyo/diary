@@ -36,6 +36,10 @@ dependencies:
   flutter_dotenv: ^5.0.2
   # floating action bubble
   floating_action_bubble: ^1.1.4
+  # screenshot
+  screenshot: ^1.2.3
+  # social_share
+  social_share: ^2.3.1
 
   get: ^4.6.5
   validators: ^3.0.0
@@ -62,5 +66,8 @@ flutter:
     - img/naver_icon.png
     - img/kakao_icon.png
     - img/google_icon.png
+    - img/Facebook_icon.png
+    - img/Instagram_icon.png
+    - img/Kakaostory_icon.png
     - img/핑구.png
     - svg/sun.svg

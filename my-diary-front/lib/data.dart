@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:http/http.dart' as http;
+import 'package:my_diary_front/diaryShare.dart';
 import 'package:dio/dio.dart';
 
 class MainViewModel {
@@ -20,6 +22,7 @@ class MainViewModel {
   Future login(SocialLogin social) async {
     socialLogin = social;
     await social.login().then((value) {
+      print(value);
       if (value != null) {
         print("####$value");
         diaryUser = DiaryUser.fromJson(jsonDecode(value));
@@ -31,6 +34,11 @@ class MainViewModel {
   Future logout() async {
     await socialLogin?.logout();
     _stream.addEvent("");
+  }
+
+  Future share(DiarySocialShare diarySocialShare, DiaryScreenshot diaryShare,
+      [Uint8List? googleMapScreenshot]) async {
+    await diarySocialShare.share(diaryShare, googleMapScreenshot);
   }
 }
 

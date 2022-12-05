@@ -14,6 +14,10 @@ import 'package:get/get.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:provider/provider.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:social_share/social_share.dart';
+
+import '../../../diaryShare.dart';
 
 import '../../../controller/dto/TravelList_travels.dart';
 
@@ -41,6 +45,8 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
 
   late Animation<double> _animation;
   late AnimationController _animationController;
+
+  DiaryScreenshot diaryScreenshot = DiaryScreenshot();
 
   @override
   void initState() {
@@ -113,7 +119,10 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
       extendBodyBehindAppBar: true,
       appBar: _buildAppBar(),
       drawer: _buildDrawer(),
-      body: _buildGoogleMap(),
+      body: Screenshot(
+        controller: diaryScreenshot.screenshotController,
+        child: _buildGoogleMap(),
+      ),
       floatingActionButton: _buildFloatingActionBubble(),
     );
   }
@@ -123,23 +132,34 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
       title: const Text(
         'OIYO My Diary',
       ),
+      backgroundColor: Colors.blueGrey[400]!.withOpacity(0.4),
       centerTitle: true,
-      elevation: 0.0,
+      shadowColor: Colors.black,
+      elevation: 8.0,
       leading: Builder(builder: (context) {
         return IconButton(
           onPressed: () {
             Scaffold.of(context).openDrawer();
           },
-          icon: const Icon(Icons.menu),
+          icon: const Icon(
+            Icons.menu,
+            color: Colors.white,
+          ),
         );
       }),
       actions: [
-        IconButton(
-            onPressed: () {
-              _controller.animateCamera(
-                  CameraUpdate.newCameraPosition(_initialPosition));
-            },
-            icon: const Icon(Icons.refresh))
+        DiarySocialShareViewModel().buildPopupMenu(
+          context,
+          (item) async {
+            await _controller
+                .takeSnapshot()
+                .then((value) => _mainViewModel.share(
+                      item,
+                      diaryScreenshot,
+                      value,
+                    ));
+          },
+        ),
       ],
     );
   }
@@ -224,7 +244,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
         Bubble(
           title: "Hot Places",
           iconColor: Colors.white,
-          bubbleColor: Colors.white.withOpacity(0.4),
+          bubbleColor: Colors.blueGrey[400]!.withOpacity(0.4),
           icon: Icons.local_fire_department_rounded,
           titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
           onPress: () async {
@@ -236,7 +256,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
         Bubble(
           title: "Add Travel",
           iconColor: Colors.white,
-          bubbleColor: Colors.white.withOpacity(0.4),
+          bubbleColor: Colors.blueGrey[400]!.withOpacity(0.4),
           icon: Icons.add,
           titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
           onPress: () {
@@ -248,7 +268,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
         Bubble(
           title: "Home",
           iconColor: Colors.white,
-          bubbleColor: Colors.white.withOpacity(0.4),
+          bubbleColor: Colors.blueGrey[400]!.withOpacity(0.4),
           icon: Icons.home,
           titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
           onPress: () async {
@@ -274,7 +294,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
 
       // Flaoting Action button Icon
       iconData: Icons.menu,
-      backGroundColor: Colors.white.withOpacity(0.4),
+      backGroundColor: Colors.blueGrey[400]!.withOpacity(0.4),
     );
   }
 
