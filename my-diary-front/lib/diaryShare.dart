@@ -13,7 +13,7 @@ import 'package:social_share/social_share.dart';
 class DiaryScreenshot {
   ScreenshotController screenshotController = ScreenshotController();
 
-  Future<String?> screenshot([Uint8List? googleMapScreenshot]) async {
+  Future<File?> screenshot([Uint8List? googleMapScreenshot]) async {
     Uint8List? data;
 
     if (googleMapScreenshot == null) {
@@ -30,7 +30,7 @@ class DiaryScreenshot {
     final assetPath = '${tempDir.path}/temp.png';
     File file = await File(assetPath).create();
     await file.writeAsBytes(data);
-    return file.path;
+    return file;
   }
 }
 
@@ -92,13 +92,15 @@ class DiaryInstagramShare implements DiarySocialShare {
   @override
   Future share(DiaryScreenshot diaryShare,
       [Uint8List? googleMapScreenshot]) async {
-    var path = await diaryShare.screenshot(googleMapScreenshot);
+    var file = await diaryShare.screenshot(googleMapScreenshot);
 
-    print("####$path");
-
-    if (path == null) {
+    if(file == null) {
       return;
     }
+
+    var path = file.path;
+
+    print("####$path");
 
     await SocialShare.shareInstagramStory(
             appId: dotenv.get("FACEBOOK_APP_ID"), imagePath: path)
@@ -114,13 +116,16 @@ class DiaryFacebookShare implements DiarySocialShare {
   @override
   Future share(DiaryScreenshot diaryShare,
       [Uint8List? googleMapScreenshot]) async {
-    var path = await diaryShare.screenshot(googleMapScreenshot);
+    var file = await diaryShare.screenshot(googleMapScreenshot);
+
+    if(file == null) {
+      return;
+    }
+
+    var path = file.path;
 
     print(path);
 
-    if (path == null) {
-      return;
-    }
     await SocialShare.shareFacebookStory(
             appId: dotenv.get("FACEBOOK_APP_ID"), imagePath: path)
         .then((value) => print(value));
@@ -135,16 +140,12 @@ class DiaryKakaostoryShare implements DiarySocialShare{
   @override
   Future share(DiaryScreenshot diaryShare,
       [Uint8List? googleMapScreenshot]) async {
-    var path = await diaryShare.screenshot(googleMapScreenshot);
+    var file = await diaryShare.screenshot(googleMapScreenshot);
 
+    if(file == null) {
+      return;
+    }
 
-    ByteData byteData = await rootBundle.load(path!);
-
-    File tempFile = File(path);
-    File file = await tempFile.writeAsBytes(byteData.buffer
-        .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
-
-    // 스토리에 업로드할 사진 파일 업로드
     List<String> images;
 
     try {

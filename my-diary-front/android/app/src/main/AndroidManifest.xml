@@ -78,6 +78,9 @@
 
                 <!-- Redirect URI, "kakao${YOUR_NATIVE_APP_KEY}://oauth" 형식 -->
                 <data android:scheme="kakao${kakaoLoginApiKey}" android:host="oauth"/>
+                <!-- "kakao${YOUR_NATIVE_APP_KEY}://kakaostory" 형식의 앱 실행 스킴을 설정하는데 사용 -->
+                <data android:host="kakaostory"
+                    android:scheme="kakao${kakaoLoginApiKey}" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
