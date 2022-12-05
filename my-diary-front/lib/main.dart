@@ -12,13 +12,40 @@ import 'view/pages/post/mapPage.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
+import 'controller/provider/diary_delete_provider.dart';
+import 'controller/provider/diary_update_provider.dart';
+import 'controller/provider/diarylist_provider.dart';
+import 'controller/provider/travel_update_provider.dart';
+import 'controller/provider/diary_write_provider.dart';
+import 'package:my_diary_front/controller/provider/travel_delete_provider.dart';
+import 'package:my_diary_front/controller/provider/travellist_provider.dart';
+import 'package:my_diary_front/controller/provider/travel_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   KakaoSdk.init(nativeAppKey: dotenv.get("KAKAO_CLIENT_ID"));
   
-  runApp(const MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(
+        create: (BuildContext context) => TravelListProvider()),
+    ChangeNotifierProvider(
+        create: (BuildContext context) => TravelProvider()),
+    ChangeNotifierProvider(
+        create: (BuildContext context) => TravelUpdateProvider()),
+    ChangeNotifierProvider(
+        create: (BuildContext context) => TravelDeleteProvider()),
+    ChangeNotifierProvider(
+        create: (BuildContext context) => DiaryListProvider()),
+    ChangeNotifierProvider(
+        create: (BuildContext context) => DiaryWriteProvider()),
+    ChangeNotifierProvider(
+        create: (BuildContext context) => DiaryUpdateProvider()),
+    ChangeNotifierProvider(
+        create: (BuildContext context) => DiaryDeleteProvider()),
+  ],
+    child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

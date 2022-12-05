@@ -7,12 +7,14 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:my_diary_front/controller/dio_update.dart';
 import 'package:my_diary_front/controller/dio_update_image.dart';
+import 'package:my_diary_front/controller/dto/Diary_images.dart';
 import 'package:my_diary_front/util/validator_util.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'dart:async';
 import 'dart:convert';
+import '../../../controller/provider/diary_update_provider.dart';
 import '../../../controller/dto/DiaryResp.dart';
 import '../../components/custom_date_picker.dart';
 import '../../components/custom_elevated_button.dart';
@@ -20,20 +22,7 @@ import '../../components/custom_text_form_field.dart';
 import '../../components/custom_textarea.dart';
 import 'diary_list_page.dart';
 
-const host = "http://192.168.20.7:8080";
-
-Future<Diary> fetchUpdate(int id) async {
-  var url = '$host/api/diaries/$id';
-  final response = await http.get(Uri.parse(url));
-
-  if(response.statusCode == 200) {
-    print("리스트 요청 성공");
-    print(json.decode(utf8.decode(response.bodyBytes)));
-    return Diary.fromJson(json.decode(utf8.decode(response.bodyBytes)));
-  } else {
-    throw Exception("리스트 요청을 실패했습니다.");
-  }
-}
+const host = "http://192.168.20.2:8080";
 
 Future<void> fetchDeleteImage(int id) async{
   var url = '$host/api/diary-images/$id';
@@ -58,6 +47,7 @@ class UpdatePage extends StatefulWidget {
 }
 
 class _UpdatePageState extends State<UpdatePage> {
+  DiaryUpdateProvider diaryUpdateProvider = DiaryUpdateProvider();
 
   final int id;
   final int travelId;
@@ -83,16 +73,11 @@ class _UpdatePageState extends State<UpdatePage> {
   final ImagePicker _picker = ImagePicker();
   bool nextIconView = false;
   List<File> updateImage = [];
-  List<String> diaryImage = [];
+  List<Images> diaryImage = [];
   List<String> updateImagebase64 = [];
 
-  @override
-  void initState() {
-    super.initState();
-    updateresp = fetchUpdate(id);
-  }
-
   Widget build(BuildContext context) {
+    diaryUpdateProvider = Provider.of<DiaryUpdateProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
@@ -118,7 +103,6 @@ class _UpdatePageState extends State<UpdatePage> {
   }
 
   Widget buildDiary(snapshot) {
-    DioUpdate dioUpdate = DioUpdate(id);
     DioUpdateImage dioUpdateImage = DioUpdateImage(id);
     _travel.text = snapshot.data!.travel;
     _title.text = snapshot.data!.title;
@@ -129,8 +113,12 @@ class _UpdatePageState extends State<UpdatePage> {
     int deleteImageId;
     String inputImage;
 
+    // for(int i=0; i<snapshot.data.images.length; i++) {
+    //   diaryImage.add(snapshot.data.images[i].imagefile);
+    // }
+
     for(int i=0; i<snapshot.data.images.length; i++) {
-      diaryImage.add(snapshot.data.images[i].imagefile);
+      diaryImage.add(snapshot.data.images[i]);
     }
 
     return Form(
@@ -175,7 +163,7 @@ class _UpdatePageState extends State<UpdatePage> {
                 funValidator: validateContent()
             ),
 
-            snapshot.data.images[0].imagefile == " " ? Center(child: Text("이미지를 등록해주세요"))
+            snapshot.data.images[0].imagefile == " " && snapshot.data.images.length == 1 ? Center(child: Text("이미지를 등록해주세요"))
                 : SafeArea(
                 child: SingleChildScrollView(
                   child: Container(
@@ -194,7 +182,7 @@ class _UpdatePageState extends State<UpdatePage> {
                                       controller: this.controller,
                                       itemCount: diaryImage[0] == "" ? 0 : this.diaryImage.length,
                                       itemBuilder: (BuildContext context, int index) {
-                                        diaryImage[index] == "" ? data = null : data = Uri.parse(this.diaryImage[index]).data!;
+                                        diaryImage[index].imagefile == "" ? data = null : data = Uri.parse(diaryImage[index].imagefile!).data!;
                                         data == null? bytes = null : bytes = data!.contentAsBytes();
                                         return Stack(
                                           children: <Widget>[
@@ -207,8 +195,7 @@ class _UpdatePageState extends State<UpdatePage> {
                                                           .circular(20.0)),
                                                   clipBehavior: Clip.antiAlias,
                                                   borderOnForeground: false,
-                                                  child: bytes == null ?  Container(child: Center(child: Text("이미지를 등록해주세요")))
-                                                      : Image.memory(bytes!, fit: BoxFit.cover),
+                                                  child: bytes == null ?  null : Image.memory(bytes!, fit: BoxFit.cover),
                                                   // Image.file(
                                                   //   updateImage[index], fit: BoxFit.cover),
                                                 ),
@@ -221,13 +208,15 @@ class _UpdatePageState extends State<UpdatePage> {
                                               child: GestureDetector(
                                                 onTap: () {
                                                   setState(() {
-                                                    diaryImage.remove(diaryImage[index]);
-                                                    if (diaryImage.length >= 2) {
-                                                      nextIconView = true;
-                                                      return;
-                                                    }
-                                                    nextIconView = false;
-                                                  });
+                                                    //diaryImage.removeWhere((element) =>  element.image_id == diaryImage[index].image_id);
+                                                    if(!(bytes == null)) {
+                                                      diaryImage.remove(diaryImage[index]);
+                                                      if (diaryImage.length >= 2) {
+                                                        nextIconView = true;
+                                                        return;
+                                                      }
+                                                      nextIconView = false;
+                                                    }});
                                                 },
                                                 child: Container(
                                                     width: 30.0,
@@ -330,7 +319,6 @@ class _UpdatePageState extends State<UpdatePage> {
                         inputImage = "data:image/png;base64,${stringcfile}";
                         updateImagebase64.add(inputImage);
                         dioUpdateImage.dioInputImage(inputImage);
-                        diaryImage.add(inputImage);
                       }
                       else{
                         final pickgallery = await _picker.pickImage(source: ImageSource.gallery);
@@ -340,7 +328,6 @@ class _UpdatePageState extends State<UpdatePage> {
                         inputImage = "data:image/png;base64,${stringgfile}";
                         updateImagebase64.add(inputImage);
                         dioUpdateImage.dioInputImage(inputImage);
-                        diaryImage.add(inputImage);
                       }
                       if(updateImage.length >= 2){
                         nextIconView = true;
@@ -362,7 +349,7 @@ class _UpdatePageState extends State<UpdatePage> {
                       _date.text == null ? _selectedDate = DateFormat('yyyy-MM-dd').format(snapshot.data!.traveldate) : _selectedDate = _date.text;
                       _travel.text == null ? _selectedTravel = snapshot.data.travel : _selectedTravel = _travel.text;
                       if (_formKey.currentState!.validate()) {
-                        updateresp = dioUpdate.dioUpdate(_selectedTitle, _selectedDate, _selectedContent, _selectedWeather, _selectedTravel);
+                        await diaryUpdateProvider.update(id, _selectedTitle, _selectedDate, _selectedContent, _selectedWeather, _selectedTravel);
                         Get.off(()=>DiaryListPage(travelId));
                       }
                     },
@@ -373,6 +360,10 @@ class _UpdatePageState extends State<UpdatePage> {
           ],
         )
     );
+  }
+
+  void viewImage() {
+
   }
 
   void iconView(){

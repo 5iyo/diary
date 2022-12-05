@@ -1,27 +1,27 @@
-import 'package:intl/intl.dart';
+
 import 'package:my_diary_front/controller/dto/Diary_images.dart';
 
 class Diary {
   final int? id;
   final String? title;
-  final DateTime? traveldate;
+  final DateTime traveldate;
   final String? content;
   final String? weather;
   final String? travel;
   final List<Images>? images;
-  final DateTime? created;
-  final DateTime? updated;
+  final DateTime created;
+  final DateTime updated;
 
   Diary(
       { this.id,
         this.title,
-        this.traveldate,
+        required this.traveldate,
         this.content,
         this.weather,
         this.travel,
         this.images,
-        this.created,
-        this.updated,
+        required this.created,
+        required this.updated,
       }
       );
 

@@ -7,6 +7,7 @@ import 'package:location/location.dart' as loc;
 import 'package:my_diary_front/data.dart';
 import 'package:my_diary_front/view/pages/post/travel_list_page.dart';
 import 'package:my_diary_front/view/pages/post/travel_page.dart';
+import 'package:my_diary_front/view/pages/post/weather_page.dart';
 import 'package:my_diary_front/view/pages/post/write_page.dart';
 import 'package:my_diary_front/view/pages/user/user_info.dart';
 import 'package:get/get.dart';
@@ -171,8 +172,14 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
             title: const Text('일기쓰기'),
             onTap: () {
               //FixMe : 일기쓰기가 무슨 페이지로 가는 버튼인지 확실히 알아보기
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => TravelPage("")));
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: (context) => TravelPage("")));
+            },
+          ),
+          ListTile(
+            title: const Text('여행지 추천'),
+            onTap: () {
+              Get.to(() => WeatherPage());
             },
           ),
           ListTile(
@@ -318,7 +325,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
         InfoWindow(
             title: detail.result.name,
             onTap: () {
-              Get.to(() => TravelPage(_mainViewModel.diaryUser!.id.toString()));
+              Get.to(() => TravelPage(_mainViewModel.diaryUser!.id.toString(), latLng));
 //              Navigator.pushNamed(context, '/diaryInfoPage');
             }));
 

@@ -5,37 +5,40 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:my_diary_front/controller/dio_travel_update.dart';
 import 'package:my_diary_front/util/validator_util.dart';
 import 'package:my_diary_front/view/components/custom_date_picker.dart';
 import 'package:my_diary_front/view/components/custom_elevated_button.dart';
 import 'package:my_diary_front/view/components/custom_text_form_field.dart';
 import 'package:my_diary_front/view/pages/post/travel_list_page.dart';
+import 'package:provider/provider.dart';
 import '../../../controller/dto/TravelListResp.dart';
 import 'dart:async';
-
-const get_host = "192.168.20.7:8080";
-const host = "http://192.168.20.7:8080";
-
+import '../../../controller/provider/travel_update_provider.dart';
 
 class TravelUpdatePage extends StatefulWidget {
 
-  final int id;
-  final String title;
-  final String image;
-  const TravelUpdatePage(this.id, this.title, this.image);
+  final LatLng? travelLatLng;
+  final int? id;
+  final String? title;
+  final String? image;
+
+  const TravelUpdatePage(this.travelLatLng, this.id, this.title, this.image);
 
   @override
-  State<TravelUpdatePage> createState() => _TravelUpdatePageState(id, title, image);
+  State<TravelUpdatePage> createState() => _TravelUpdatePageState(travelLatLng!, id!, title!, image!);
 }
 
 class _TravelUpdatePageState extends State<TravelUpdatePage> {
 
+  TravelUpdateProvider travelUpdateProvider = TravelUpdateProvider();
+
+  LatLng travelLatLng;
   final int id;
   final String title;
   final String image;
-  _TravelUpdatePageState(this.id, this.title, this.image);
+  _TravelUpdatePageState(this.travelLatLng, this.id, this.title, this.image);
 
   final _formKey = GlobalKey<FormState>();
 
@@ -61,13 +64,13 @@ class _TravelUpdatePageState extends State<TravelUpdatePage> {
   }
 
   Widget buildTravel() {
+    travelUpdateProvider = Provider.of<TravelUpdateProvider>(context, listen: false);
 
-    DioTravelUpdate dioTravelUpdate = DioTravelUpdate(id);
     String startinit = "여행 시작 날짜";
     String endinit = "여행 종료 날짜";
     _title.text = title;
-    UriData data;
-    Uint8List bytes;
+    UriData? data;
+    Uint8List? bytes;
     travelImage.add(image); //travelImage[0] = image
 
     return Form(
@@ -107,53 +110,63 @@ class _TravelUpdatePageState extends State<TravelUpdatePage> {
                                   controller: this.controller,
                                   itemCount: 1,
                                   itemBuilder: (BuildContext context, int index) {
-                                    data = Uri.parse(travelImage[0]).data!;
-                                    bytes = data.contentAsBytes();
-                                    return Stack(
-                                        children: <Widget>[
-                                          GestureDetector(
-                                            child: Container(
-                                              width: 200.0,
-                                              child: Card(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius
-                                                        .circular(20.0)),
-                                                clipBehavior: Clip.antiAlias,
-                                                borderOnForeground: false,
-                                                child: Image.memory(bytes, fit: BoxFit.cover),
-                                              ),
-                                              padding: EdgeInsets.all(10.0),
-                                            ),
-                                          ),
-                                          Positioned(
-                                            top: 0,
-                                            right: 0,
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  travelImage[0] = "";
-                                                });
-                                              },
+                                    travelImage[0] == "" || travelImage[0] == null ? data = null
+                                        : data = Uri.parse(travelImage[0]).data;
+                                    data == null ? bytes = null : bytes = data!.contentAsBytes();
+                                    if (bytes != null) {
+                                      return Stack(
+                                          children: <Widget>[
+                                            GestureDetector(
                                               child: Container(
-                                                  width: 30.0,
-                                                  height: 30.0,
-                                                  margin: EdgeInsets.all(5.0),
-                                                  alignment: Alignment.center,
-                                                  decoration: BoxDecoration(
-                                                      color: Colors.red,
+                                                width: 200.0,
+                                                child: Card(
+                                                  shape: RoundedRectangleBorder(
                                                       borderRadius: BorderRadius
-                                                          .circular(30.0)
-                                                  ),
-                                                  child: Center(
-                                                      child: Icon(
-                                                        Icons.close, size: 20.0,
-                                                        color: Colors.white,)
-                                                  )
+                                                          .circular(20.0)),
+                                                  clipBehavior: Clip.antiAlias,
+                                                  borderOnForeground: false,
+                                                  child: Image.memory(bytes!, fit: BoxFit.cover),
+                                                ),
+                                                padding: EdgeInsets.all(10.0),
                                               ),
                                             ),
-                                          ),
-                                        ]
-                                    );
+                                            Positioned(
+                                              top: 0,
+                                              right: 0,
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    travelImage[0] = "";
+                                                  });
+                                                },
+                                                child: Container(
+                                                    width: 30.0,
+                                                    height: 30.0,
+                                                    margin: EdgeInsets.all(5.0),
+                                                    alignment: Alignment.center,
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.red,
+                                                        borderRadius: BorderRadius
+                                                            .circular(30.0)
+                                                    ),
+                                                    child: Center(
+                                                        child: Icon(
+                                                          Icons.close, size: 20.0,
+                                                          color: Colors.white,)
+                                                    )
+                                                ),
+                                              ),
+                                            ),
+                                          ]
+                                      );
+                                    }
+                                    else {
+                                      return Container(
+                                          width: MediaQuery.of(context).size.width,
+                                          height: 200.0,
+                                          child: Center(child: Text("이미지를 등록해주세요"))
+                                      );
+                                    }
                                   }
                               )
                           ),
@@ -228,8 +241,8 @@ class _TravelUpdatePageState extends State<TravelUpdatePage> {
                   text: "수정하기",
                   funPageRoute: () async {
                     if (_formKey.currentState!.validate()) {
-                      dioTravelUpdate.dioTravelUpdate(_title.text, travelImage[0], _startdate.text, _enddate.text);
-                      Get.off(()=>TravelUpdatePage(id, title, image));
+                      await travelUpdateProvider.travelUpdate(id, _title.text, travelImage[0], _startdate.text, _enddate.text);
+                      Get.offAll(()=>TravelListPage(travelLatLng: travelLatLng));
                     }
                   },
                 ),
