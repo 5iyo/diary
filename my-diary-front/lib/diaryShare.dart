@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:my_diary_front/data.dart';
 
 import 'package:screenshot/screenshot.dart';
 import 'package:path_provider/path_provider.dart';
@@ -137,10 +138,13 @@ class DiaryKakaostoryShare implements DiarySocialShare{
   @override
   String name = "Kakaostory";
 
+  KakaoLogin kakaoLogin = KakaoLogin();
+
   @override
   Future share(DiaryScreenshot diaryShare,
       [Uint8List? googleMapScreenshot]) async {
     var file = await diaryShare.screenshot(googleMapScreenshot);
+    bool isKakao = true;
 
     if(file == null) {
       return;
@@ -153,7 +157,13 @@ class DiaryKakaostoryShare implements DiarySocialShare{
       print('사진 업로드 성공 $images');
     }catch (error){
       print('사진 업로드 실패 $error');
-      return;
+      isKakao = false;
+      await kakaoLogin.login();
+      try{
+        images = await StoryApi.instance.upload([file]);
+      } catch (error) {
+        return;
+      }
     }
 
     // 업로드한 사진 파일 정보로 사진 스토리 쓰기
@@ -166,6 +176,10 @@ class DiaryKakaostoryShare implements DiarySocialShare{
       print('스토리 쓰기 실패 $error');
     }
 
+    if(!isKakao) {
+      print("is not kakao");
+      await kakaoLogin.logout();
+    }
   }
 
 }
