@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 import 'package:screenshot/screenshot.dart';
 import 'package:path_provider/path_provider.dart';
@@ -34,7 +35,7 @@ class DiaryScreenshot {
 }
 
 class DiarySocialShareViewModel {
-  List<DiarySocialShare> shares = [DiaryInstagramShare(), DiaryFacebookShare()];
+  List<DiarySocialShare> shares = [DiaryInstagramShare(), DiaryFacebookShare(),DiaryKakaostoryShare()];
 
   PopupMenuButton<DiarySocialShare> buildPopupMenu(
       BuildContext context, Function onSelected) {
@@ -125,4 +126,45 @@ class DiaryFacebookShare implements DiarySocialShare {
         .then((value) => print(value));
 /*    await SocialSharePlugin.shareToFeedFacebook(path: path);*/
   }
+}
+
+class DiaryKakaostoryShare implements DiarySocialShare{
+  @override
+  String name = "Kakaostory";
+
+  @override
+  Future share(DiaryScreenshot diaryShare,
+      [Uint8List? googleMapScreenshot]) async {
+    var path = await diaryShare.screenshot(googleMapScreenshot);
+
+
+    ByteData byteData = await rootBundle.load(path!);
+
+    File tempFile = File(path);
+    File file = await tempFile.writeAsBytes(byteData.buffer
+        .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+
+    // 스토리에 업로드할 사진 파일 업로드
+    List<String> images;
+
+    try {
+      images = await StoryApi.instance.upload([file]);
+      print('사진 업로드 성공 $images');
+    }catch (error){
+      print('사진 업로드 실패 $error');
+      return;
+    }
+
+    // 업로드한 사진 파일 정보로 사진 스토리 쓰기
+    try {
+      String content = '여기에 공유 내용 작성';
+      StoryPostResult storyPostResult = await StoryApi.instance
+          .postPhoto(images: images, content: content);
+      print('스토리 쓰기 성공 [${storyPostResult.id}]');
+    } catch (error) {
+      print('스토리 쓰기 실패 $error');
+    }
+
+  }
+
 }
