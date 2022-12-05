@@ -1,8 +1,7 @@
 import 'package:dio/dio.dart';
-
 import 'dto/WriteResp.dart';
 
-const host = "http://192.168.20.7:8080";
+const host = "http://192.168.20.2:8080";
 
 class DioUpdateImage {
 

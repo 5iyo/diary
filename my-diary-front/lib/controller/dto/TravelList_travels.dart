@@ -1,19 +1,18 @@
-import 'package:intl/intl.dart';
 
 class Travels {
   final int? id;
   final String? title;
   final String? image;
-  final DateTime? startdate;
-  final DateTime? enddate;
+  final DateTime startdate;
+  final DateTime enddate;
 
   Travels(
       {
         this.id,
         this.title,
         this.image,
-        this.startdate,
-        this.enddate,}
+        required this.startdate,
+        required this.enddate,}
       );
 
   factory Travels.fromJson(Map<String, dynamic> json) {

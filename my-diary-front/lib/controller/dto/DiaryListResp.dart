@@ -7,7 +7,7 @@ class DiaryList {
   final String? area;
   final DateTime? startdate;
   final DateTime? enddate;
-  final List<Diaries>? data;
+  final dynamic data;
 
   DiaryList(
       { this.title,
@@ -19,16 +19,12 @@ class DiaryList {
 
   factory DiaryList.fromJson(Map<String, dynamic> json) {
 
-    var list = (json["diaries"] ?? []) as List;
-    print(list.runtimeType);
-    List<Diaries> diariesList = list.map((i) => Diaries.fromJson(i)).toList();
-
     return DiaryList(
       title : json["travelTitle"],
       area : json["travelArea"],
       startdate : DateFormat("yyyy-mm-dd").parse(json["travelStartDate"]),
       enddate : DateFormat("yyyy-mm-dd").parse(json["travelEndDate"]),
-      data : diariesList,
+      data : json["diaries"] ?? [],
     );
   }
 }

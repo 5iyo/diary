@@ -194,6 +194,13 @@ public class WeatherApiController {
                 // json 결과 파싱
                 JSONObject jsonObj = new JSONObject(result.toString());
                 JSONObject coordObj = jsonObj.getJSONObject("coord");
+
+                BigDecimal mapX = coordObj.getBigDecimal("lon");
+                BigDecimal mapY = coordObj.getBigDecimal("lat");
+                PosDTO posDTO = new PosDTO();
+                posDTO.setX(mapX.toString());
+                posDTO.setY(mapY.toString());
+
                 JSONArray weatherArray = jsonObj.getJSONArray("weather");
 
                 JSONObject tempArray = jsonObj.getJSONObject("main");
@@ -246,6 +253,7 @@ public class WeatherApiController {
             urlBuilder.append("&" + URLEncoder.encode("mapX", "UTF-8") + "=" + URLEncoder.encode(mapX, "UTF-8"));
             urlBuilder.append("&" + URLEncoder.encode("mapY", "UTF-8") + "=" + URLEncoder.encode(mapY, "UTF-8"));
             urlBuilder.append("&" + URLEncoder.encode("_type", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("arrange", "UTF-8") + "=" + URLEncoder.encode("E", "UTF-8"));
             urlBuilder.append("&" + URLEncoder.encode("radius", "UTF-8") + "=" + URLEncoder.encode("50000", "UTF-8"));
 
             URL url2 = new URL(urlBuilder.toString());
@@ -313,7 +321,8 @@ public class WeatherApiController {
 
     @Data
     @AllArgsConstructor
-    static class RecommendDTO {
+    @NoArgsConstructor
+    static class PosDTO {
         private String x;
         private String y;
     }
