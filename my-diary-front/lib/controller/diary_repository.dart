@@ -11,7 +11,6 @@ const get_host = "192.168.20.2:8080";
 const host = "http://192.168.20.2:8080";
 
 class DiaryRepository {
-
   Future<List<Travels>> fetchTravelList(LatLng travelLatLng) async {
     var latitude;
     var longitude;
@@ -39,7 +38,7 @@ class DiaryRepository {
       "travelLongitude": "${longitude}"
     }; //마커 좌표
     final response = await http.get(
-      Uri.http('$get_host', 'api/travels', queryParams),
+      Uri.https('$get_host', 'api/travels', queryParams),
     );
 
     if(response.statusCode == 200) {

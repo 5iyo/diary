@@ -163,7 +163,7 @@ class DiaryUser {
     print(profileIntroduction);
     print(birthDate);
     try {
-      Response response = await dio.post('$url/user',
+      Response response = await dio.post('$url/user/$id',
       data: {
         "email" : email,
         "profileIntroduction" : profileIntroduction,

@@ -4,9 +4,11 @@ import 'package:intl/intl.dart';
 import 'package:my_diary_front/data.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/custom_elevated_button.dart';
-import '../../components/custom_text_form_field.dart';
-import '../../components/custom_textarea.dart';
+import 'user_info_custom/custom_elevated_button.dart';
+import 'user_info_custom/custom_text_form_field.dart';
+import 'user_info_custom/custom_textarea.dart';
+
+
 
 class UserInfo extends StatefulWidget {
   const UserInfo({Key? key}) : super(key: key);
