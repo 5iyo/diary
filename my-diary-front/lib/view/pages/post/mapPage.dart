@@ -189,9 +189,9 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
             },
           ),
           ListTile(
-            title: const Text('일기쓰기'),
+            title: const Text('여행 조회'),
             onTap: () {
-              //FixMe : 일기쓰기가 무슨 페이지로 가는 버튼인지 확실히 알아보기
+              //FixMe : 여행 조회 페이지 만들고 _mainViewModel.diaryUser.travels.travelMarkers 랑 연결하기
               // Navigator.push(context,
               //     MaterialPageRoute(builder: (context) => TravelPage("")));
             },
