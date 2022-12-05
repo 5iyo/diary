@@ -16,7 +16,7 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("")
+    @PostMapping("/{id}")
     public Map<String, Object> updateUser(@PathVariable("id") long id,@RequestBody PostUserInfoDto updateDto){
         Map<String, Object>response = new HashMap<>();
          if(userService.updateUser(id, updateDto) == 1)
