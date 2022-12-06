@@ -63,9 +63,48 @@
     		<key>CFBundleURLSchemes</key>
     		<array>
     			<string>com.googleusercontent.apps.961645508859-6vkjjmuvm5omvnqodlot2lmhrb6782l0</string>
+    			<string>https://a.com<string>
     		</array>
     	</dict>
     </array>
     <!-- End of the Google Sign-in Section -->
+
+    <key>LSApplicationQueriesSchemes</key>
+        <array>
+            <string>naversearchapp</string>
+            <string>naversearchthirdlogin</string>
+        </array>
+        <key>naverServiceAppUrlScheme</key>
+        <string>https://a.com</string>
+        <key>naverConsumerKey</key>
+        <string>1UBSsEUyRC9K7QGsdenq</string>
+        <key>naverConsumerSecret</key>
+        <string>wpcwx1RMc9</string>
+        <key>naverServiceAppName</key>
+        <string>my_diary</string>
+
+        <!-- http allows configurations -->
+        <key>NSAppTransportSecurity</key>
+        <dict>
+           <key>NSAllowsArbitraryLoads</key>
+           <true/>
+           <key>NSExceptionDomains</key>
+           <dict>
+              <key>naver.com</key>
+              <dict>
+                 <key>NSExceptionRequiresForwardSecrecy</key>
+                 <false/>
+                 <key>NSIncludesSubdomains</key>
+                 <true/>
+              </dict>
+              <key>naver.net</key>
+              <dict>
+                 <key>NSExceptionRequiresForwardSecrecy</key>
+                 <false/>
+                 <key>NSIncludesSubdomains</key>
+                 <true/>
+              </dict>
+           </dict>
+        </dict>
 </dict>
 </plist>
