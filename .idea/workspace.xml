@@ -6,10 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="2bbbed5c-b4d0-4feb-9d21-400060351cbd" name="Changes" comment="init project">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-diary-front/lib/controller/diary_repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/my-diary-front/lib/controller/diary_repository.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-diary-front/lib/data.dart" beforeDir="false" afterPath="$PROJECT_DIR$/my-diary-front/lib/data.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-diary-front/lib/view/pages/post/mapPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/my-diary-front/lib/view/pages/post/mapPage.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-diary-front/lib/view/pages/post/travel_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/my-diary-front/lib/view/pages/post/travel_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-diary-front/lib/view/pages/post/update_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/my-diary-front/lib/view/pages/post/update_page.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
