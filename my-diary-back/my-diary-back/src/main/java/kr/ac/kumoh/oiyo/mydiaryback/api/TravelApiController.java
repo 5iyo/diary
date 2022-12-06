@@ -76,7 +76,7 @@ public class TravelApiController {
      * @return
      */
     @GetMapping("/api/user/{id}/inquire-travels")
-    public ResponseEntity inquireTravelsInMap(@PathVariable("id") String memberId) {
+    public ResponseEntity inquireTravelsInMap(@PathVariable("id") Long memberId) {
         List<Travel> travels = travelService.inquiryTravelsByMember(memberId);
 
         List<TravelCoordinateDto> collect = travels.stream()

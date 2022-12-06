@@ -35,7 +35,7 @@ public class TravelService {
      * @param memberId 사용자의 ID (pk)
      * @return 해당 사용자의 모든 여행 기록 조회
      */
-    public List<Travel> inquiryTravelsByMember(String memberId) {
+    public List<Travel> inquiryTravelsByMember(Long memberId) {
         return travelRepository.findTravelsByMember(memberId);
     }
 
