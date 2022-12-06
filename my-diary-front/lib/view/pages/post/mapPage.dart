@@ -223,7 +223,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
   Widget _buildGoogleMap() {
     return GoogleMap(
       initialCameraPosition: _initialPosition,
-      mapType: MapType.hybrid,
+      mapType: MapType.normal,
       onMapCreated: (controller) {
         setState(() {
           _controller = controller;
