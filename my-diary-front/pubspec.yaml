@@ -40,6 +40,8 @@ dependencies:
   screenshot: ^1.2.3
   # social_share
   social_share: ^2.3.1
+  # resize image
+  image: ^3.2.2
 
   get: ^4.6.5
   validators: ^3.0.0
@@ -69,5 +71,6 @@ flutter:
     - img/Facebook_icon.png
     - img/Instagram_icon.png
     - img/Kakaostory_icon.png
+    - img/KakaoTalk_icon.png
     - img/핑구.png
     - svg/sun.svg
