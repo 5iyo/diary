@@ -5,16 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2bbbed5c-b4d0-4feb-9d21-400060351cbd" name="Changes" comment="init project">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-diary-front/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/my-diary-front/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-diary-front/lib/controller/diary_repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/my-diary-front/lib/controller/diary_repository.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-diary-front/lib/controller/dio_update_image.dart" beforeDir="false" afterPath="$PROJECT_DIR$/my-diary-front/lib/controller/dio_update_image.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-diary-front/lib/controller/dto/TravelListResp.dart" beforeDir="false" afterPath="$PROJECT_DIR$/my-diary-front/lib/controller/dto/TravelListResp.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-diary-front/lib/view/pages/post/diary_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/my-diary-front/lib/view/pages/post/diary_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-diary-front/lib/view/pages/post/recommend_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/my-diary-front/lib/view/pages/post/recommend_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-diary-front/lib/view/pages/post/update_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/my-diary-front/lib/view/pages/post/update_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-diary-front/lib/view/pages/post/weather_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/my-diary-front/lib/view/pages/post/weather_page.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,7 +65,7 @@
     <property name="cidr.known.project.marker" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../diary_provider/diary" />
     <property name="settings.editor.selected.configurable" value="dart.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>

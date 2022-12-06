@@ -208,7 +208,7 @@ class _TravelPageState extends State<TravelPage> {
                           base64.isEmpty ? base64 = [""] : base64;
                           print(base64[0]);
                           if (_formKey.currentState!.validate()) {
-                            await travelProvider.travelsave(id, _title.text, " ", "${travelLatLng.latitude}", "${travelLatLng.latitude}", base64[0], _startdate.text, _enddate.text);
+                            await travelProvider.travelsave(id, _title.text, " ", "${travelLatLng.latitude}", "${travelLatLng.longitude}", base64[0], _startdate.text, _enddate.text);
                             print("=======!!");
                             print(travelLatLng.latitude);
                             print(travelLatLng.longitude);

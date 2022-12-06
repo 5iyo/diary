@@ -29,7 +29,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
-  late MainViewModel _mainViewModel;
+  MainViewModel? _mainViewModel;
 
   // 애플리케이션에서 지도를 이동하기 위한 컨트롤러
   late GoogleMapController _controller;
@@ -64,22 +64,23 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
   }
 
   addMarker(coordinate, InfoWindow infoWindow, [TravelMarker? travelMarker]) {
+    print("#######addMarker ${markerId}");
     markers.add(travelMarker == null
         ? Marker(
             position: coordinate,
-            markerId: MarkerId((markerId).toString()),
+            markerId: MarkerId("$markerId"),
             infoWindow: infoWindow,
           )
         : Marker(
             position: coordinate,
-            markerId: MarkerId((markerId++).toString()),
+            markerId: MarkerId("${markerId++}"),
             infoWindow: infoWindow,
           ));
     setState(() {
       setOfMarkers = markers.toSet();
     });
-//    print("#######addMarker ${markers.length} & ${setOfMarkers.length}");
-    print("#######addMarker ${travelMarker!.travelLatLng.latitude} & ${travelMarker.travelLatLng.longitude}");
+    print("#######addMarker ${markers.length} & ${setOfMarkers.length}");
+//    print("#######addMarker ${travelMarker!.travelLatLng.latitude} & ${travelMarker.travelLatLng.longitude}");
   }
 
   void _currentLocation() async {
@@ -119,8 +120,10 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     print("#######build");
-    _mainViewModel = Provider.of<MainViewModel>(context, listen: true);
-    initMarkers(_mainViewModel.diaryUser!.travels);
+    if(_mainViewModel == null) {
+      _mainViewModel = Provider.of<MainViewModel>(context, listen: true);
+      initMarkers(_mainViewModel!.diaryUser!.travels);
+    }
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: _buildAppBar(),
@@ -159,7 +162,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
           (item) async {
             await _controller
                 .takeSnapshot()
-                .then((value) => _mainViewModel.share(
+                .then((value) => _mainViewModel!.share(
                       item,
                       diaryScreenshot,
                       value,
@@ -177,13 +180,13 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
         children: <Widget>[
           UserAccountsDrawerHeader(
             currentAccountPicture: CircleAvatar(
-              backgroundImage: _mainViewModel.diaryUser!.profileImage == null
+              backgroundImage: _mainViewModel!.diaryUser!.profileImage == null
                   ? const AssetImage('img/핑구.png')
-                  : Image.network(_mainViewModel.diaryUser!.profileImage!)
+                  : Image.network(_mainViewModel!.diaryUser!.profileImage!)
                       .image,
             ),
-            accountName: Text(_mainViewModel.diaryUser!.username),
-            accountEmail: Text(_mainViewModel.diaryUser!.email),
+            accountName: Text(_mainViewModel!.diaryUser!.username),
+            accountEmail: Text(_mainViewModel!.diaryUser!.email),
             decoration: BoxDecoration(color: Colors.blueGrey[400]),
           ),
           ListTile(
@@ -210,7 +213,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
           ),
           ListTile(
             title: const Text('로그아웃'),
-            onTap: () => _mainViewModel.logout(),
+            onTap: () => _mainViewModel!.logout(),
           )
         ],
       ),
@@ -279,8 +282,8 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
           onPress: () async {
             _animationController.reverse();
             markers.clear();
-            await _mainViewModel.diaryUser!.getTravelMarkerList();
-            initMarkers(_mainViewModel.diaryUser!.travels);
+            await _mainViewModel!.diaryUser!.getTravelMarkerList();
+            initMarkers(_mainViewModel!.diaryUser!.travels);
             _controller.animateCamera(
                 CameraUpdate.newCameraPosition(_initialPosition));
           },
@@ -353,11 +356,11 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
             title: detail.result.name,
             onTap: () {
               Get.to(() =>
-                  TravelPage(_mainViewModel.diaryUser!.id.toString(), latLng));
+                  TravelPage(_mainViewModel!.diaryUser!.id.toString(), latLng));
 //              Navigator.pushNamed(context, '/diaryInfoPage');
             }));
 
     _controller
-        .animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lng), 14.0));
+        .animateCamera(CameraUpdate.newLatLngZoom(latLng, 14.0));
   }
 }
