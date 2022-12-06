@@ -36,6 +36,19 @@ Future<void> fetchDeleteImage(int id) async{
   }
 }
 
+Future<Diary> fetchDiary(int id) async {
+  var url = '$host/api/diaries/$id';
+  final response = await http.get(Uri.parse(url));
+
+  if(response.statusCode == 200) {
+    print("리스트 요청 성공");
+    print(json.decode(utf8.decode(response.bodyBytes)));
+    return Diary.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+  } else {
+    throw Exception("리스트 요청을 실패했습니다.");
+  }
+}
+
 class UpdatePage extends StatefulWidget {
 
   final int id;
@@ -77,6 +90,12 @@ class _UpdatePageState extends State<UpdatePage> {
   List<Images> diaryImage = [];
   List<String> updateImagebase64 = [];
 
+  void initState() {
+    super.initState();
+    updateresp = fetchDiary(id);
+  }
+
+  @override
   Widget build(BuildContext context) {
     diaryUpdateProvider = Provider.of<DiaryUpdateProvider>(context, listen: false);
     return Scaffold(

@@ -13,16 +13,9 @@ String? get_host = dotenv.env['SERVER_NAME'];
 
 class DiaryRepository {
   Future<List<Travels>> fetchTravelList(LatLng travelLatLng) async {
-    var latitude = travelLatLng.latitude;
-    var longitude = travelLatLng.longitude;
-
-    print("왜 안돼");
-    print(latitude);
-    print(longitude);
-
     Map<String, String> queryParams = {
-      "travelLatitude": "${latitude}",
-      "travelLongitude": "${longitude}"
+      "travelLatitude": "${travelLatLng.latitude}",
+      "travelLongitude": "${travelLatLng.longitude}"
     }; //마커 좌표
     final response = await http.get(
       Uri.https('$get_host', 'api/travels', queryParams),
