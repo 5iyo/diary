@@ -96,6 +96,7 @@
     </array>
     <!-- End of the Google Sign-in Section -->
 
+    <!--flutter naver login-->
     <key>CFBundleURLTypes</key>
     <array>
         <dict>
@@ -103,7 +104,7 @@
             <string>Editor</string>
             <key>CFBundleURLSchemes</key>
             <array>
-                <string>https://a.com</string>
+                <string>kr.ac.kumoh.oiyo.myDiaryFront</string>
             </array>
         </dict>
     </array>
@@ -114,7 +115,7 @@
             <string>naversearchthirdlogin</string>
         </array>
         <key>naverServiceAppUrlScheme</key>
-        <string>https://a.com</string>
+        <string>kr.ac.kumoh.oiyo.myDiaryFront</string>
         <key>naverConsumerKey</key>
         <string>1UBSsEUyRC9K7QGsdenq</string>
         <key>naverConsumerSecret</key>
@@ -145,5 +146,7 @@
               </dict>
            </dict>
         </dict>
+    <!--flutter naver login-->
+
 </dict>
 </plist>
