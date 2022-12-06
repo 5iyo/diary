@@ -7,11 +7,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Transactional
+    public int delete(long id) {
+        Optional<User> user = userRepository.findById(id);
+        if(user.isPresent()) {
+            userRepository.delete(user.get());
+            return 1;
+        }
+        return 0;
+    }
 
     @Transactional
     public User findUserbyId(long id){
@@ -23,8 +35,8 @@ public class UserService {
     }
 
     @Transactional
-    public int updateUser(PostUserInfoDto updateUserInfo){
-        User user = userRepository.findByEmail(updateUserInfo.getEmail()).orElseThrow(()->{
+    public int updateUser(long id,PostUserInfoDto updateUserInfo){
+        User user = userRepository.findById(id).orElseThrow(()->{
             return new IllegalArgumentException("수정하기 위한 회원 찾기 실패!");
         });
 

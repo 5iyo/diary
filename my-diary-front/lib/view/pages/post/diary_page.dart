@@ -1,6 +1,9 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:my_diary_front/controller/provider/diary_delete_provider.dart';
+import 'package:my_diary_front/controller/provider/diarylist_provider.dart';
 import 'package:my_diary_front/view/pages/post/update_page.dart';
 import 'package:my_diary_front/view/pages/post/diary_list_page.dart';
 import 'package:my_diary_front/controller/dto/DiaryResp.dart';
@@ -9,7 +12,9 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
-const host = "http://192.168.20.7:8080";
+import 'package:provider/provider.dart';
+
+const host = "http://192.168.20.2:8080";
 
 Future<Diary> fetchDiary(int id) async {
   var url = '$host/api/diaries/$id';
@@ -24,34 +29,23 @@ Future<Diary> fetchDiary(int id) async {
   }
 }
 
-Future<void> fetchDelete(int id) async{
-  var url = '$host/api/diaries/$id';
-  final response = await http.delete(Uri.parse(url));
-
-  if(response.statusCode == 200) {
-    print("삭제 성공");
-  } else {
-    throw Exception("삭제 실패");
-  }
-}
-
 class DiaryPage extends StatefulWidget {
 
-  final int id;
+  final int? id;
   final int travelId;
 
   const DiaryPage(this.id, this.travelId);
 
   @override
-  State<DiaryPage> createState() => _DiaryPage(id, travelId);
+  State<DiaryPage> createState() => _DiaryPage(id!, travelId);
 }
 
 class _DiaryPage extends State<DiaryPage> {
+  DiaryListProvider diaryListProvider = DiaryListProvider();
+  DiaryDeleteProvider diaryDeleteProvider = DiaryDeleteProvider();
 
   final int id;
   final int travelId;
-
-  //List<File> _byteImage = [];
 
   _DiaryPage(this.id, this.travelId);
 
@@ -65,6 +59,7 @@ class _DiaryPage extends State<DiaryPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
@@ -93,8 +88,9 @@ class _DiaryPage extends State<DiaryPage> {
   }
 
   Widget buildDiary(context, snapshot) {
-    // snapshot.data?.images.isEmpty? null :
-    // snapshot.data?.images.forEach((e) => _byteImage.add(e.writeAsBytesSync(base64Decode(e))));
+    diaryListProvider = Provider.of<DiaryListProvider>(context, listen: false);
+    diaryDeleteProvider = Provider.of<DiaryDeleteProvider>(context, listen: true);
+
     UriData data;
     Uint8List bytes;
     return Padding(
@@ -143,7 +139,6 @@ class _DiaryPage extends State<DiaryPage> {
                   controller: this.controller,
                   itemCount: snapshot.data?.images.length ?? 0,
                   itemBuilder: (context, index) {
-                    //bytes = base64Decode(snapshot.data.images[index]);
                     if(snapshot.data.images[index].imagefile == "" ) return Container();
                     else {
                       data = Uri.parse(snapshot.data.images[index].imagefile).data!;
@@ -182,16 +177,16 @@ class _DiaryPage extends State<DiaryPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                onPressed: () {
-                  fetchDelete(id);
+                onPressed: () async {
+                  await diaryDeleteProvider.diaryDelete(id);
                   Get.off(() => DiaryListPage(travelId));
                 },
                 child: Text("삭제"),
               ),
               SizedBox(width: 10),
               ElevatedButton(
-                onPressed: (){
-                  Get.to(()=>UpdatePage(id, travelId));
+                onPressed: () async {
+                  await Get.off(()=>UpdatePage(id, travelId));
                 },
                 child: Text("수정"),
               ),

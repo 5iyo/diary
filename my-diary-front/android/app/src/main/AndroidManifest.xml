@@ -1,8 +1,24 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="kr.ac.kumoh.oiyo.my_diary_front">
     <!--Location 권한-->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <queries>
+        <!-- Explicit apps you know in advance about: -->
+        <package android:name="com.instagram.android" />
+        <package android:name="com.facebook.katana" />
+        <package android:name="com.facebook.orca" />
+        <package android:name="org.telegram.messenger" />
+        <package android:name="com.whatsapp" />
+        <package android:name="com.twitter.android" />
+    </queries>
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name="${applicationName}"
@@ -20,6 +36,17 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${googleMapApiKey}" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.com.shekarmudaliyar.social_share"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
 
         <activity
             android:name=".MainActivity"
@@ -51,6 +78,9 @@
 
                 <!-- Redirect URI, "kakao${YOUR_NATIVE_APP_KEY}://oauth" 형식 -->
                 <data android:scheme="kakao${kakaoLoginApiKey}" android:host="oauth"/>
+                <!-- "kakao${YOUR_NATIVE_APP_KEY}://kakaostory" 형식의 앱 실행 스킴을 설정하는데 사용 -->
+                <data android:host="kakaostory"
+                    android:scheme="kakao${kakaoLoginApiKey}" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

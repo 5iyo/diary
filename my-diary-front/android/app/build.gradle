@@ -64,7 +64,6 @@ android {
         manifestPlaceholders["naverLoginApiId"] = naverLoginApiId
         manifestPlaceholders["naverLoginApiSecret"] = naverLoginApiSecret
         manifestPlaceholders["naverLoginApiName"] = naverLoginApiName
-
     }
 
     buildTypes {
