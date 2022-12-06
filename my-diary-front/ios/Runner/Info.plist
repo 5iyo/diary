@@ -54,6 +54,17 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 
+	<!--location-->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<true/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<true/>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<true/>
+	<key>UIBackgroundModes</key>
+	<string>location</string>
+    <!--location-->
+
 	<!-- Put me in the [my_project]/ios/Runner/Info.plist file -->
     <!-- Google Sign-in Section -->
 
