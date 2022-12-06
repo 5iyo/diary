@@ -208,10 +208,7 @@ class _TravelPageState extends State<TravelPage> {
                           base64.isEmpty ? base64 = [""] : base64;
                           print(base64[0]);
                           if (_formKey.currentState!.validate()) {
-                            await travelProvider.travelsave(id, _title.text, " ", "35.8561", "129.224", base64[0], _startdate.text, _enddate.text);
-                            print("=======!!");
-                            print(travelLatLng.latitude);
-                            print(travelLatLng.longitude);
+                            await travelProvider.travelsave(id, _title.text, " ", "${travelLatLng.latitude}", "${travelLatLng.longitude}", base64[0], _startdate.text, _enddate.text);
                             Get.to(()=>TravelListPage(travelLatLng: travelLatLng));
                             //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => TravelListPage()), (route) => false);
                           }

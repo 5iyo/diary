@@ -13,30 +13,9 @@ String? get_host = dotenv.env['SERVER_NAME'];
 
 class DiaryRepository {
   Future<List<Travels>> fetchTravelList(LatLng travelLatLng) async {
-    var latitude;
-    var longitude;
-
-    if(travelLatLng.latitude.floor() < 100 && travelLatLng.latitude.floor() > 9) {
-      latitude = (travelLatLng.latitude - 0.0001).toStringAsFixed(4);
-    }
-    else if (travelLatLng.latitude.floor() >= 100) {
-      latitude = (travelLatLng.latitude - 0.001).toStringAsFixed(3);
-    }
-
-    if(travelLatLng.longitude.floor() < 100 && travelLatLng.longitude.floor() > 9) {
-      longitude = (travelLatLng.longitude-0.0001).toStringAsFixed(4);
-    }
-    else if (travelLatLng.longitude.floor() >= 100) {
-      longitude = (travelLatLng.longitude-0.001).toStringAsFixed(3);
-    }
-
-    print("왜 안돼");
-    print(latitude);
-    print(longitude);
-
     Map<String, String> queryParams = {
-      "travelLatitude": "${latitude}",
-      "travelLongitude": "${longitude}"
+      "travelLatitude": "${travelLatLng.latitude}",
+      "travelLongitude": "${travelLatLng.longitude}"
     }; //마커 좌표
     final response = await http.get(
       Uri.https('$get_host', 'api/travels', queryParams),
