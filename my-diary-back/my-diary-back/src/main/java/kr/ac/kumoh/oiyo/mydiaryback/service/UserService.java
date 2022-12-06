@@ -18,7 +18,7 @@ public class UserService {
     UserRepository userRepository;
 
     @Transactional
-    public int delete(long id) {
+    public int deleteUserById(long id) {
         Optional<User> user = userRepository.findById(id);
         if(user.isPresent()) {
             userRepository.delete(user.get());

@@ -53,4 +53,17 @@ public class UserController {
         return response;
     }
 
+    @DeleteMapping("/{id}")
+    public Map<String, Object> deleteUserById(@PathVariable("id")long userId){
+        Map<String, Object> response = new HashMap<>();
+
+        if (userService.deleteUserById(userId)==1){
+            response.put("result","SUCCESS");
+        }else{
+            response.put("result","FAIL");
+            response.put("reason","사용자 삭제 실패");
+        }
+        return response;
+    }
+
 }
