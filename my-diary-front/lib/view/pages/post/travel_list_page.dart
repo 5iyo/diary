@@ -18,6 +18,7 @@ import '../../../diaryShare.dart';
 
 class Menu {
   final String name;
+
   const Menu(this.name);
 }
 
@@ -36,7 +37,6 @@ class TravelListPage extends StatefulWidget {
 }
 
 class _TravelListPage extends State<TravelListPage> {
-
   LatLng travelLatLng;
   List<String> travelImageList = [];
   ScrollController controller = ScrollController();
@@ -51,178 +51,196 @@ class _TravelListPage extends State<TravelListPage> {
   late MainViewModel _mainViewModel;
   DiaryScreenshot diaryScreenshot = DiaryScreenshot();
 
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _travelListProvider = Provider.of<TravelListProvider>(context, listen: false);
+    _travelListProvider =
+        Provider.of<TravelListProvider>(context, listen: false);
     _travelListProvider.travelList(travelLatLng);
   }
 
   @override
   Widget build(BuildContext context) {
-    _travelDeleteProvider = Provider.of<TravelDeleteProvider>(context, listen: true);
+    _travelDeleteProvider =
+        Provider.of<TravelDeleteProvider>(context, listen: true);
     _mainViewModel = Provider.of<MainViewModel>(context, listen: true);
 
     UriData? data;
     Uint8List? bytes;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-        title: Text("Travel List",
-            style: TextStyle(color: Colors.grey[700])),
+        title: Text("Travel List", style: TextStyle(color: Colors.grey[700])),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         actions: [
-          DiarySocialShareViewModel().buildPopupMenu(
-            context,
-                (item) async {
-              _mainViewModel.share(
-                item,
-                diaryScreenshot,
-              );
-            },
-            Colors.black
-          ),
+          DiarySocialShareViewModel().buildPopupMenu(context, (item) async {
+            _mainViewModel.share(
+              item,
+              diaryScreenshot,
+            );
+          }, Colors.black),
         ],
       ),
       extendBodyBehindAppBar: true,
       body: Consumer<TravelListProvider>(
           builder: (context, TravelListProvider value, child) {
-            for(int i=0; i<value.travels.length; i++) {
-              travelImageList.add("${value.travels[i].image}");
-            }
+        for (int i = 0; i < value.travels.length; i++) {
+          travelImageList.add("${value.travels[i].image}");
+        }
 
-            int count = 0;
-            bool imagenull = false;
+        int count = 0;
+        bool imagenull = false;
 
-            for(int i=0; i<travelImageList.length; i++) {
-              if(travelImageList[i] == "") {
-                count ++;
-              }
-            }
-            if(count == travelImageList.length) {
-              imagenull = true;
-            }
+        for (int i = 0; i < travelImageList.length; i++) {
+          if (travelImageList[i] == "") {
+            count++;
+          }
+        }
+        if (count == travelImageList.length) {
+          imagenull = true;
+        }
 
-            if(value.travels != null && value.travels.length>0) {
-              return Screenshot(
-                controller: diaryScreenshot.screenshotController,
-                child: Container(
+        if (value.travels != null && value.travels.length > 0) {
+          return Screenshot(
+            controller: diaryScreenshot.screenshotController,
+            child: Container(
+              decoration: BoxDecoration(
                   color: Colors.white,
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          imagenull == true ? Container()
-                              : SafeArea(
-                            child: SingleChildScrollView(
-                              child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 300.0,
-                                  child: ListView.builder(
-                                      padding: EdgeInsets.all(10.0),
-                                      scrollDirection: Axis.horizontal,
-                                      controller: this.controller,
-                                      itemCount: travelImageList.length,
-                                      itemBuilder: (BuildContext context, int index) {
-                                        travelImageList[index] == "" || travelImageList[index] == null ? data = null
-                                            : data = Uri.parse(travelImageList[index]).data;
-                                        data == null ? bytes = null : bytes = data!.contentAsBytes();
-                                        if (bytes != null) {
-                                          return Container(
-                                            width: 200.0,
-                                            child: Card(
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(20.0)),
-                                              clipBehavior: Clip.antiAlias,
-                                              borderOnForeground: false,
-                                              child: Image.memory(bytes!, fit: BoxFit.cover),
-                                            ),
-                                            padding: EdgeInsets.all(10.0),
-                                          );
-                                        }
-                                        else {
-                                          return SizedBox();
-                                        }
-                                      }
-                                  )
+                  image: DecorationImage(
+                      image: Image.asset("img/page_background.png").image,
+                      fit: BoxFit.cover)),
+              child: Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: Center(
+                  child: Column(
+                    children: [
+                      imagenull == true
+                          ? Container()
+                          : SafeArea(
+                              child: SingleChildScrollView(
+                                child: Container(
+                                    width: MediaQuery.of(context).size.width <
+                                            MediaQuery.of(context).size.height
+                                        ? MediaQuery.of(context).size.width *
+                                            1.7 *
+                                            MediaQuery.of(context).size.width /
+                                            MediaQuery.of(context).size.height
+                                        : MediaQuery.of(context).size.height *
+                                            1.7 *
+                                            MediaQuery.of(context).size.height /
+                                            MediaQuery.of(context).size.width,
+                                    height: 300.0,
+                                    child: ListView.builder(
+                                        padding: EdgeInsets.all(10.0),
+                                        scrollDirection: Axis.horizontal,
+                                        controller: this.controller,
+                                        itemCount: travelImageList.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          travelImageList[index] == "" ||
+                                                  travelImageList[index] == null
+                                              ? data = null
+                                              : data = Uri.parse(
+                                                      travelImageList[index])
+                                                  .data;
+                                          data == null
+                                              ? bytes = null
+                                              : bytes = data!.contentAsBytes();
+                                          if (bytes != null) {
+                                            return Container(
+                                              width: 200.0,
+                                              child: Card(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20.0)),
+                                                clipBehavior: Clip.antiAlias,
+                                                borderOnForeground: false,
+                                                child: Image.memory(bytes!,
+                                                    fit: BoxFit.cover),
+                                              ),
+                                              padding: EdgeInsets.all(10.0),
+                                            );
+                                          } else {
+                                            return SizedBox();
+                                          }
+                                        })),
                               ),
-
                             ),
-                          ),
-                          Expanded(
-                            child: ListView.separated(
-                              itemCount: value.travels.length,
-                              itemBuilder: (context, index) {
-                                return ListTile(
-                                  onTap: () {
-                                    Get.to(()=>DiaryListPage(value.travels[index].id));
-                                  },
-                                  title: Row(
-                                    children: [
-                                      Text("${value.travels[index].title}"),
-                                      SizedBox(width: 20),
-                                      Text(DateFormat.yMd().format(
+                      Expanded(
+                        child: ListView.separated(
+                          itemCount: value.travels.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              onTap: () {
+                                Get.to(() =>
+                                    DiaryListPage(value.travels[index].id));
+                              },
+                              title: Row(
+                                children: [
+                                  Text("${value.travels[index].title}"),
+                                  SizedBox(width: 20),
+                                  Text(
+                                      DateFormat.yMd().format(
                                           value.travels[index].startdate),
-                                          style: TextStyle(fontSize: 10)),
-                                      Text("  -  ", style: TextStyle(fontSize: 10)),
-                                      Text(DateFormat.yMd().format(
-                                          value.travels[index].enddate),
-                                          style: TextStyle(fontSize: 10)),
-                                    ],
+                                      style: TextStyle(fontSize: 10)),
+                                  Text("  -  ", style: TextStyle(fontSize: 10)),
+                                  Text(
+                                      DateFormat.yMd()
+                                          .format(value.travels[index].enddate),
+                                      style: TextStyle(fontSize: 10)),
+                                ],
+                              ),
+                              trailing: PopupMenuButton(
+                                itemBuilder: (context) => [
+                                  PopupMenuItem(
+                                    value: 1,
+                                    child: Text('수정'),
+                                    onTap: () async {
+                                      final navigator = Navigator.of(context);
+                                      await Future.delayed(Duration.zero);
+                                      navigator.push(
+                                        MaterialPageRoute(
+                                            builder: (_) => TravelUpdatePage(
+                                                travelLatLng,
+                                                value.travels[index].id,
+                                                value.travels[index].title,
+                                                value.travels[index].image)),
+                                      );
+                                    },
                                   ),
-                                  trailing: PopupMenuButton(
-                                    itemBuilder: (context) =>
-                                    [
-                                      PopupMenuItem(
-                                        value: 1,
-                                        child: Text('수정'),
-                                        onTap: () async {
-                                          final navigator = Navigator.of(context);
-                                          await Future.delayed(Duration.zero);
-                                          navigator.push(
-                                            MaterialPageRoute(builder: (_) =>
-                                                TravelUpdatePage(
-                                                    travelLatLng,
-                                                    value.travels[index].id,
-                                                    value.travels[index].title,
-                                                    value.travels[index].image)),
-                                          );
-                                        },
-                                      ),
-                                      PopupMenuItem(
-                                        child: Text('삭제'),
-                                        onTap: () async {
-                                          await _travelDeleteProvider.travelDelete(
-                                              value.travels[index].id!);
-                                          Get.off(() => TravelListPage(
+                                  PopupMenuItem(
+                                    child: Text('삭제'),
+                                    onTap: () async {
+                                      await _travelDeleteProvider.travelDelete(
+                                          value.travels[index].id!);
+                                      Get.off(() => TravelListPage(
                                             travelLatLng: travelLatLng,
                                           ));
-                                        },
-                                      ),
-                                    ],
+                                    },
                                   ),
-                                );
-                              },
-                              separatorBuilder: (context, index) {
-                                return Divider();
-                              },
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
+                                ],
+                              ),
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return Divider();
+                          },
+                        ),
+                      )
+                    ],
                   ),
                 ),
-              );
-            }
-            return Center(child: CircularProgressIndicator());
-          }
-      ),
+              ),
+            ),
+          );
+        }
+        return Center(child: CircularProgressIndicator());
+      }),
     );
   }
 }

@@ -100,7 +100,8 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
     print("#######initMarkers");
 //    markers.clear();
     for (TravelMarker e in list.travelMarkers!) {
-      print("#######initMarkers ${e.travelLatLng.latitude} & ${e.travelLatLng.longitude}");
+      print(
+          "#######initMarkers ${e.travelLatLng.latitude} & ${e.travelLatLng.longitude}");
       addMarker(
           e.travelLatLng,
           InfoWindow(
@@ -120,17 +121,27 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     print("#######build");
-    if(_mainViewModel == null) {
+    if (_mainViewModel == null) {
       _mainViewModel = Provider.of<MainViewModel>(context, listen: true);
       initMarkers(_mainViewModel!.diaryUser!.travels);
     }
     return Scaffold(
+      resizeToAvoidBottomInset : false,
       extendBodyBehindAppBar: true,
       appBar: _buildAppBar(),
       drawer: _buildDrawer(),
       body: Screenshot(
         controller: diaryScreenshot.screenshotController,
-        child: _buildGoogleMap(),
+        child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                image: DecorationImage(
+                    image: Image.asset("img/login_background.png").image,
+                    fit: BoxFit.cover)),
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(15.0,AppBar().preferredSize.height,15.0,AppBar().preferredSize.height,),
+              child: _buildGoogleMap(),
+            )),
       ),
       floatingActionButton: _buildFloatingActionBubble(),
     );
@@ -360,7 +371,6 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
 //              Navigator.pushNamed(context, '/diaryInfoPage');
             }));
 
-    _controller
-        .animateCamera(CameraUpdate.newLatLngZoom(latLng, 14.0));
+    _controller.animateCamera(CameraUpdate.newLatLngZoom(latLng, 14.0));
   }
 }

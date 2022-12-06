@@ -77,33 +77,35 @@ class _DiaryPage extends State<DiaryPage> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         actions: [
-          DiarySocialShareViewModel().buildPopupMenu(
-            context,
-            (item) async {
-              _mainViewModel.share(
-                item,
-                diaryScreenshot,
-              );
-            },
-            Colors.black
-          ),
+          DiarySocialShareViewModel().buildPopupMenu(context, (item) async {
+            _mainViewModel.share(
+              item,
+              diaryScreenshot,
+            );
+          }, Colors.black),
         ],
       ),
       extendBodyBehindAppBar: true,
       body: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: FutureBuilder<Diary>(
-            future: diary,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Container(color: Colors.white, child: buildDiary(context, snapshot));
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}에러");
-              }
-              return CircularProgressIndicator();
-            },
-          ),
+        padding: EdgeInsets.all(16.0),
+        child: FutureBuilder<Diary>(
+          future: diary,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      image: DecorationImage(
+                          image: Image.asset("img/page_background.png").image,
+                          fit: BoxFit.cover)),
+                  child: buildDiary(context, snapshot));
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}에러");
+            }
+            return CircularProgressIndicator();
+          },
         ),
+      ),
     );
   }
 
@@ -115,7 +117,7 @@ class _DiaryPage extends State<DiaryPage> {
     UriData data;
     Uint8List bytes;
     return Padding(
-      padding: const EdgeInsets.only(top: 100),
+      padding: const EdgeInsets.only(top: 150),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

@@ -37,6 +37,7 @@ class _DiaryListPage extends State<DiaryListPage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset : false,
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         title: Text("Diary List",
@@ -46,31 +47,38 @@ class _DiaryListPage extends State<DiaryListPage> {
         elevation: 0.0,
       ),
       extendBodyBehindAppBar: true,
-      body: Consumer<DiaryListProvider>(
-        builder: (context, DiaryListProvider value, child) {
-          if(value.diaries != null && value.diaries.length>0) {
-            return Padding(
-                padding: EdgeInsets.only(top: 10),
-                child: Center(
-                  child: ListView.separated(
-                    itemCount: value.diaries.length ?? 0,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        onTap: (){
-                          Get.to(()=>DiaryPage(value.diaries[index].id, id));
-                        },
-                        title: Text("${value.diaries[index].title}"),
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return Divider();
-                    },
-                  ),
-                )
-            );
-          }
-          return Center(child: Text('일기를 추가해주세요'));
-        },
+      body: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            image: DecorationImage(
+                image: Image.asset("img/login_background.png").image,
+                fit: BoxFit.cover)),
+        child: Consumer<DiaryListProvider>(
+          builder: (context, DiaryListProvider value, child) {
+            if(value.diaries != null && value.diaries.length>0) {
+              return Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Center(
+                    child: ListView.separated(
+                      itemCount: value.diaries.length ?? 0,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          onTap: (){
+                            Get.to(()=>DiaryPage(value.diaries[index].id, id));
+                          },
+                          title: Text("${value.diaries[index].title}"),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return Divider();
+                      },
+                    ),
+                  )
+              );
+            }
+            return Center(child: Text('일기를 추가해주세요'));
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

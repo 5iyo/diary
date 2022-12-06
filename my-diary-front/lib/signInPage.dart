@@ -33,7 +33,12 @@ class _SignInPageState extends State<SignInPage> {
       child: Scaffold(
         body: SingleChildScrollView(
           child: Center(
-            child: SizedBox(
+            child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    image: DecorationImage(
+                        image: Image.asset("img/login_background.png").image,
+                        fit: BoxFit.cover)),
                 width: MediaQuery.of(context).size.width <
                         MediaQuery.of(context).size.height
                     ? MediaQuery.of(context).size.width
@@ -58,13 +63,13 @@ class _SignInPageState extends State<SignInPage> {
                                 : MediaQuery.of(context).size.height) *
                             1.331730769230769,
                         child: Card(
-                          elevation: 32.0,
+                          elevation: 16.0,
                           clipBehavior: Clip.antiAlias,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16.0),
                           ),
                           child: Ink.image(
-                            image: Image.asset("img/login_background.png").image,
+                            image: Image.asset("img/login_image.png").image,
                             fit: BoxFit.fill,
                           ),
                         ),
