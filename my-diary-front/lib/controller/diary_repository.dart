@@ -13,22 +13,8 @@ String? get_host = dotenv.env['SERVER_NAME'];
 
 class DiaryRepository {
   Future<List<Travels>> fetchTravelList(LatLng travelLatLng) async {
-    var latitude;
-    var longitude;
-
-    if(travelLatLng.latitude.floor() < 100 && travelLatLng.latitude.floor() > 9) {
-      latitude = (travelLatLng.latitude - 0.0001).toStringAsFixed(4);
-    }
-    else if (travelLatLng.latitude.floor() >= 100) {
-      latitude = (travelLatLng.latitude - 0.001).toStringAsFixed(3);
-    }
-
-    if(travelLatLng.longitude.floor() < 100 && travelLatLng.longitude.floor() > 9) {
-      longitude = (travelLatLng.longitude-0.0001).toStringAsFixed(4);
-    }
-    else if (travelLatLng.longitude.floor() >= 100) {
-      longitude = (travelLatLng.longitude-0.001).toStringAsFixed(3);
-    }
+    var latitude = travelLatLng.latitude;
+    var longitude = travelLatLng.longitude;
 
     print("왜 안돼");
     print(latitude);

@@ -64,11 +64,10 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
   }
 
   addMarker(coordinate, InfoWindow infoWindow, [TravelMarker? travelMarker]) {
-    print("before addMarker ${markers.length} & ${setOfMarkers.length}");
     markers.add(travelMarker == null
         ? Marker(
             position: coordinate,
-            markerId: MarkerId((markerId + 1).toString()),
+            markerId: MarkerId((markerId).toString()),
             infoWindow: infoWindow,
           )
         : Marker(
@@ -79,7 +78,8 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
     setState(() {
       setOfMarkers = markers.toSet();
     });
-    print("after addMarker ${markers.length} & ${setOfMarkers.length}");
+//    print("#######addMarker ${markers.length} & ${setOfMarkers.length}");
+    print("#######addMarker ${travelMarker!.travelLatLng.latitude} & ${travelMarker.travelLatLng.longitude}");
   }
 
   void _currentLocation() async {
@@ -99,10 +99,11 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
     print("#######initMarkers");
 //    markers.clear();
     for (TravelMarker e in list.travelMarkers!) {
+      print("#######initMarkers ${e.travelLatLng.latitude} & ${e.travelLatLng.longitude}");
       addMarker(
           e.travelLatLng,
           InfoWindow(
-              title: e.travelArea,
+              title: e.travelTitle,
               onTap: () {
                 Navigator.push(
                     context,

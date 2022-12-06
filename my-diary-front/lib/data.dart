@@ -23,7 +23,6 @@ class MainViewModel {
     print("#######login");
     socialLogin = social;
     await social.login().then((value) {
-      print(value);
       if (value != null) {
         print("####$value");
         diaryUser = DiaryUser.fromJson(jsonDecode(value));
@@ -149,6 +148,7 @@ class DiaryUser {
       required this.travels});
 
   factory DiaryUser.fromJson(Map<String, dynamic> json) {
+    print("DiaryUser.fromJson ${TravelMarkerList.fromJson(json['travels'] as List)}");
     return DiaryUser(
       id: json['id'],
       createDate: DateTime.parse(json['createDate']),
