@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dto/WriteResp.dart';
 
-const host = "http://192.168.20.2:8080";
+String? host = dotenv.env['SERVER_URI'];
 
 class DioUpdateImage {
 

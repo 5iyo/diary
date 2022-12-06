@@ -10,9 +10,10 @@ import 'package:timer_builder/timer_builder.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-const get_host = "192.168.20.2:8080";
-const host = "http://192.168.20.2:8080";
+String? host = dotenv.env['SERVER_URI'];
+String? get_host = dotenv.env['SERVER_NAME'];
 
 Future<WeatherResp> fetchWeather() async {
   var url = '$host/weather/clear';

@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:my_diary_front/controller/provider/diary_delete_provider.dart';
 import 'package:my_diary_front/controller/provider/diarylist_provider.dart';
@@ -14,7 +15,7 @@ import 'dart:convert';
 
 import 'package:provider/provider.dart';
 
-const host = "http://192.168.20.2:8080";
+String? host = dotenv.env['SERVER_URI'];
 
 Future<Diary> fetchDiary(int id) async {
   var url = '$host/api/diaries/$id';

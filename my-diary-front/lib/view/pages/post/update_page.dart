@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -22,7 +23,7 @@ import '../../components/custom_text_form_field.dart';
 import '../../components/custom_textarea.dart';
 import 'diary_list_page.dart';
 
-const host = "http://192.168.20.2:8080";
+String? host = dotenv.env['SERVER_URI'];
 
 Future<void> fetchDeleteImage(int id) async{
   var url = '$host/api/diary-images/$id';
