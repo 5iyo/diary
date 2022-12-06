@@ -99,24 +99,46 @@ class _UpdatePageState extends State<UpdatePage> {
   Widget build(BuildContext context) {
     diaryUpdateProvider = Provider.of<DiaryUpdateProvider>(context, listen: false);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
         elevation: 0.0,
       ),
       extendBodyBehindAppBar: true,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: FutureBuilder<Diary>(
-          future: updateresp,
-          builder: (context, snapshot) {
-            if(snapshot.hasData) {
-              return buildDiary(snapshot);
-            } else if(snapshot.hasError) {
-              return Text("${snapshot.error}에러");
-            }
-            return CircularProgressIndicator();
-          },
+      body: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            image: DecorationImage(
+                image: Image.asset("img/page_background.png").image,
+                fit: BoxFit.cover)),
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+              MediaQuery.of(context).size.width *
+                  0.15 *
+                  MediaQuery.of(context).size.width /
+                  MediaQuery.of(context).size.height,
+              AppBar().preferredSize.height * 0.5*
+                  MediaQuery.of(context).size.height /
+                  MediaQuery.of(context).size.width,
+              MediaQuery.of(context).size.width *
+                  0.15 *
+                  MediaQuery.of(context).size.width /
+                  MediaQuery.of(context).size.height,
+              AppBar().preferredSize.height *
+                  MediaQuery.of(context).size.height /
+                  MediaQuery.of(context).size.width),
+          child: FutureBuilder<Diary>(
+            future: updateresp,
+            builder: (context, snapshot) {
+              if(snapshot.hasData) {
+                return buildDiary(snapshot);
+              } else if(snapshot.hasError) {
+                return Text("${snapshot.error}에러");
+              }
+              return CircularProgressIndicator();
+            },
+          ),
         ),
       ),
     );

@@ -86,7 +86,7 @@ class _WritePageState extends State<WritePage> {
                   0.15 *
                   MediaQuery.of(context).size.width /
                   MediaQuery.of(context).size.height,
-              AppBar().preferredSize.height *
+              AppBar().preferredSize.height * 0.5 *
                   MediaQuery.of(context).size.height /
                   MediaQuery.of(context).size.width,
               MediaQuery.of(context).size.width *

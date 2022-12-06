@@ -141,39 +141,48 @@ class _DiaryPage extends State<DiaryPage> {
             ),
           ),
           Divider(),
-          Expanded(
-              child: SingleChildScrollView(
+          SingleChildScrollView(
             child: Text(snapshot.data!.content),
-          )),
+          ),
           snapshot.data!.images[0].imagefile == "" &&
                   snapshot.data!.images.length == 1
               ? Container()
               : Expanded(
                   child: SingleChildScrollView(
-                  child: ListView.builder(
-                    padding: EdgeInsets.all(8.0),
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    controller: this.controller,
-                    itemCount: snapshot.data?.images.length ?? 0,
-                    itemBuilder: (context, index) {
-                      if (snapshot.data.images[index].imagefile == "")
-                        return Container();
-                      else {
-                        data = Uri.parse(snapshot.data.images[index].imagefile)
-                            .data!;
-                        bytes = data.contentAsBytes();
-                        return Container(
-                            width: 200.0,
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0)),
-                              clipBehavior: Clip.antiAlias,
-                              borderOnForeground: false,
-                              child: Image.memory(bytes, fit: BoxFit.cover),
-                            ));
-                      }
-                    },
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width <
+                        MediaQuery.of(context).size.height
+                        ? MediaQuery.of(context).size.width *
+                        1.5 *
+                        MediaQuery.of(context).size.width /
+                        MediaQuery.of(context).size.height
+                        : MediaQuery.of(context).size.height *
+                        1.5 *
+                        MediaQuery.of(context).size.height /
+                        MediaQuery.of(context).size.width,
+                    child: ListView.builder(
+                      padding: EdgeInsets.all(8.0),
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      controller: this.controller,
+                      itemCount: snapshot.data?.images.length ?? 0,
+                      itemBuilder: (context, index) {
+                        if (snapshot.data.images[index].imagefile == "")
+                          return Container();
+                        else {
+                          data = Uri.parse(snapshot.data.images[index].imagefile)
+                              .data!;
+                          bytes = data.contentAsBytes();
+                          return Card(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16.0)),
+                                clipBehavior: Clip.antiAlias,
+                                borderOnForeground: false,
+                                child: Image.memory(bytes, fit: BoxFit.fitWidth),
+                              );
+                        }
+                      },
+                    ),
                   ),
                 )),
           Padding(

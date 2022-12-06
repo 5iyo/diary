@@ -126,7 +126,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
       initMarkers(_mainViewModel!.diaryUser!.travels);
     }
     return Scaffold(
-      resizeToAvoidBottomInset : false,
+      resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
       appBar: _buildAppBar(),
       drawer: _buildDrawer(),
@@ -139,8 +139,20 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                     image: Image.asset("img/login_background.png").image,
                     fit: BoxFit.cover)),
             child: Padding(
-              padding: EdgeInsets.fromLTRB(15.0,AppBar().preferredSize.height,15.0,AppBar().preferredSize.height,),
-              child: _buildGoogleMap(),
+              padding: EdgeInsets.fromLTRB(
+                15.0,
+                AppBar().preferredSize.height + 10,
+                15.0,
+                AppBar().preferredSize.height,
+              ),
+              child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                    bottomRight: Radius.circular(16),
+                    bottomLeft: Radius.circular(16),
+                  ),
+                  child: _buildGoogleMap())
             )),
       ),
       floatingActionButton: _buildFloatingActionBubble(),
@@ -155,7 +167,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
       backgroundColor: Colors.blueGrey[400]!.withOpacity(0.4),
       centerTitle: true,
       shadowColor: Colors.black,
-      elevation: 8.0,
+      elevation: 0.1,
       leading: Builder(builder: (context) {
         return IconButton(
           onPressed: () {
@@ -208,14 +220,14 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
               //Navigator.pushNamed(context, "/userInfoPage");
             },
           ),
-          ListTile(
+/*          ListTile(
             title: const Text('여행 조회'),
             onTap: () {
               //FixMe : 여행 조회 페이지 만들고 _mainViewModel.diaryUser.travels.travelMarkers 랑 연결하기
               // Navigator.push(context,
               //     MaterialPageRoute(builder: (context) => TravelPage("")));
             },
-          ),
+          ),*/
           ListTile(
             title: const Text('여행지 추천'),
             onTap: () {
