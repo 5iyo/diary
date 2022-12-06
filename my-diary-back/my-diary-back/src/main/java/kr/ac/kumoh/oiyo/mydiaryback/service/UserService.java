@@ -1,5 +1,6 @@
 package kr.ac.kumoh.oiyo.mydiaryback.service;
 
+import kr.ac.kumoh.oiyo.mydiaryback.domain.Travel;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.dto.PostUserInfoDto;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.User;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.UserRepository;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,6 +25,15 @@ public class UserService {
             return 1;
         }
         return 0;
+    }
+
+    @Transactional
+    public List<Travel> findTravelsbyUserId(long id){
+        User user = userRepository.findById(id).orElseThrow(()->{
+            return new IllegalArgumentException("수정하기 위한 회원 찾기 실패!");
+        });
+
+        return user.getTravels();
     }
 
     @Transactional

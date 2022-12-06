@@ -2,6 +2,7 @@ package kr.ac.kumoh.oiyo.mydiaryback.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Builder;
 import lombok.Getter;
@@ -45,6 +46,7 @@ public class User extends BaseEntity {
     @Column
     private String address;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Travel> travels = new ArrayList<>();
 

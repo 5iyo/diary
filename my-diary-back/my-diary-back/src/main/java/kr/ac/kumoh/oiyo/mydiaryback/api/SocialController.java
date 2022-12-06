@@ -1,10 +1,12 @@
 package kr.ac.kumoh.oiyo.mydiaryback.api;
 
 
+import kr.ac.kumoh.oiyo.mydiaryback.domain.Travel;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.dto.GoogleDto;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.dto.KakaoDto;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.dto.NaverDto;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.User;
+import kr.ac.kumoh.oiyo.mydiaryback.service.UserService;
 import kr.ac.kumoh.oiyo.mydiaryback.service.social.GoogleService;
 import kr.ac.kumoh.oiyo.mydiaryback.service.social.KakaoService;
 import kr.ac.kumoh.oiyo.mydiaryback.service.social.NaverService;
@@ -15,10 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
-public class MainController {
+public class SocialController {
 
     @Autowired
     KakaoService kakaoService;
@@ -27,6 +32,9 @@ public class MainController {
 
     @Autowired
     GoogleService googleService;
+
+    @Autowired
+    UserService userService;
 
 
     @RequestMapping("test")
@@ -37,7 +45,9 @@ public class MainController {
 
     @RequestMapping(value = "kakao/login", produces = "application/json;charset=utf8")
     @ResponseBody
-    public User kakaoSignIn(@RequestParam("accessToken") String accessToken) {
+    public Map<String, Object> kakaoSignIn(@RequestParam("accessToken") String accessToken) {
+        Map<String, Object> response = new HashMap<>();
+
         Map<String,Object> userInfo = kakaoService.getKakaoUserInfo(accessToken);
 //        System.out.println("###access_Token#### : " + code);
         String name = userInfo.get("nickname").toString();
@@ -58,16 +68,23 @@ public class MainController {
 //        카카오로 회원가입 처리
         User kakaoUser = kakaoService.registerKakaoUserIfNeed(kakaoDTO);
 
-//        강제 로그인 처리
-//        Authentication authentication = kakaoService.forceLogin(kakaoUser);
+//        여행 정보 불러오기
+        List<Travel> travels = userService.findTravelsbyUserId(kakaoUser.getId());
+        List<TravelApiController.TravelDto> collect = travels.stream()
+                .map(t -> new TravelApiController.TravelDto(t))
+                .collect(Collectors.toList());
 
+        response.put("travels",collect);
+        response.put("user",kakaoUser);
 
-        return kakaoUser;
+        return response;
     }
 
     @RequestMapping(value = "naver/login", produces = "application/json;charset=utf8")
     @ResponseBody
-    public User naverSignIn(@RequestParam("accessToken") String accessToken) {
+    public Map<String, Object> naverSignIn(@RequestParam("accessToken") String accessToken) {
+        Map<String, Object> response = new HashMap<>();
+
         Map<String,Object> userInfo = naverService.getNaverUserInfo(accessToken);
 //        System.out.println("###access_Token#### : " + code);
         String name = userInfo.get("name").toString();
@@ -88,14 +105,23 @@ public class MainController {
 //        네이버로 회원가입 처리
         User naverUser = naverService.registerNaverUserIfNeed(naverDTO);
 
-//        강제 로그인 처리
+//        여행 정보 불러오기
+        List<Travel> travels = userService.findTravelsbyUserId(naverUser.getId());
+        List<TravelApiController.TravelDto> collect = travels.stream()
+                .map(t -> new TravelApiController.TravelDto(t))
+                .collect(Collectors.toList());
 
-        return naverUser;
+        response.put("travels",collect);
+        response.put("user",naverUser);
+
+        return response;
     }
 
     @RequestMapping(value = "google/login", produces = "application/json;charset=utf8")
     @ResponseBody
-    public User googleSignIn(@RequestParam("accessToken") String accessToken) {
+    public Map<String, Object> googleSignIn(@RequestParam("accessToken") String accessToken) {
+        Map<String, Object> response = new HashMap<>();
+
         Map<String,Object> userInfo = googleService.getGoogleUserInfo(accessToken);
 //        System.out.println("###access_Token#### : " + code);
         String name = userInfo.get("name").toString();
@@ -116,8 +142,15 @@ public class MainController {
 //        구글로 회원가입 처리
         User googleUser = googleService.registerGoogleUserIfNeed(googleDTO);
         
-//        강제 로그인 처리
+//        여행 정보 불러오기
+        List<Travel> travels = userService.findTravelsbyUserId(googleUser.getId());
+        List<TravelApiController.TravelDto> collect = travels.stream()
+                .map(t -> new TravelApiController.TravelDto(t))
+                .collect(Collectors.toList());
 
-        return googleUser;
+        response.put("travels",collect);
+        response.put("user",googleUser);
+
+        return response;
     }
 }
