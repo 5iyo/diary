@@ -50,12 +50,12 @@ class DiarySocialShareViewModel {
   ];
 
   PopupMenuButton<DiarySocialShare> buildPopupMenu(
-      BuildContext context, Function onSelected) {
+      BuildContext context, Function onSelected, [Color iconColor = Colors.white]) {
     print("buildPopupMenu");
     return PopupMenuButton<DiarySocialShare>(
-        icon: const Icon(
+        icon: Icon(
           Icons.share_outlined,
-          color: Colors.white,
+          color: iconColor,
         ),
         color: Colors.blueGrey[400]!.withOpacity(0.4),
         offset: Offset(0, AppBar().preferredSize.height + 8.0),
