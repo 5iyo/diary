@@ -50,6 +50,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
+    print('initState');
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 260),
@@ -63,6 +64,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
   }
 
   addMarker(coordinate, InfoWindow infoWindow, [TravelMarker? travelMarker]) {
+    print("before addMarker ${markers.length} & ${setOfMarkers.length}");
     markers.add(travelMarker == null
         ? Marker(
             position: coordinate,
@@ -77,8 +79,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
     setState(() {
       setOfMarkers = markers.toSet();
     });
-    print("${markers.length} & ${setOfMarkers.length}");
-    // TODO : 여행 쓰기 마커 안되니까 고치기
+    print("after addMarker ${markers.length} & ${setOfMarkers.length}");
   }
 
   void _currentLocation() async {
@@ -95,8 +96,8 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
   }
 
   void initMarkers(TravelMarkerList list) {
-    print("##############${list.travelMarkers!.length}");
-    markers.clear();
+    print("#######initMarkers");
+//    markers.clear();
     for (TravelMarker e in list.travelMarkers!) {
       addMarker(
           e.travelLatLng,
@@ -112,11 +113,11 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
               }),
           e);
     }
-    print(markers.length);
   }
 
   @override
   Widget build(BuildContext context) {
+    print("#######build");
     _mainViewModel = Provider.of<MainViewModel>(context, listen: true);
     initMarkers(_mainViewModel.diaryUser!.travels);
     return Scaffold(
@@ -276,6 +277,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
           titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
           onPress: () async {
             _animationController.reverse();
+            markers.clear();
             await _mainViewModel.diaryUser!.getTravelMarkerList();
             initMarkers(_mainViewModel.diaryUser!.travels);
             _controller.animateCamera(

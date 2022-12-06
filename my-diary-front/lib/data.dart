@@ -20,6 +20,7 @@ class MainViewModel {
   }
 
   Future login(SocialLogin social) async {
+    print("#######login");
     socialLogin = social;
     await social.login().then((value) {
       print(value);
