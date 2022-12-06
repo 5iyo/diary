@@ -66,7 +66,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
     markers.add(travelMarker == null
         ? Marker(
             position: coordinate,
-            markerId: MarkerId((markerId).toString()),
+            markerId: MarkerId((markerId + 1).toString()),
             infoWindow: infoWindow,
           )
         : Marker(
@@ -77,6 +77,8 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
     setState(() {
       setOfMarkers = markers.toSet();
     });
+    print("${markers.length} & ${setOfMarkers.length}");
+    // TODO : 여행 쓰기 마커 안되니까 고치기
   }
 
   void _currentLocation() async {
@@ -93,22 +95,24 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
   }
 
   void initMarkers(TravelMarkerList list) {
-    print("##############${markers.length}");
+    print("##############${list.travelMarkers!.length}");
     markers.clear();
+    for (TravelMarker e in list.travelMarkers!) {
+      addMarker(
+          e.travelLatLng,
+          InfoWindow(
+              title: e.travelArea,
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TravelListPage(
+                              travelLatLng: e.travelLatLng,
+                            )));
+              }),
+          e);
+    }
     print(markers.length);
-    list.travelMarkers!.map((e) => addMarker(
-        e.travelLatLng,
-        InfoWindow(
-            title: e.travelArea,
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => TravelListPage(
-                            travelLatLng: e.travelLatLng,
-                          )));
-            }),
-        e));
   }
 
   @override
@@ -227,7 +231,6 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
       onTap: (coordinate) {
         FocusScope.of(context).unfocus();
         _controller.animateCamera(CameraUpdate.newLatLng(coordinate));
-        addMarker(coordinate, InfoWindow());
       },
       cameraTargetBounds: CameraTargetBounds(LatLngBounds(
           southwest: const LatLng(33.0643, 124.3636),
@@ -293,7 +296,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
       iconColor: Colors.white,
 
       // Flaoting Action button Icon
-      iconData: Icons.menu,
+      iconData: Icons.format_list_bulleted,
       backGroundColor: Colors.blueGrey[400]!.withOpacity(0.4),
     );
   }
@@ -334,7 +337,8 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
     GoogleMapsPlaces places = GoogleMapsPlaces(
         apiKey: dotenv.get('GOOGLE_MAP_KEY'),
         apiHeaders: await const GoogleApiHeaders().getHeaders());
-    PlacesDetailsResponse detail = await places.getDetailsByPlaceId(p.placeId!, language: "ko");
+    PlacesDetailsResponse detail =
+        await places.getDetailsByPlaceId(p.placeId!, language: "ko");
 
     final lat = detail.result.geometry!.location.lat;
     final lng = detail.result.geometry!.location.lng;
@@ -345,7 +349,8 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
         InfoWindow(
             title: detail.result.name,
             onTap: () {
-              Get.to(() => TravelPage(_mainViewModel.diaryUser!.id.toString(), latLng));
+              Get.to(() =>
+                  TravelPage(_mainViewModel.diaryUser!.id.toString(), latLng));
 //              Navigator.pushNamed(context, '/diaryInfoPage');
             }));
 
