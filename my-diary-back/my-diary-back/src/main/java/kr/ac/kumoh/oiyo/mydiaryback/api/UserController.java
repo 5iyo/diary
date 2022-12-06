@@ -3,6 +3,7 @@ package kr.ac.kumoh.oiyo.mydiaryback.api;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.Travel;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.dto.PostUserInfoDto;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.User;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.dto.TravelsOfUserDto;
 import kr.ac.kumoh.oiyo.mydiaryback.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -38,8 +39,8 @@ public class UserController {
 
         User user = userService.findUserbyId(userId);
         List<Travel> travels = userService.findTravelsbyUserId(userId);
-        List<TravelApiController.TravelDto> collect = travels.stream()
-                .map(t -> new TravelApiController.TravelDto(t))
+        List<TravelsOfUserDto> collect = travels.stream()
+                .map(t -> new TravelsOfUserDto(t))
                 .collect(Collectors.toList());
 
         if(user != null) {

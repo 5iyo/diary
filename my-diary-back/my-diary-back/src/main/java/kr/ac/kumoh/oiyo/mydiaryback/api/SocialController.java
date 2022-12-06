@@ -6,6 +6,7 @@ import kr.ac.kumoh.oiyo.mydiaryback.domain.dto.GoogleDto;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.dto.KakaoDto;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.dto.NaverDto;
 import kr.ac.kumoh.oiyo.mydiaryback.domain.User;
+import kr.ac.kumoh.oiyo.mydiaryback.domain.dto.TravelsOfUserDto;
 import kr.ac.kumoh.oiyo.mydiaryback.service.UserService;
 import kr.ac.kumoh.oiyo.mydiaryback.service.social.GoogleService;
 import kr.ac.kumoh.oiyo.mydiaryback.service.social.KakaoService;
@@ -70,8 +71,8 @@ public class SocialController {
 
 //        여행 정보 불러오기
         List<Travel> travels = userService.findTravelsbyUserId(kakaoUser.getId());
-        List<TravelApiController.TravelDto> collect = travels.stream()
-                .map(t -> new TravelApiController.TravelDto(t))
+        List<TravelsOfUserDto> collect = travels.stream()
+                .map(t -> new TravelsOfUserDto(t))
                 .collect(Collectors.toList());
 
         response.put("travels",collect);
@@ -107,8 +108,8 @@ public class SocialController {
 
 //        여행 정보 불러오기
         List<Travel> travels = userService.findTravelsbyUserId(naverUser.getId());
-        List<TravelApiController.TravelDto> collect = travels.stream()
-                .map(t -> new TravelApiController.TravelDto(t))
+        List<TravelsOfUserDto> collect = travels.stream()
+                .map(t -> new TravelsOfUserDto(t))
                 .collect(Collectors.toList());
 
         response.put("travels",collect);
@@ -144,8 +145,8 @@ public class SocialController {
         
 //        여행 정보 불러오기
         List<Travel> travels = userService.findTravelsbyUserId(googleUser.getId());
-        List<TravelApiController.TravelDto> collect = travels.stream()
-                .map(t -> new TravelApiController.TravelDto(t))
+        List<TravelsOfUserDto> collect = travels.stream()
+                .map(t -> new TravelsOfUserDto(t))
                 .collect(Collectors.toList());
 
         response.put("travels",collect);
