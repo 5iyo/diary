@@ -78,11 +78,18 @@ class _TravelListPage extends State<TravelListPage> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         actions: [
-          DiarySocialShareViewModel().buildPopupMenu(context, (item) async {
-            _mainViewModel.share(
-              item,
-              diaryScreenshot,
-            );
+          DiarySocialShareViewModel().buildPopupMenu(context,
+              (DiarySocialShare item) async {
+            _mainViewModel
+                .share(
+                  item,
+                  diaryScreenshot,
+                )
+                .then((value) => value
+                    ? ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("${item.name} 공유 완료")))
+                    : ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("${item.name} 공유 실패"))));
           }, Colors.black),
         ],
       ),
@@ -141,7 +148,11 @@ class _TravelListPage extends State<TravelListPage> {
                                           : bytes = data!.contentAsBytes();
                                       if (bytes != null) {
                                         return Container(
-                                          width: UiViewModel.getSizedLayoutSize(context).width * 0.45 - 5,
+                                          width: UiViewModel.getSizedLayoutSize(
+                                                          context)
+                                                      .width *
+                                                  0.45 -
+                                              5,
                                           child: Card(
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:

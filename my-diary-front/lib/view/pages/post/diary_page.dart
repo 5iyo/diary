@@ -78,11 +78,18 @@ class _DiaryPage extends State<DiaryPage> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         actions: [
-          DiarySocialShareViewModel().buildPopupMenu(context, (item) async {
-            _mainViewModel.share(
-              item,
-              diaryScreenshot,
-            );
+          DiarySocialShareViewModel().buildPopupMenu(context,
+              (DiarySocialShare item) async {
+            await _mainViewModel
+                .share(
+                  item,
+                  diaryScreenshot,
+                )
+                .then((value) => value
+                    ? ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("${item.name} 공유 완료")))
+                    : ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("${item.name} 공유 실패"))));
           }, Colors.black),
         ],
       ),
@@ -132,7 +139,8 @@ class _DiaryPage extends State<DiaryPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(DateFormat.yMMMd('en_US').format(snapshot.data!.traveldate)),
+                Text(DateFormat.yMMMd('en_US')
+                    .format(snapshot.data!.traveldate)),
                 SizedBox(width: 10),
                 Text((snapshot.data!.weather)),
                 SizedBox(width: 10),
@@ -148,26 +156,26 @@ class _DiaryPage extends State<DiaryPage> {
                   snapshot.data!.images.length == 1
               ? Container()
               : SizedBox(
-                    width: UiViewModel.getSizedLayoutSize(context).width * 0.7,
-                    child: ColumnBuilder(
-                      itemCount: snapshot.data?.images.length ?? 0,
-                      itemBuilder: (context, index) {
-                        if (snapshot.data.images[index].imagefile == "") {
-                          return Container();
-                        } else {
-                          data = Uri.parse(snapshot.data.images[index].imagefile)
-                              .data!;
-                          bytes = data.contentAsBytes();
-                          return Card(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16.0)),
-                            clipBehavior: Clip.antiAlias,
-                            borderOnForeground: false,
-                            child: Image.memory(bytes, fit: BoxFit.fitWidth),
-                          );
-                        }
-                      },
-                    ),
+                  width: UiViewModel.getSizedLayoutSize(context).width * 0.7,
+                  child: ColumnBuilder(
+                    itemCount: snapshot.data?.images.length ?? 0,
+                    itemBuilder: (context, index) {
+                      if (snapshot.data.images[index].imagefile == "") {
+                        return Container();
+                      } else {
+                        data = Uri.parse(snapshot.data.images[index].imagefile)
+                            .data!;
+                        bytes = data.contentAsBytes();
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0)),
+                          clipBehavior: Clip.antiAlias,
+                          borderOnForeground: false,
+                          child: Image.memory(bytes, fit: BoxFit.fitWidth),
+                        );
+                      }
+                    },
+                  ),
                 ),
           Padding(
             padding: const EdgeInsets.all(12.0),

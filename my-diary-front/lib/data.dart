@@ -36,9 +36,9 @@ class MainViewModel {
     _stream.addEvent("");
   }
 
-  Future share(DiarySocialShare diarySocialShare, DiaryScreenshot diaryShare,
+  Future<bool> share(DiarySocialShare diarySocialShare, DiaryScreenshot diaryShare,
       [Uint8List? googleMapScreenshot]) async {
-    await diarySocialShare.share(diaryShare, googleMapScreenshot);
+    return await diarySocialShare.share(diaryShare, googleMapScreenshot);
   }
 }
 

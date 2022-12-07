@@ -140,10 +140,11 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                   context,
                   Card(
                     elevation: 16.0,
-                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(16.0))),
                     child: ClipRRect(
                         borderRadius:
-                        const BorderRadius.all(Radius.circular(16.0)),
+                            const BorderRadius.all(Radius.circular(16.0)),
                         child: _buildGoogleMap()),
                   )))),
       floatingActionButton: _buildFloatingActionBubble(),
@@ -173,14 +174,19 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
       actions: [
         DiarySocialShareViewModel().buildPopupMenu(
           context,
-          (item) async {
+          (DiarySocialShare item) async {
             await _controller
                 .takeSnapshot()
                 .then((value) => _mainViewModel!.share(
                       item,
                       diaryScreenshot,
                       value,
-                    ));
+                    ))
+                .then((value) => value
+                    ? ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("${item.name} 공유 완료")))
+                    : ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("${item.name} 공유 실패"))));
           },
         ),
       ],
