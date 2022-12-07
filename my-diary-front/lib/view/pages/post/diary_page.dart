@@ -93,11 +93,14 @@ class _DiaryPage extends State<DiaryPage> {
           future: diary,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return UiViewModel.buildBackgroundContainer(
-                  context: context,
-                  backgroundType: BackgroundType.write,
-                  child: UiViewModel.buildSizedLayout(
-                      context, buildDiary(context, snapshot)));
+              return Screenshot(
+                controller: diaryScreenshot.screenshotController,
+                child: UiViewModel.buildBackgroundContainer(
+                    context: context,
+                    backgroundType: BackgroundType.write,
+                    child: UiViewModel.buildSizedLayout(
+                        context, buildDiary(context, snapshot))),
+              );
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}에러");
             }

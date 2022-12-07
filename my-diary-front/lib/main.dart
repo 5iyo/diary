@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:my_diary_front/data.dart';
@@ -26,7 +27,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   KakaoSdk.init(nativeAppKey: dotenv.get("KAKAO_CLIENT_ID"));
-  
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(
         create: (BuildContext context) => TravelListProvider()),

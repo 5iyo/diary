@@ -138,10 +138,14 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
               backgroundType: BackgroundType.none,
               child: UiViewModel.buildSizedLayout(
                   context,
-                  ClipRRect(
-                      borderRadius:
-                      const BorderRadius.all(Radius.circular(16.0)),
-                      child: _buildGoogleMap())))),
+                  Card(
+                    elevation: 16.0,
+                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                    child: ClipRRect(
+                        borderRadius:
+                        const BorderRadius.all(Radius.circular(16.0)),
+                        child: _buildGoogleMap()),
+                  )))),
       floatingActionButton: _buildFloatingActionBubble(),
     );
   }
