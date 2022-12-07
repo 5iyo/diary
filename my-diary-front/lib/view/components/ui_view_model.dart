@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:separated_column/separated_column.dart';
 
 enum BackgroundType {
@@ -41,14 +42,14 @@ class UiViewModel {
     );
   }
 
-  static Size getSizedLayoutSize (BuildContext context) {
+  static Size getSizedLayoutSize(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double containerHeight = _heightRatio * height;
     double containerWidth = _containerRatio * containerHeight;
     return Size(containerWidth, containerHeight);
   }
 
-  static Widget buildSizedLayout(BuildContext context, Widget child) {
+  static Column buildSizedLayout(BuildContext context, Widget child) {
     Size sizedLayoutSize = getSizedLayoutSize(context);
     double containerHeight = sizedLayoutSize.height;
     double containerWidth = sizedLayoutSize.width;
@@ -63,13 +64,29 @@ class UiViewModel {
               height: containerHeight,
               child: Padding(
                 padding: EdgeInsets.fromLTRB(
-                    containerWidth * 0.05, containerHeight * 0.05, containerWidth * 0.05, containerHeight * 0.05),
+                    containerWidth * 0.05,
+                    containerHeight * 0.05,
+                    containerWidth * 0.05,
+                    containerHeight * 0.05),
                 child: child,
               ),
             ),
           ],
         ),
       ],
+    );
+  }
+
+  static buildProgressBar() {
+    return AbsorbPointer(
+      child: Container(
+          decoration: BoxDecoration(
+            color: Colors.blueGrey[400]!.withOpacity(0.4),
+          ),
+          child: const SpinKitCircle(
+            color: Colors.white,
+            size: 100,
+          )),
     );
   }
 }
@@ -103,8 +120,8 @@ class ColumnBuilder extends StatelessWidget {
         return Divider();
       },
       includeOuterSeparators: true,
-      children:
-      List.generate(itemCount, (index) => itemBuilder(context, index)).toList(),
+      children: List.generate(itemCount, (index) => itemBuilder(context, index))
+          .toList(),
     );
   }
 }

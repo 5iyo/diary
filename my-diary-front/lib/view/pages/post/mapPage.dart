@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -6,6 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
 import 'package:my_diary_front/data.dart';
 import 'package:my_diary_front/view/components/ui_view_model.dart';
+import 'package:my_diary_front/view/pages/post/recommend_page.dart';
 import 'package:my_diary_front/view/pages/post/travel_list_page.dart';
 import 'package:my_diary_front/view/pages/post/travel_page.dart';
 import 'package:my_diary_front/view/pages/post/weather_page.dart';
@@ -18,9 +21,12 @@ import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:social_share/social_share.dart';
 
+import '../../../controller/dto/WeatherResp.dart';
 import '../../../diaryShare.dart';
 
 import '../../../controller/dto/TravelList_travels.dart';
+
+import 'package:http/http.dart' as http;
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -47,6 +53,8 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
   late Animation<double> _animation;
   late AnimationController _animationController;
 
+  bool isAwait = false;
+
   DiaryScreenshot diaryScreenshot = DiaryScreenshot();
 
   @override
@@ -64,7 +72,8 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
     super.initState();
   }
 
-  addMarker(coordinate, InfoWindow infoWindow, [TravelMarker? travelMarker]) {
+  addMarker(LatLng coordinate, InfoWindow infoWindow,
+      [TravelMarker? travelMarker]) {
     print("#######addMarker ${markerId}");
     markers.add(travelMarker == null
         ? Marker(
@@ -97,8 +106,13 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
     ));
   }
 
-  void initMarkers(TravelMarkerList list) {
+  void initMarkers(TravelMarkerList list, [Function(TravelMarker)? onTap]) {
     print("#######initMarkers");
+    if (list.travelMarkers!.isEmpty) {
+      setState(() {
+        setOfMarkers = {};
+      });
+    }
 //    markers.clear();
     for (TravelMarker e in list.travelMarkers!) {
       print(
@@ -107,14 +121,16 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
           e.travelLatLng,
           InfoWindow(
               title: e.travelTitle,
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => TravelListPage(
-                              travelLatLng: e.travelLatLng,
-                            )));
-              }),
+              onTap: onTap == null
+                  ? () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => TravelListPage(
+                                    travelLatLng: e.travelLatLng,
+                                  )));
+                    }
+                  : () => onTap(e)),
           e);
     }
   }
@@ -131,22 +147,26 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
       extendBodyBehindAppBar: true,
       appBar: _buildAppBar(),
       drawer: _buildDrawer(),
-      body: Screenshot(
-          controller: diaryScreenshot.screenshotController,
-          child: UiViewModel.buildBackgroundContainer(
-              context: context,
-              backgroundType: BackgroundType.none,
-              child: UiViewModel.buildSizedLayout(
-                  context,
-                  Card(
-                    elevation: 16.0,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(16.0))),
-                    child: ClipRRect(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(16.0)),
-                        child: _buildGoogleMap()),
-                  )))),
+      body: Stack(children: [
+        Screenshot(
+            controller: diaryScreenshot.screenshotController,
+            child: UiViewModel.buildBackgroundContainer(
+                context: context,
+                backgroundType: BackgroundType.none,
+                child: UiViewModel.buildSizedLayout(
+                    context,
+                    Card(
+                      elevation: 16.0,
+                      shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(16.0))),
+                      child: ClipRRect(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(16.0)),
+                          child: _buildGoogleMap()),
+                    )))),
+        isAwait ? UiViewModel.buildProgressBar() : Container(),
+      ]),
       floatingActionButton: _buildFloatingActionBubble(),
     );
   }
@@ -175,6 +195,9 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
         DiarySocialShareViewModel().buildPopupMenu(
           context,
           (DiarySocialShare item) async {
+            setState(() {
+              isAwait = true;
+            });
             await _controller
                 .takeSnapshot()
                 .then((value) => _mainViewModel!.share(
@@ -182,11 +205,16 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                       diaryScreenshot,
                       value,
                     ))
-                .then((value) => value
-                    ? ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("${item.name} 공유 완료")))
-                    : ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("${item.name} 공유 실패"))));
+                .then((value) {
+              setState(() {
+                isAwait = false;
+              });
+              value
+                  ? ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("${item.name} 공유 완료")))
+                  : ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("${item.name} 공유 실패")));
+            });
           },
         ),
       ],
@@ -228,7 +256,20 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
           ListTile(
             title: const Text('여행지 추천'),
             onTap: () {
-              Get.to(() => WeatherPage());
+              Navigator.of(context).pop();
+              Navigator.pushNamed(context, "/weatherPage").then((value) {
+                if (value.runtimeType == TravelMarker) {
+                  var result = value as TravelMarker;
+                  print("after push weather_page");
+//                  markers.clear();
+                  TravelMarkerList list = TravelMarkerList();
+                  list.travelMarkers = [result];
+                  initMarkers(list, (e) {});
+                  _controller.animateCamera(CameraUpdate.newCameraPosition(
+                      CameraPosition(target: result.travelLatLng, zoom: 14.0)));
+                }
+              });
+//              Get.to(() => WeatherPage());
             },
           ),
           ListTile(
@@ -264,6 +305,26 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
     );
   }
 
+  Future<WeatherResp> fetchWeather() async {
+    var url = '${dotenv.get('SERVER_URI')}/weather/clear';
+    setState(() {
+      isAwait = true;
+    });
+    final response = await http.get(Uri.parse(url));
+    setState(() {
+      isAwait = false;
+    });
+    if (response.statusCode == 200) {
+      print("날씨 리스트 요청 성공");
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return WeatherResp.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+    } else if (response.statusCode == 500) {
+      throw Exception("날씨 리스트가 없습니다.");
+    } else {
+      throw Exception("날씨 리스트 요청을 실패했습니다.");
+    }
+  }
+
   Widget _buildFloatingActionBubble() {
     return FloatingActionBubble(
       // Menu items
@@ -277,7 +338,49 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
           titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
           onPress: () async {
             _animationController.reverse();
-            // TODO : 맑음 지역 받아오기 + initMarkers(맑음 지역 list)
+            setState(() {
+              isAwait = true;
+            });
+            await fetchWeather().then((value) {
+              TravelMarkerList list = TravelMarkerList();
+              list.travelMarkers = value.weatherresp!
+                  .map((e) => TravelMarker(
+                      travelTitle: e.location!,
+                      travelArea: "",
+                      travelLatLng: LatLng(double.parse(e.position!.y!),
+                          double.parse(e.position!.x!)),
+                      travelImage: ""))
+                  .toList();
+              markers.clear();
+              initMarkers(list, (TravelMarker e) {
+                print("onclick");
+                Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RecommendPage(
+                                e.travelTitle,
+                                e.travelLatLng.latitude.toString(),
+                                e.travelLatLng.longitude.toString())))
+                    .then((value) {
+                  if (value.runtimeType == TravelMarker) {
+                    print("after push weather_page");
+//                    markers.clear();
+                    TravelMarkerList list = TravelMarkerList();
+                    list.travelMarkers = [value];
+                    initMarkers(list, (e) {});
+                    _controller.animateCamera(CameraUpdate.newCameraPosition(
+                        CameraPosition(
+                            target: value.travelLatLng, zoom: 14.0)));
+                  }
+                });
+//                Get.to(()=> RecommendPage(e.travelTitle, e.travelLatLng.latitude.toString(), e.travelLatLng.longitude.toString()));
+              });
+            });
+            setState(() {
+              isAwait = false;
+            });
+            _controller.animateCamera(
+                CameraUpdate.newCameraPosition(_initialPosition));
           },
         ),
         // Floating action menu item
@@ -302,7 +405,13 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
           onPress: () async {
             _animationController.reverse();
             markers.clear();
+            setState(() {
+              isAwait = true;
+            });
             await _mainViewModel!.diaryUser!.getTravelMarkerList();
+            setState(() {
+              isAwait = false;
+            });
             initMarkers(_mainViewModel!.diaryUser!.travels);
             _controller.animateCamera(
                 CameraUpdate.newCameraPosition(_initialPosition));
