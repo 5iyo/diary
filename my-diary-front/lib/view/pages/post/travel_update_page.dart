@@ -56,10 +56,12 @@ class _TravelUpdatePageState extends State<TravelUpdatePage> {
 
   bool isAwait = false;
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(),
         extendBodyBehindAppBar: true,
+        resizeToAvoidBottomInset: false,
         body: Stack(
           children: [UiViewModel.buildBackgroundContainer(
               context: context,
@@ -189,6 +191,7 @@ class _TravelUpdatePageState extends State<TravelUpdatePage> {
                 ],
               ),
             ),
+            SizedBox(height: 10),
             Row(
               children: [
                 Expanded(

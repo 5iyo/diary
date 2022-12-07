@@ -49,12 +49,12 @@ class _UpdatePageState extends State<UpdatePage> {
     super.didChangeDependencies();
     DiaryProvider diaryProvider =
         Provider.of<DiaryProvider>(context, listen: false);
-    diaryImageProvider =
-        Provider.of<DiaryImageProvider>(context, listen: false);
     setState(() {
       isAwait = true;
     });
     await diaryProvider.getdiary(id);
+    diaryImageProvider =
+        Provider.of<DiaryImageProvider>(context, listen: false);
     await diaryImageProvider.getdiaryImage(id);
     setState(() {
       isAwait = false;
@@ -132,6 +132,7 @@ class _UpdatePageState extends State<UpdatePage> {
                           controller: _date,
                           init: "여행 날짜 선택",
                           funValidator: validateDate())),
+                  const Padding(padding: EdgeInsets.all(5.0)),
                   Expanded(
                       child: DropdownButton(
                     value: value.diary.weather,
@@ -149,6 +150,7 @@ class _UpdatePageState extends State<UpdatePage> {
                       });
                     },
                   )),
+                  const Padding(padding: EdgeInsets.all(5.0)),
                   Expanded(
                     child: TextFormField(
                       controller: _travel,
@@ -172,8 +174,10 @@ class _UpdatePageState extends State<UpdatePage> {
                 String inputImage;
 
                 diaryImage.clear();
-                for (int i = 0; i < value.diaryImage.images!.length; i++) {
-                  diaryImage.add(value.diaryImage.images![i].imagefile!);
+                if(value.diaryImage.images != null){
+                  for (int i = 0; i < value.diaryImage.images!.length; i++) {
+                    diaryImage.add(value.diaryImage.images![i].imagefile!);
+                  }
                 }
                 return Column(
                   children: [
@@ -347,6 +351,9 @@ class _UpdatePageState extends State<UpdatePage> {
                                       ));
                               if (check == null) return;
                               if (check) {
+                                setState(() {
+                                  isAwait = true;
+                                });
                                 final pickCamera = await _picker.pickImage(
                                     source: ImageSource.camera);
                                 final cFile = File(pickCamera!.path.toString());
@@ -358,8 +365,14 @@ class _UpdatePageState extends State<UpdatePage> {
                                 diaryImage.add(inputImage);
                                 await diaryImageInputProvider.imageInput(
                                     id, inputImage);
-                                value.getdiaryImage(id);
+                                await value.getdiaryImage(id);
+                                setState(() {
+                                  isAwait = false;
+                                });
                               } else {
+                                setState(() {
+                                  isAwait = true;
+                                });
                                 final pickGallery = await _picker.pickImage(
                                     source: ImageSource.gallery);
                                 final gFile =
@@ -372,7 +385,10 @@ class _UpdatePageState extends State<UpdatePage> {
                                 diaryImage.add(inputImage);
                                 await diaryImageInputProvider.imageInput(
                                     id, inputImage);
-                                value.getdiaryImage(id);
+                                await value.getdiaryImage(id);
+                                setState(() {
+                                  isAwait = false;
+                                });
                               }
                               if (updateImage.length >= 2) {
                                 nextIconView = true;
@@ -394,6 +410,9 @@ class _UpdatePageState extends State<UpdatePage> {
                   _selectedDate = _date.text;
                   _selectedTravel = _travel.text;
                   if (_formKey.currentState!.validate()) {
+                    setState(() {
+                      isAwait = true;
+                    });
                     await diaryUpdateProvider.update(
                         id,
                         _selectedTitle,
@@ -401,6 +420,9 @@ class _UpdatePageState extends State<UpdatePage> {
                         _selectedContent,
                         _selectedWeather,
                         _selectedTravel);
+                    setState(() {
+                      isAwait = false;
+                    });
                     Get.off(() => DiaryListPage(travelId));
                   }
                 },

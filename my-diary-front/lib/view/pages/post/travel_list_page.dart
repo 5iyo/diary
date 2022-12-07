@@ -8,9 +8,7 @@ import 'package:my_diary_front/controller/provider/travellist_provider.dart';
 import 'package:my_diary_front/data.dart';
 import 'package:my_diary_front/view/components/ui_view_model.dart';
 import 'package:my_diary_front/view/pages/post/diary_list_page.dart';
-import 'package:my_diary_front/view/pages/post/travel_page.dart';
 import 'dart:async';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:my_diary_front/view/pages/post/travel_update_page.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
@@ -24,10 +22,10 @@ class Menu {
 }
 
 class TravelListPage extends StatefulWidget {
-  LatLng travelLatLng;
+  final LatLng travelLatLng;
 
   // 좌표 받아야함
-  TravelListPage({
+  const TravelListPage({
     super.key,
     required this.travelLatLng,
   });
@@ -88,7 +86,10 @@ class _TravelListPage extends State<TravelListPage> {
         actions: [
           DiarySocialShareViewModel().buildPopupMenu(context,
               (DiarySocialShare item) async {
-            _mainViewModel
+            setState(() {
+              isAwait = true;
+            });
+            await _mainViewModel
                 .share(
                   item,
                   diaryScreenshot,
@@ -98,6 +99,9 @@ class _TravelListPage extends State<TravelListPage> {
                         SnackBar(content: Text("${item.name} 공유 완료")))
                     : ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text("${item.name} 공유 실패"))));
+            setState(() {
+              isAwait = false;
+            });
           }, Colors.black),
         ],
       ),
