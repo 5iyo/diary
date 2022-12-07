@@ -33,7 +33,7 @@ class UiViewModel {
       decoration: BoxDecoration(
           color: Colors.white,
           image: DecorationImage(
-              image: Image.asset(background).image, fit: BoxFit.fitHeight)),
+              image: Image.asset(background).image, fit: BoxFit.cover)),
       width: width,
       height: height,
       child: child,
@@ -44,6 +44,7 @@ class UiViewModel {
     double height = MediaQuery.of(context).size.height;
     double containerHeight = _heightRatio * height;
     double containerWidth = _containerRatio * containerHeight;
+
     print("buildSizedLayout context height : $height");
     print("buildSizedLayout context containerHeight : $containerHeight");
     return Column(
@@ -54,7 +55,11 @@ class UiViewModel {
             SizedBox(
               width: containerWidth,
               height: containerHeight,
-              child: FractionallySizedBox(child: child),
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(
+                    containerWidth * 0.05, 0.0, containerWidth * 0.05, 0.0),
+                child: child,
+              ),
             )
           ],
         ),
