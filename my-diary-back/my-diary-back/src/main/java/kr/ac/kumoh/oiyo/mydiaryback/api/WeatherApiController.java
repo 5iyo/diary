@@ -219,6 +219,7 @@ public class WeatherApiController {
 
                         clearDTO.setTemp(temp.toString());
                         clearDTO.setLocation(clearLocation);
+                        clearDTO.setPosition(posDTO);
                         clearLocationInfoDTOList.add(clearDTO);
                     }
                 }
@@ -340,6 +341,7 @@ public class WeatherApiController {
     static class ClearLocationInfoDTO {
         private String temp;
         private String location;
+        private PosDTO position;
     }
 
     @Data
