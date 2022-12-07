@@ -41,13 +41,18 @@ class UiViewModel {
     );
   }
 
-  static Widget buildSizedLayout(BuildContext context, Widget child) {
+  static Size getSizedLayoutSize (BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double containerHeight = _heightRatio * height;
     double containerWidth = _containerRatio * containerHeight;
+    return Size(containerWidth, containerHeight);
+  }
 
-    print("buildSizedLayout context height : $height");
-    print("buildSizedLayout context containerHeight : $containerHeight");
+  static Widget buildSizedLayout(BuildContext context, Widget child) {
+    Size sizedLayoutSize = getSizedLayoutSize(context);
+    double containerHeight = sizedLayoutSize.height;
+    double containerWidth = sizedLayoutSize.width;
+
     return Column(
       children: [
         const Spacer(),

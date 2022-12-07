@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:my_diary_front/controller/provider/diary_delete_provider.dart';
 import 'package:my_diary_front/controller/provider/diarylist_provider.dart';
 import 'package:my_diary_front/data.dart';
+import 'package:my_diary_front/view/components/ui_view_model.dart';
 import 'package:my_diary_front/view/pages/post/update_page.dart';
 import 'package:my_diary_front/view/pages/post/diary_list_page.dart';
 import 'package:my_diary_front/controller/dto/DiaryResp.dart';
@@ -92,13 +93,11 @@ class _DiaryPage extends State<DiaryPage> {
           future: diary,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      image: DecorationImage(
-                          image: Image.asset("img/bg_write.png").image,
-                          fit: BoxFit.fitHeight)),
-                  child: buildDiary(context, snapshot));
+              return UiViewModel.buildBackgroundContainer(
+                  context: context,
+                  backgroundType: BackgroundType.write,
+                  child: UiViewModel.buildSizedLayout(
+                      context, buildDiary(context, snapshot)));
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}에러");
             }
@@ -116,8 +115,7 @@ class _DiaryPage extends State<DiaryPage> {
 
     UriData data;
     Uint8List bytes;
-    return Padding(
-      padding: const EdgeInsets.only(top: 150),
+    return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -131,8 +129,7 @@ class _DiaryPage extends State<DiaryPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(DateFormat.yMMMd('en_US')
-                    .format(snapshot.data!.traveldate)),
+                Text(DateFormat.yMMMd('en_US').format(snapshot.data!.traveldate)),
                 SizedBox(width: 10),
                 Text((snapshot.data!.weather)),
                 SizedBox(width: 10),
@@ -147,44 +144,28 @@ class _DiaryPage extends State<DiaryPage> {
           snapshot.data!.images[0].imagefile == "" &&
                   snapshot.data!.images.length == 1
               ? Container()
-              : Expanded(
-                  child: SingleChildScrollView(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width <
-                        MediaQuery.of(context).size.height
-                        ? MediaQuery.of(context).size.width *
-                        1.5 *
-                        MediaQuery.of(context).size.width /
-                        MediaQuery.of(context).size.height
-                        : MediaQuery.of(context).size.height *
-                        1.5 *
-                        MediaQuery.of(context).size.height /
-                        MediaQuery.of(context).size.width,
-                    child: ListView.builder(
-                      padding: EdgeInsets.all(8.0),
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      controller: this.controller,
+              : SizedBox(
+                    width: UiViewModel.getSizedLayoutSize(context).width * 0.7,
+                    child: ColumnBuilder(
                       itemCount: snapshot.data?.images.length ?? 0,
                       itemBuilder: (context, index) {
-                        if (snapshot.data.images[index].imagefile == "")
+                        if (snapshot.data.images[index].imagefile == "") {
                           return Container();
-                        else {
+                        } else {
                           data = Uri.parse(snapshot.data.images[index].imagefile)
                               .data!;
                           bytes = data.contentAsBytes();
                           return Card(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16.0)),
-                                clipBehavior: Clip.antiAlias,
-                                borderOnForeground: false,
-                                child: Image.memory(bytes, fit: BoxFit.fitWidth),
-                              );
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.0)),
+                            clipBehavior: Clip.antiAlias,
+                            borderOnForeground: false,
+                            child: Image.memory(bytes, fit: BoxFit.fitWidth),
+                          );
                         }
                       },
                     ),
-                  ),
-                )),
+                ),
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Row(

@@ -118,62 +118,46 @@ class _TravelListPage extends State<TravelListPage> {
                       children: [
                         imagenull == true
                             ? Container()
-                            : SafeArea(
-                                child: SingleChildScrollView(
-                                  child: Container(
-                                      width: MediaQuery.of(context).size.width <
-                                              MediaQuery.of(context).size.height
-                                          ? MediaQuery.of(context).size.width *
-                                              1.7 *
-                                              MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              MediaQuery.of(context).size.height
-                                          : MediaQuery.of(context).size.height *
-                                              1.7 *
-                                              MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              MediaQuery.of(context).size.width,
-                                      height: 300.0,
-                                      child: ListView.builder(
+                            : Container(
+                                width: UiViewModel.getSizedLayoutSize(context)
+                                        .width *
+                                    0.9,
+                                height: 300.0,
+                                child: ListView.builder(
+                                    padding: EdgeInsets.all(10.0),
+                                    scrollDirection: Axis.horizontal,
+                                    controller: this.controller,
+                                    itemCount: travelImageList.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      travelImageList[index] == "" ||
+                                              travelImageList[index] == null
+                                          ? data = null
+                                          : data =
+                                              Uri.parse(travelImageList[index])
+                                                  .data;
+                                      data == null
+                                          ? bytes = null
+                                          : bytes = data!.contentAsBytes();
+                                      if (bytes != null) {
+                                        return Container(
+                                          width: UiViewModel.getSizedLayoutSize(context).width * 0.45 - 5,
+                                          child: Card(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        20.0)),
+                                            clipBehavior: Clip.antiAlias,
+                                            borderOnForeground: false,
+                                            child: Image.memory(bytes!,
+                                                fit: BoxFit.cover),
+                                          ),
                                           padding: EdgeInsets.all(10.0),
-                                          scrollDirection: Axis.horizontal,
-                                          controller: this.controller,
-                                          itemCount: travelImageList.length,
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            travelImageList[index] == "" ||
-                                                    travelImageList[index] ==
-                                                        null
-                                                ? data = null
-                                                : data = Uri.parse(
-                                                        travelImageList[index])
-                                                    .data;
-                                            data == null
-                                                ? bytes = null
-                                                : bytes =
-                                                    data!.contentAsBytes();
-                                            if (bytes != null) {
-                                              return Container(
-                                                width: 200.0,
-                                                child: Card(
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20.0)),
-                                                  clipBehavior: Clip.antiAlias,
-                                                  borderOnForeground: false,
-                                                  child: Image.memory(bytes!,
-                                                      fit: BoxFit.cover),
-                                                ),
-                                                padding: EdgeInsets.all(10.0),
-                                              );
-                                            } else {
-                                              return SizedBox();
-                                            }
-                                          })),
-                                ),
+                                        );
+                                      } else {
+                                        return SizedBox();
+                                      }
+                                    }),
                               ),
                         Expanded(
                           child: SingleChildScrollView(
