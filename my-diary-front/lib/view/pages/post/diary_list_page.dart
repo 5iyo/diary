@@ -55,25 +55,22 @@ class _DiaryListPage extends State<DiaryListPage> {
               UiViewModel.buildSizedLayout(context, Consumer<DiaryListProvider>(
             builder: (context, DiaryListProvider value, child) {
               if (value.diaries != null && value.diaries.length > 0) {
-                return Padding(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Center(
-                      child: ListView.separated(
-                        itemCount: value.diaries.length ?? 0,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            onTap: () {
-                              Get.to(
-                                  () => DiaryPage(value.diaries[index].id, id));
-                            },
-                            title: Text("${value.diaries[index].title}"),
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return Divider();
-                        },
-                      ),
-                    ));
+                return Center(
+                  child: SingleChildScrollView(
+                    child: ColumnBuilder(
+                      itemCount: value.diaries.length ?? 0,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          onTap: () {
+                            Get.to(
+                                    () => DiaryPage(value.diaries[index].id, id));
+                          },
+                          title: Text("${value.diaries[index].title}"),
+                        );
+                      },
+                    ),
+                  ),
+                );
               }
               return Center(child: Text('일기를 추가해주세요'));
             },

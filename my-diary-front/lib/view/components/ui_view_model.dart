@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:separated_column/separated_column.dart';
 
 enum BackgroundType {
   none,
@@ -49,7 +50,7 @@ class UiViewModel {
     print("buildSizedLayout context containerHeight : $containerHeight");
     return Column(
       children: [
-        const Spacer(flex: 1,),
+        const Spacer(),
         Wrap(
           children: [
             SizedBox(
@@ -57,14 +58,49 @@ class UiViewModel {
               height: containerHeight,
               child: Padding(
                 padding: EdgeInsets.fromLTRB(
-                    containerWidth * 0.05, 0.0, containerWidth * 0.05, 0.0),
+                    containerWidth * 0.05, containerHeight * 0.05, containerWidth * 0.05, 0.0),
                 child: child,
               ),
-            )
+            ),
           ],
         ),
-        const Spacer(flex: 2,),
+        const Spacer(),
       ],
+    );
+  }
+}
+
+class ColumnBuilder extends StatelessWidget {
+  final IndexedWidgetBuilder itemBuilder;
+  final MainAxisAlignment mainAxisAlignment;
+  final MainAxisSize mainAxisSize;
+  final CrossAxisAlignment crossAxisAlignment;
+  final VerticalDirection verticalDirection;
+  final int itemCount;
+
+  const ColumnBuilder({
+    Key? key,
+    required this.itemBuilder,
+    required this.itemCount,
+    this.mainAxisAlignment = MainAxisAlignment.start,
+    this.mainAxisSize = MainAxisSize.max,
+    this.crossAxisAlignment = CrossAxisAlignment.center,
+    this.verticalDirection = VerticalDirection.down,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SeparatedColumn(
+      crossAxisAlignment: crossAxisAlignment,
+      mainAxisSize: mainAxisSize,
+      mainAxisAlignment: mainAxisAlignment,
+      verticalDirection: verticalDirection,
+      separatorBuilder: (context, index) {
+        return Divider();
+      },
+      includeOuterSeparators: true,
+      children:
+      List.generate(itemCount, (index) => itemBuilder(context, index)).toList(),
     );
   }
 }

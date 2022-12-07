@@ -68,214 +68,187 @@ class _TravelPageState extends State<TravelPage> {
               context,
               Form(
                 key: _formKey,
-                child: ListView(
-                  children: [
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                            child: CustomDatePicker(
-                                controller: _startdate,
-                                init: startinit,
-                                funValidator: validateDate())),
-                        Padding(padding: EdgeInsets.all(5.0)),
-                        Expanded(
-                            child: CustomDatePicker(
-                                controller: _enddate,
-                                init: endinit,
-                                funValidator: validateDate())),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    CustomTextFormField(
-                        controller: _title,
-                        hint: "Title",
-                        funValidator: validateTitle()),
-                    SizedBox(height: 10),
-                    SafeArea(
-                      child: SingleChildScrollView(
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            children: <Widget>[
-                              Stack(children: <Widget>[
-                                Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      border: Border.all(),
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 200.0,
-                                    child: this.travelImage.isEmpty
-                                        ? Center(child: Text("이미지를 등록해주세요"))
-                                        : ListView.builder(
-                                            padding: EdgeInsets.all(10.0),
-                                            scrollDirection: Axis.horizontal,
-                                            controller: this.controller,
-                                            itemCount: this.travelImage.length,
-                                            itemBuilder: (BuildContext context,
-                                                    int index) =>
-                                                Stack(children: <Widget>[
-                                                  GestureDetector(
-                                                    child: Container(
-                                                      width: 200.0,
-                                                      child: Card(
-                                                        shape: RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20.0)),
-                                                        clipBehavior:
-                                                            Clip.antiAlias,
-                                                        borderOnForeground:
-                                                            false,
-                                                        child: Image.file(
-                                                            this.travelImage[
-                                                                index],
-                                                            fit: BoxFit.cover),
-                                                      ),
-                                                      padding:
-                                                          EdgeInsets.all(10.0),
-                                                    ),
-                                                  ),
-                                                  Positioned(
-                                                    top: 0,
-                                                    right: 0,
-                                                    child: GestureDetector(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          travelImage.remove(
-                                                              travelImage[
-                                                                  index]);
-                                                        });
-                                                      },
-                                                      child: Container(
-                                                          width: 30.0,
-                                                          height: 30.0,
-                                                          margin:
-                                                              EdgeInsets.all(
-                                                                  5.0),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          decoration: BoxDecoration(
-                                                              color: Colors.red,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          30.0)),
-                                                          child: Center(
-                                                              child: Icon(
-                                                            Icons.close,
-                                                            size: 20.0,
-                                                            color: Colors.white,
-                                                          ))),
-                                                    ),
-                                                  ),
-                                                ]))),
-                              ]),
-                            ],
-                          ),
-                        ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                              child: CustomDatePicker(
+                                  controller: _startdate,
+                                  init: startinit,
+                                  funValidator: validateDate())),
+                          Padding(padding: EdgeInsets.all(5.0)),
+                          Expanded(
+                              child: CustomDatePicker(
+                                  controller: _enddate,
+                                  init: endinit,
+                                  funValidator: validateDate())),
+                        ],
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: IconButton(
-                            color: this.travelImage.length >= 1
-                                ? Colors.white
-                                : Colors.grey,
-                            icon: this.travelImage.length >= 1
-                                ? Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white.withOpacity(0.6),
-                                        shape: BoxShape.circle),
-                                    child: Icon(
-                                      CupertinoIcons.xmark,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ))
-                                : Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white.withOpacity(0.6),
-                                        shape: BoxShape.circle),
-                                    child: Icon(
-                                      CupertinoIcons.camera,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    )),
-                            onPressed: this.travelImage.length >= 1
-                                ? () => print("이미지 초과")
-                                : () async {
-                                    bool? check = await showDialog(
-                                            context: context,
-                                            builder: (context) => AlertDialog(
-                                                  title: Text(
-                                                      "갤러리를 통해 업로드할 수 있습니다"),
-                                                  actions: <Widget>[
-                                                    ElevatedButton(
-                                                      child: Text("앨범"),
-                                                      onPressed: () =>
-                                                          Navigator.of(context)
-                                                              .pop(false),
-                                                    ),
-                                                    ElevatedButton(
-                                                      child: Text("취소"),
-                                                      onPressed: () async =>
-                                                          Navigator.of(context)
-                                                              .pop(null),
-                                                    ),
-                                                  ],
-                                                )) ??
-                                        null;
-                                    final pickgallery = await _picker.pickImage(
-                                        source: ImageSource.gallery);
-                                    final gfile =
-                                        File(pickgallery!.path.toString());
-                                    travelImage.add(gfile);
+                      SizedBox(height: 10),
+                      CustomTextFormField(
+                          controller: _title,
+                          hint: "Title",
+                          funValidator: validateTitle()),
+                      SizedBox(height: 10),
+                      Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(),
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          width: MediaQuery.of(context).size.width,
+                          height: 200.0,
+                          child: this.travelImage.isEmpty
+                              ? Center(child: Text("이미지를 등록해주세요"))
+                              : Stack(children: <Widget>[
+                                  Positioned(
+                                    top: 0.0,
+                                    bottom: 0.0,
+                                    right: 0.0,
+                                    left: 0.0,
+                                    child: GestureDetector(
+                                      child: Container(
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20.0)),
+                                          clipBehavior: Clip.antiAlias,
+                                          borderOnForeground: false,
+                                          child: Image.file(this.travelImage[0],
+                                              fit: BoxFit.cover),
+                                        ),
+                                        padding: EdgeInsets.all(10.0),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 0,
+                                    right: 0,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          travelImage.remove(travelImage[0]);
+                                        });
+                                      },
+                                      child: Container(
+                                          width: 30.0,
+                                          height: 30.0,
+                                          margin: EdgeInsets.all(5.0),
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              borderRadius:
+                                                  BorderRadius.circular(30.0)),
+                                          child: Center(
+                                              child: Icon(
+                                            Icons.close,
+                                            size: 20.0,
+                                            color: Colors.white,
+                                          ))),
+                                    ),
+                                  ),
+                                ])),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: IconButton(
+                              color: this.travelImage.length >= 1
+                                  ? Colors.white
+                                  : Colors.grey,
+                              icon: this.travelImage.length >= 1
+                                  ? Container(
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white.withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: Icon(
+                                        CupertinoIcons.xmark,
+                                        color:
+                                            Theme.of(context).colorScheme.primary,
+                                      ))
+                                  : Container(
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white.withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: Icon(
+                                        CupertinoIcons.camera,
+                                        color:
+                                            Theme.of(context).colorScheme.primary,
+                                      )),
+                              onPressed: this.travelImage.length >= 1
+                                  ? () => print("이미지 초과")
+                                  : () async {
+                                      bool? check = await showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                    title: Text(
+                                                        "갤러리를 통해 업로드할 수 있습니다"),
+                                                    actions: <Widget>[
+                                                      ElevatedButton(
+                                                        child: Text("앨범"),
+                                                        onPressed: () =>
+                                                            Navigator.of(context)
+                                                                .pop(false),
+                                                      ),
+                                                      ElevatedButton(
+                                                        child: Text("취소"),
+                                                        onPressed: () async =>
+                                                            Navigator.of(context)
+                                                                .pop(null),
+                                                      ),
+                                                    ],
+                                                  )) ??
+                                          null;
+                                      final pickgallery = await _picker.pickImage(
+                                          source: ImageSource.gallery);
+                                      final gfile =
+                                          File(pickgallery!.path.toString());
+                                      travelImage.add(gfile);
 
-                                    return setState(() {});
-                                  },
+                                      return setState(() {});
+                                    },
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: CustomElavatedButton(
-                            text: "여행 만들기",
-                            funPageRoute: () async {
-                              this.travelImage.isEmpty
-                                  ? null
-                                  : this.travelImage.forEach((e) => base64.add(
-                                      "data:image/png;base64,${base64Encode(e.readAsBytesSync())}"));
-                              base64.isEmpty ? base64 = [""] : base64;
-                              print(base64[0]);
-                              if (_formKey.currentState!.validate()) {
-                                await travelProvider.travelsave(
-                                    id,
-                                    _title.text,
-                                    " ",
-                                    "${travelLatLng.latitude}",
-                                    "${travelLatLng.longitude}",
-                                    base64[0],
-                                    _startdate.text,
-                                    _enddate.text);
-                                print("=======!!");
-                                print(travelLatLng.latitude);
-                                print(travelLatLng.longitude);
-                                Get.to(() =>
-                                    TravelListPage(travelLatLng: travelLatLng));
-                                //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => TravelListPage()), (route) => false);
-                              }
-                            },
+                          Expanded(
+                            flex: 3,
+                            child: CustomElavatedButton(
+                              text: "여행 만들기",
+                              funPageRoute: () async {
+                                this.travelImage.isEmpty
+                                    ? null
+                                    : this.travelImage.forEach((e) => base64.add(
+                                        "data:image/png;base64,${base64Encode(e.readAsBytesSync())}"));
+                                base64.isEmpty ? base64 = [""] : base64;
+                                print(base64[0]);
+                                if (_formKey.currentState!.validate()) {
+                                  await travelProvider.travelsave(
+                                      id,
+                                      _title.text,
+                                      " ",
+                                      "${travelLatLng.latitude}",
+                                      "${travelLatLng.longitude}",
+                                      base64[0],
+                                      _startdate.text,
+                                      _enddate.text);
+                                  print("=======!!");
+                                  print(travelLatLng.latitude);
+                                  print(travelLatLng.longitude);
+                                  Get.to(() =>
+                                      TravelListPage(travelLatLng: travelLatLng));
+                                  //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => TravelListPage()), (route) => false);
+                                }
+                              },
+                            ),
                           ),
-                        ),
-                      ],
-                    )
-                  ],
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             )));

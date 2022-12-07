@@ -108,8 +108,12 @@ class _TravelListPage extends State<TravelListPage> {
         if (value.travels != null && value.travels.length > 0) {
           return Screenshot(
             controller: diaryScreenshot.screenshotController,
-            child: UiViewModel.buildBackgroundContainer(context: context, backgroundType: BackgroundType.write, child: UiViewModel.buildSizedLayout(context,
-              Center(
+            child: UiViewModel.buildBackgroundContainer(
+                context: context,
+                backgroundType: BackgroundType.write,
+                child: UiViewModel.buildSizedLayout(
+                  context,
+                  Center(
                     child: Column(
                       children: [
                         imagenull == true
@@ -172,73 +176,75 @@ class _TravelListPage extends State<TravelListPage> {
                                 ),
                               ),
                         Expanded(
-                          child: ListView.separated(
-                            itemCount: value.travels.length,
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                onTap: () {
-                                  Get.to(() =>
-                                      DiaryListPage(value.travels[index].id));
-                                },
-                                title: Row(
-                                  children: [
-                                    Text("${value.travels[index].title}"),
-                                    SizedBox(width: 20),
-                                    Text(
-                                        DateFormat.yMd().format(
-                                            value.travels[index].startdate),
-                                        style: TextStyle(fontSize: 10)),
-                                    Text("  -  ",
-                                        style: TextStyle(fontSize: 10)),
-                                    Text(
-                                        DateFormat.yMd().format(
-                                            value.travels[index].enddate),
-                                        style: TextStyle(fontSize: 10)),
-                                  ],
-                                ),
-                                trailing: PopupMenuButton(
-                                  itemBuilder: (context) => [
-                                    PopupMenuItem(
-                                      value: 1,
-                                      child: Text('수정'),
-                                      onTap: () async {
-                                        final navigator = Navigator.of(context);
-                                        await Future.delayed(Duration.zero);
-                                        navigator.push(
-                                          MaterialPageRoute(
-                                              builder: (_) => TravelUpdatePage(
-                                                  travelLatLng,
-                                                  value.travels[index].id,
-                                                  value.travels[index].title,
-                                                  value.travels[index].image)),
-                                        );
-                                      },
-                                    ),
-                                    PopupMenuItem(
-                                      child: Text('삭제'),
-                                      onTap: () async {
-                                        await _travelDeleteProvider
-                                            .travelDelete(
-                                                value.travels[index].id!);
-                                        Get.off(() => TravelListPage(
-                                              travelLatLng: travelLatLng,
-                                            ));
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return Divider();
-                            },
+                          child: SingleChildScrollView(
+                            child: ColumnBuilder(
+                              itemCount: value.travels.length,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  onTap: () {
+                                    Get.to(() =>
+                                        DiaryListPage(value.travels[index].id));
+                                  },
+                                  title: Row(
+                                    children: [
+                                      Text("${value.travels[index].title}"),
+                                      SizedBox(width: 20),
+                                      Text(
+                                          DateFormat.yMd().format(
+                                              value.travels[index].startdate),
+                                          style: TextStyle(fontSize: 10)),
+                                      Text("  -  ",
+                                          style: TextStyle(fontSize: 10)),
+                                      Text(
+                                          DateFormat.yMd().format(
+                                              value.travels[index].enddate),
+                                          style: TextStyle(fontSize: 10)),
+                                    ],
+                                  ),
+                                  trailing: PopupMenuButton(
+                                    itemBuilder: (context) => [
+                                      PopupMenuItem(
+                                        value: 1,
+                                        child: Text('수정'),
+                                        onTap: () async {
+                                          final navigator =
+                                              Navigator.of(context);
+                                          await Future.delayed(Duration.zero);
+                                          navigator.push(
+                                            MaterialPageRoute(
+                                                builder: (_) =>
+                                                    TravelUpdatePage(
+                                                        travelLatLng,
+                                                        value.travels[index].id,
+                                                        value.travels[index]
+                                                            .title,
+                                                        value.travels[index]
+                                                            .image)),
+                                          );
+                                        },
+                                      ),
+                                      PopupMenuItem(
+                                        child: Text('삭제'),
+                                        onTap: () async {
+                                          await _travelDeleteProvider
+                                              .travelDelete(
+                                                  value.travels[index].id!);
+                                          Get.off(() => TravelListPage(
+                                                travelLatLng: travelLatLng,
+                                              ));
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                         )
                       ],
                     ),
                   ),
-                )
-            ),
+                )),
           );
         }
         return Center(child: CircularProgressIndicator());
