@@ -5,11 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:my_diary_front/data.dart';
 import 'package:provider/provider.dart';
 
+import '../../components/ui_view_model.dart';
 import 'user_info_custom/custom_elevated_button.dart';
 import 'user_info_custom/custom_text_form_field.dart';
 import 'user_info_custom/custom_textarea.dart';
-
-
 
 class UserInfo extends StatefulWidget {
   const UserInfo({Key? key}) : super(key: key);
@@ -27,6 +26,8 @@ class _UserInfoState extends State<UserInfo> {
 
   final _dateFormat = DateFormat("yyyy-MM-dd", 'ko');
 
+  bool isAwait = false;
+
   @override
   Widget build(BuildContext context) {
     _mainViewModel = Provider.of<MainViewModel>(context, listen: true);
@@ -42,63 +43,75 @@ class _UserInfoState extends State<UserInfo> {
         elevation: 0.0,
       ),
       extendBodyBehindAppBar: true,
-      body: SingleChildScrollView(
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                UserAccountsDrawerHeader(
-                  currentAccountPicture: CircleAvatar(
+      body: Stack(children: [
+        SingleChildScrollView(
+          child: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  UserAccountsDrawerHeader(
+                    currentAccountPicture: CircleAvatar(
                       backgroundImage: /*const AssetImage(
-                          'img/핑구.png') */_mainViewModel.diaryUser!.profileImage == null
-                        ? const AssetImage('img/핑구.png')
-                        : Image.network(_mainViewModel.diaryUser!.profileImage!).image,
-                      ),
-                  accountName:/* Text("???"),*/
-                  Text(_mainViewModel.diaryUser!.username),
-                  /*Row(children: [
-                    Text("???"), //Text(_mainViewModel.diaryUser!.name),
-                    Spacer(),
-                    SizedBox(width: 200.0, child: CustomDatePicker()),
-                  ]),*/
-                  accountEmail: /*Text("???"),*/
-                  Text(_mainViewModel.diaryUser!.email),
-                  decoration: BoxDecoration(color: Colors.blueGrey[400]),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-                  child: CustomTextFormField(
-                    hint: '',
-                    funValidator: null,
-                    controller: _birthDateController,
+                            'img/핑구.png') */
+                          _mainViewModel.diaryUser!.profileImage == null
+                              ? const AssetImage('img/핑구.png')
+                              : Image.network(
+                                      _mainViewModel.diaryUser!.profileImage!)
+                                  .image,
+                    ),
+                    accountName: /* Text("???"),*/
+                        Text(_mainViewModel.diaryUser!.username),
+                    /*Row(children: [
+                      Text("???"), //Text(_mainViewModel.diaryUser!.name),
+                      Spacer(),
+                      SizedBox(width: 200.0, child: CustomDatePicker()),
+                    ]),*/
+                    accountEmail: /*Text("???"),*/
+                        Text(_mainViewModel.diaryUser!.email),
+                    decoration: BoxDecoration(color: Colors.blueGrey[400]),
                   ),
-                ),
-                Padding(
+                  Padding(
                     padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-                    child: CustomTextArea(
+                    child: CustomTextFormField(
                       hint: '',
                       funValidator: null,
-                      controller: _introductionController,
-                    )),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-                  child: CustomElavatedButton(
-                    text: '정보 수정',
-                    funPageRoute: () async {
-                      await _mainViewModel.diaryUser!.updateUserInfo(
-                          _introductionController.text,
-                          _birthDateController.text);
-                      Navigator.pop(context);
-                    },
+                      controller: _birthDateController,
+                    ),
                   ),
-                )
-              ],
+                  Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                      child: CustomTextArea(
+                        hint: '',
+                        funValidator: null,
+                        controller: _introductionController,
+                      )),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                    child: CustomElavatedButton(
+                      text: '정보 수정',
+                      funPageRoute: () async {
+                        setState(() {
+                          isAwait = true;
+                        });
+                        await _mainViewModel.diaryUser!.updateUserInfo(
+                            _introductionController.text,
+                            _birthDateController.text);
+                        setState(() {
+                          isAwait = false;
+                        });
+                        Navigator.pop(context);
+                      },
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
-      ),
+        isAwait ? UiViewModel.buildProgressBar() : Container(),
+      ]),
     );
   }
 }
