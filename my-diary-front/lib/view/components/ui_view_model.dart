@@ -40,18 +40,26 @@ class UiViewModel {
     );
   }
 
-  static SizedBox buildLayout(BuildContext context,
-      Widget Function(BoxConstraints constraints) layoutBuilder) {
+  static Widget buildSizedLayout(BuildContext context, Widget child) {
     double height = MediaQuery.of(context).size.height;
     double containerHeight = _heightRatio * height;
     double containerWidth = _containerRatio * containerHeight;
-    return SizedBox(
-      width: containerWidth,
-      height: containerHeight,
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) =>
-            layoutBuilder(constraints),
-      ),
+    print("buildSizedLayout context height : $height");
+    print("buildSizedLayout context containerHeight : $containerHeight");
+    return Column(
+      children: [
+        const Spacer(),
+        Wrap(
+          children: [
+            SizedBox(
+              width: containerWidth,
+              height: containerHeight,
+              child: FractionallySizedBox(child: child),
+            )
+          ],
+        ),
+        const Spacer(),
+      ],
     );
   }
 }

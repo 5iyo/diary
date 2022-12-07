@@ -5,6 +5,7 @@ import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
 import 'package:my_diary_front/data.dart';
+import 'package:my_diary_front/view/components/ui_view_model.dart';
 import 'package:my_diary_front/view/pages/post/travel_list_page.dart';
 import 'package:my_diary_front/view/pages/post/travel_page.dart';
 import 'package:my_diary_front/view/pages/post/weather_page.dart';
@@ -131,30 +132,16 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
       appBar: _buildAppBar(),
       drawer: _buildDrawer(),
       body: Screenshot(
-        controller: diaryScreenshot.screenshotController,
-        child: Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                image: DecorationImage(
-                    image: Image.asset("img/login_background.png").image,
-                    fit: BoxFit.fitHeight)),
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(
-                15.0,
-                AppBar().preferredSize.height + 10,
-                15.0,
-                AppBar().preferredSize.height,
-              ),
-              child: ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16),
-                    bottomRight: Radius.circular(16),
-                    bottomLeft: Radius.circular(16),
-                  ),
-                  child: _buildGoogleMap())
-            )),
-      ),
+          controller: diaryScreenshot.screenshotController,
+          child: UiViewModel.buildBackgroundContainer(
+              context: context,
+              backgroundType: BackgroundType.none,
+              child: UiViewModel.buildSizedLayout(
+                  context,
+                  ClipRRect(
+                      borderRadius:
+                      const BorderRadius.all(Radius.circular(16.0)),
+                      child: _buildGoogleMap())))),
       floatingActionButton: _buildFloatingActionBubble(),
     );
   }
