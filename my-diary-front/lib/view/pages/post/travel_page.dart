@@ -54,8 +54,8 @@ class _TravelPageState extends State<TravelPage> {
       decoration: BoxDecoration(
           color: Colors.white,
           image: DecorationImage(
-              image: Image.asset("img/page_background.png").image,
-              fit: BoxFit.cover)),
+              image: Image.asset("img/bg_write.png").image,
+              fit: BoxFit.fitHeight)),
       child: Scaffold(
           resizeToAvoidBottomInset : false,
           backgroundColor: Colors.transparent,

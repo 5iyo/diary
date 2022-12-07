@@ -111,8 +111,8 @@ class _TravelListPage extends State<TravelListPage> {
               decoration: BoxDecoration(
                   color: Colors.white,
                   image: DecorationImage(
-                      image: Image.asset("img/page_background.png").image,
-                      fit: BoxFit.cover)),
+                      image: Image.asset("img/bg_write.png").image,
+                      fit: BoxFit.fitHeight)),
               child: Padding(
                 padding: EdgeInsets.only(top: 10),
                 child: Center(

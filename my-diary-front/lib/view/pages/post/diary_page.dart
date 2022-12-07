@@ -96,8 +96,8 @@ class _DiaryPage extends State<DiaryPage> {
                   decoration: BoxDecoration(
                       color: Colors.white,
                       image: DecorationImage(
-                          image: Image.asset("img/page_background.png").image,
-                          fit: BoxFit.cover)),
+                          image: Image.asset("img/bg_write.png").image,
+                          fit: BoxFit.fitHeight)),
                   child: buildDiary(context, snapshot));
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}에러");

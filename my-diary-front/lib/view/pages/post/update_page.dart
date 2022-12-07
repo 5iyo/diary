@@ -110,8 +110,8 @@ class _UpdatePageState extends State<UpdatePage> {
         decoration: BoxDecoration(
             color: Colors.white,
             image: DecorationImage(
-                image: Image.asset("img/page_background.png").image,
-                fit: BoxFit.cover)),
+                image: Image.asset("img/bg_write.png").image,
+                fit: BoxFit.fitHeight)),
         child: Padding(
           padding: EdgeInsets.fromLTRB(
               MediaQuery.of(context).size.width *

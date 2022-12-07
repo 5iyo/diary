@@ -137,7 +137,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                 color: Colors.white,
                 image: DecorationImage(
                     image: Image.asset("img/login_background.png").image,
-                    fit: BoxFit.cover)),
+                    fit: BoxFit.fitHeight)),
             child: Padding(
               padding: EdgeInsets.fromLTRB(
                 15.0,

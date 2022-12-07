@@ -38,7 +38,7 @@ class _SignInPageState extends State<SignInPage> {
                     color: Colors.white,
                     image: DecorationImage(
                         image: Image.asset("img/login_background.png").image,
-                        fit: BoxFit.cover)),
+                        fit: BoxFit.fitHeight)),
                 width: MediaQuery.of(context).size.width <
                         MediaQuery.of(context).size.height
                     ? MediaQuery.of(context).size.width

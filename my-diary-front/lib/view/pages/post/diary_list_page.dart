@@ -52,7 +52,7 @@ class _DiaryListPage extends State<DiaryListPage> {
             color: Colors.white,
             image: DecorationImage(
                 image: Image.asset("img/login_background.png").image,
-                fit: BoxFit.cover)),
+                fit: BoxFit.fitHeight)),
         child: Consumer<DiaryListProvider>(
           builder: (context, DiaryListProvider value, child) {
             if(value.diaries != null && value.diaries.length>0) {
