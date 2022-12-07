@@ -7,12 +7,12 @@ enum BackgroundType {
 }
 
 class UiViewModel {
-  static double containerRatio = 0.6209286209286209;
-  static double heightRatio = 0.7417322834645669;
+  static const double _containerRatio = 0.6209286209286209;
+  static const double _heightRatio = 0.7417322834645669;
 
-  static String _matchBackground(BackgroundType pageType) {
+  static String _matchBackground(BackgroundType backgroundType) {
     String base = "img/bg_";
-    switch (pageType) {
+    switch (backgroundType) {
       case BackgroundType.none:
         return "${base}none.png";
       case BackgroundType.login:
@@ -23,27 +23,34 @@ class UiViewModel {
   }
 
   static Container buildBackgroundContainer(
-      BoxConstraints context, BackgroundType pageType) {
-    String background = _matchBackground(pageType);
+      {required BuildContext context,
+      required BackgroundType backgroundType,
+      required Widget child}) {
+    String background = _matchBackground(backgroundType);
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
           image: DecorationImage(
               image: Image.asset(background).image, fit: BoxFit.fitHeight)),
+      width: width,
+      height: height,
+      child: child,
     );
   }
 
   static SizedBox buildLayout(BuildContext context,
-      Function(BoxConstraints constraints) child) {
+      Widget Function(BoxConstraints constraints) layoutBuilder) {
     double height = MediaQuery.of(context).size.height;
-    double containerHeight = heightRatio * height;
-    double containerWidth = containerRatio * containerHeight;
+    double containerHeight = _heightRatio * height;
+    double containerWidth = _containerRatio * containerHeight;
     return SizedBox(
       width: containerWidth,
       height: containerHeight,
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) =>
-            child(constraints),
+            layoutBuilder(constraints),
       ),
     );
   }

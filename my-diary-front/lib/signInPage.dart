@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_diary_front/data.dart';
+import 'package:my_diary_front/view/components/ui_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 
@@ -32,94 +33,62 @@ class _SignInPageState extends State<SignInPage> {
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
-          child: Center(
-            child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    image: DecorationImage(
-                        image: Image.asset("img/login_background.png").image,
-                        fit: BoxFit.fitHeight)),
-                width: MediaQuery.of(context).size.width <
-                        MediaQuery.of(context).size.height
-                    ? MediaQuery.of(context).size.width
-                    : MediaQuery.of(context).size.height,
-                height: (MediaQuery.of(context).size.width <
-                        MediaQuery.of(context).size.height
-                    ? MediaQuery.of(context).size.height
-                    : MediaQuery.of(context).size.width) - AppBar().preferredSize.height,
-                child: Column(
+          child: UiViewModel.buildBackgroundContainer(
+            context: context,
+            backgroundType: BackgroundType.login,
+            child: Column(
+              children: [
+                const Spacer(flex: 17,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width <
-                                MediaQuery.of(context).size.height
-                            ? MediaQuery.of(context).size.width
-                            : MediaQuery.of(context).size.height,
-                        height: (MediaQuery.of(context).size.width <
-                                    MediaQuery.of(context).size.height
-                                ? MediaQuery.of(context).size.width
-                                : MediaQuery.of(context).size.height) *
-                            1.331730769230769,
-                        child: Card(
-                          elevation: 16.0,
-                          clipBehavior: Clip.antiAlias,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16.0),
-                          ),
-                          child: Ink.image(
-                            image: Image.asset("img/login_image.png").image,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
+                    const Spacer(
+                      flex: 1,
+                    ),
+                    ElevatedButton(
+                      onPressed: () => _mainViewModel.login(NaverLogin()),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent, elevation: 0.0),
+                      child: Image.asset(
+                        'img/naver_icon.png',
+                        height: 50,
+                        fit: BoxFit.fitHeight,
                       ),
                     ),
-                    Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.all(32.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () => _mainViewModel.login(NaverLogin()),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                elevation: 0.0),
-                            child: Image.asset(
-                              'img/naver_icon.png',
-                              height: 50,
-                              fit: BoxFit.fitHeight,
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () => _mainViewModel.login(KakaoLogin()),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                elevation: 0.0),
-                            child: Image.asset(
-                              'img/kakao_icon.png',
-                              height: 50,
-                              fit: BoxFit.fitHeight,
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () => _mainViewModel.login(GoogleLogin()),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                elevation: 0.0),
-                            child: Image.asset(
-                              'img/google_icon.png',
-                              height: 50,
-                              fit: BoxFit.fitHeight,
-                            ),
-                          ),
-                        ],
+                    const Spacer(
+                      flex: 2,
+                    ),
+                    ElevatedButton(
+                      onPressed: () => _mainViewModel.login(KakaoLogin()),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent, elevation: 0.0),
+                      child: Image.asset(
+                        'img/kakao_icon.png',
+                        height: 50,
+                        fit: BoxFit.fitHeight,
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(
+                      flex: 2,
+                    ),
+                    ElevatedButton(
+                      onPressed: () => _mainViewModel.login(GoogleLogin()),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent, elevation: 0.0),
+                      child: Image.asset(
+                        'img/google_icon.png',
+                        height: 50,
+                        fit: BoxFit.fitHeight,
+                      ),
+                    ),
+                    const Spacer(
+                      flex: 1,
+                    ),
                   ],
-                )),
+                ),
+                const Spacer(flex: 3,),
+              ],
+            ),
           ),
         ),
       ),
