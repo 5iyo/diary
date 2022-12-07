@@ -52,12 +52,20 @@ class _TravelListPage extends State<TravelListPage> {
   late MainViewModel _mainViewModel;
   DiaryScreenshot diaryScreenshot = DiaryScreenshot();
 
+  bool isAwait = false;
+
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     super.didChangeDependencies();
     _travelListProvider =
         Provider.of<TravelListProvider>(context, listen: false);
-    _travelListProvider.travelList(travelLatLng);
+    setState(() {
+      isAwait = true;
+    });
+    await _travelListProvider.travelList(travelLatLng);
+    setState(() {
+      isAwait = false;
+    });
   }
 
   @override
@@ -94,142 +102,174 @@ class _TravelListPage extends State<TravelListPage> {
         ],
       ),
       extendBodyBehindAppBar: true,
-      body: Consumer<TravelListProvider>(
-          builder: (context, TravelListProvider value, child) {
-
-        travelImageList.clear();
-        for (int i = 0; i < value.travels.length; i++) {
-          travelImageList.add("${value.travels[i].image}");
-        }
-
-        int count = 0;
-        bool imagenull = false;
-
-        for (int i = 0; i < travelImageList.length; i++) {
-          if (travelImageList[i] == "") {
-            count++;
+      body: Stack(children: [
+        Consumer<TravelListProvider>(
+            builder: (context, TravelListProvider value, child) {
+          travelImageList.clear();
+          for (int i = 0; i < value.travels.length; i++) {
+            travelImageList.add("${value.travels[i].image}");
           }
-        }
-        if (count == travelImageList.length) {
-          imagenull = true;
-        }
 
-        if (value.travels != null && value.travels.length > 0) {
-          return Screenshot(
-            controller: diaryScreenshot.screenshotController,
-            child: UiViewModel.buildBackgroundContainer(
-                context: context,
-                backgroundType: BackgroundType.write,
-                child: UiViewModel.buildSizedLayout(
-                  context,
-                  Center(
-                    child: Column(
-                      children: [
-                        imagenull == true
-                            ? Container()
-                            : Container(
-                                width: UiViewModel.getSizedLayoutSize(context)
-                                        .width *
-                                    0.9,
-                                height: 300.0,
-                                child: ListView.builder(
-                                    padding: EdgeInsets.all(10.0),
-                                    scrollDirection: Axis.horizontal,
-                                    controller: this.controller,
-                                    itemCount: travelImageList.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                          travelImageList[index] == "" || travelImageList[index] == null ? data = null
-                                              : data = Uri.parse(travelImageList[index]).data;
-                                          data == null ? bytes = null : bytes = data!.contentAsBytes();
-                                      if (bytes != null) {
-                                        return Container(
-                                          width: UiViewModel.getSizedLayoutSize(context).width * 0.45 - 5,
-                                          child: Card(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(20.0)),
-                                            clipBehavior: Clip.antiAlias,
-                                            borderOnForeground: false,
-                                            child: Image.memory(bytes!, fit: BoxFit.cover),
-                                          ),
-                                          padding: EdgeInsets.all(10.0),
-                                        );
-                                      } else {
-                                        return SizedBox();
-                                      }
-                                    }),
-                              ),
-                        Expanded(
-                          child: SingleChildScrollView(
-                            child: ColumnBuilder(
-                              itemCount: value.travels.length,
-                              itemBuilder: (context, index) {
-                                return ListTile(
-                                  onTap: () {
-                                    Get.to(() =>
-                                        DiaryListPage(value.travels[index].id));
-                                  },
-                                  title: Row(
-                                    children: [
-                                      Text("${value.travels[index].title}"),
-                                      SizedBox(width: 20),
-                                      Text(
-                                          DateFormat.yMd().format(
-                                              value.travels[index].startdate),
-                                          style: TextStyle(fontSize: 10)),
-                                      Text("  -  ",
-                                          style: TextStyle(fontSize: 10)),
-                                      Text(
-                                          DateFormat.yMd().format(
-                                              value.travels[index].enddate),
-                                          style: TextStyle(fontSize: 10)),
-                                    ],
-                                  ),
-                                  trailing: PopupMenuButton(
-                                    itemBuilder: (context) => [
-                                      PopupMenuItem(
-                                        value: 1,
-                                        child: Text('수정'),
-                                        onTap: () async {
-                                          final navigator =
-                                              Navigator.of(context);
-                                          await Future.delayed(Duration.zero);
-                                          navigator.push(
-                                            MaterialPageRoute(builder: (_) =>
-                                                    TravelUpdatePage(
-                                                        travelLatLng,
-                                                        value.travels[index].id,
-                                                        value.travels[index].title,
-                                                        value.travels[index].image)),
+          int count = 0;
+          bool imagenull = false;
+
+          for (int i = 0; i < travelImageList.length; i++) {
+            if (travelImageList[i] == "") {
+              count++;
+            }
+          }
+          if (count == travelImageList.length) {
+            imagenull = true;
+          }
+
+          if (value.travels != null && value.travels.length > 0) {
+            return Screenshot(
+              controller: diaryScreenshot.screenshotController,
+              child: UiViewModel.buildBackgroundContainer(
+                  context: context,
+                  backgroundType: BackgroundType.write,
+                  child: UiViewModel.buildSizedLayout(
+                    context,
+                    Center(
+                      child: Column(
+                        children: [
+                          imagenull == true
+                              ? Container()
+                              : Container(
+                                  width: UiViewModel.getSizedLayoutSize(context)
+                                          .width *
+                                      0.9,
+                                  height: 300.0,
+                                  child: ListView.builder(
+                                      padding: EdgeInsets.all(10.0),
+                                      scrollDirection: Axis.horizontal,
+                                      controller: this.controller,
+                                      itemCount: travelImageList.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        travelImageList[index] == "" ||
+                                                travelImageList[index] == null
+                                            ? data = null
+                                            : data = Uri.parse(
+                                                    travelImageList[index])
+                                                .data;
+                                        data == null
+                                            ? bytes = null
+                                            : bytes = data!.contentAsBytes();
+                                        if (bytes != null) {
+                                          return Container(
+                                            width:
+                                                UiViewModel.getSizedLayoutSize(
+                                                                context)
+                                                            .width *
+                                                        0.45 -
+                                                    5,
+                                            child: Card(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20.0)),
+                                              clipBehavior: Clip.antiAlias,
+                                              borderOnForeground: false,
+                                              child: Image.memory(bytes!,
+                                                  fit: BoxFit.cover),
+                                            ),
+                                            padding: EdgeInsets.all(10.0),
                                           );
-                                        },
-                                      ),
-                                      PopupMenuItem(
-                                        child: Text('삭제'),
-                                        onTap: () async {
-                                          await _travelDeleteProvider.travelDelete(
-                                              value.travels[index].id!);
-                                          Get.off(() => TravelListPage(
-                                                travelLatLng: travelLatLng,
-                                              ));
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
+                                        } else {
+                                          return SizedBox();
+                                        }
+                                      }),
+                                ),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              child: ColumnBuilder(
+                                itemCount: value.travels.length,
+                                itemBuilder: (context, index) {
+                                  return ListTile(
+                                    onTap: () {
+                                      Get.to(() => DiaryListPage(
+                                          value.travels[index].id));
+                                    },
+                                    title: Row(
+                                      children: [
+                                        Text("${value.travels[index].title}"),
+                                        SizedBox(width: 20),
+                                        Text(
+                                            DateFormat.yMd().format(
+                                                value.travels[index].startdate),
+                                            style: TextStyle(fontSize: 10)),
+                                        Text("  -  ",
+                                            style: TextStyle(fontSize: 10)),
+                                        Text(
+                                            DateFormat.yMd().format(
+                                                value.travels[index].enddate),
+                                            style: TextStyle(fontSize: 10)),
+                                      ],
+                                    ),
+                                    trailing: PopupMenuButton(
+                                      itemBuilder: (context) => [
+                                        PopupMenuItem(
+                                          value: 1,
+                                          child: Text('수정'),
+                                          onTap: () async {
+                                            final navigator =
+                                                Navigator.of(context);
+                                            setState(() {
+                                              isAwait = true;
+                                            });
+                                            await Future.delayed(Duration.zero);
+                                            setState(() {
+                                              isAwait = false;
+                                            });
+                                            navigator.push(
+                                              MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      TravelUpdatePage(
+                                                          travelLatLng,
+                                                          value.travels[index]
+                                                              .id,
+                                                          value.travels[index]
+                                                              .title,
+                                                          value.travels[index]
+                                                              .image)),
+                                            );
+                                          },
+                                        ),
+                                        PopupMenuItem(
+                                          child: Text('삭제'),
+                                          onTap: () async {
+                                            setState(() {
+                                              isAwait = true;
+                                            });
+                                            await _travelDeleteProvider
+                                                .travelDelete(
+                                                    value.travels[index].id!);
+                                            setState(() {
+                                              isAwait = false;
+                                            });
+                                            Get.off(() => TravelListPage(
+                                                  travelLatLng: travelLatLng,
+                                                ));
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                )
-            ),
-          );
-        }
-        return Center(child : Text("여행을 추가해주세요."));
-      }),
+                  )),
+            );
+          }
+          return Center(child: Text("여행을 추가해주세요."));
+        }),
+        isAwait ? UiViewModel.buildProgressBar() : Container(),
+      ]),
     );
   }
 }

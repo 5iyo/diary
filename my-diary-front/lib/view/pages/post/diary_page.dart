@@ -41,10 +41,16 @@ class _DiaryPage extends State<DiaryPage> {
   _DiaryPage(this.id, this.travelId);
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     super.didChangeDependencies();
     diaryProvider = Provider.of<DiaryProvider>(context, listen: false);
-    diaryProvider.getdiary(id);
+    setState(() {
+      isAwait = true;
+    });
+    await diaryProvider.getdiary(id);
+    setState(() {
+      isAwait = false;
+    });
   }
 
   ScrollController controller = ScrollController();
@@ -53,157 +59,190 @@ class _DiaryPage extends State<DiaryPage> {
 
   DiaryScreenshot diaryScreenshot = DiaryScreenshot();
 
+  bool isAwait = false;
+
   @override
   Widget build(BuildContext context) {
     _mainViewModel = Provider.of<MainViewModel>(context, listen: true);
-    diaryDeleteProvider = Provider.of<DiaryDeleteProvider>(context, listen: true);
+    diaryDeleteProvider =
+        Provider.of<DiaryDeleteProvider>(context, listen: true);
 
     UriData data;
     Uint8List bytes;
 
     return Scaffold(
-      appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
-        title: Text("Diary", style: TextStyle(color: Colors.grey[700])),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        actions: [
-          DiarySocialShareViewModel().buildPopupMenu(context,
-              (DiarySocialShare item) async {
-            await _mainViewModel
-                .share(
-                  item,
-                  diaryScreenshot,
-                )
-                .then((value) => value
-                    ? ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("${item.name} 공유 완료")))
-                    : ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("${item.name} 공유 실패"))));
-          }, Colors.black),
-        ],
-      ),
-      extendBodyBehindAppBar: true,
-      body: Consumer<DiaryProvider>(
-        builder: (context, DiaryProvider value, child) {
-          return Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Screenshot(
-              controller: diaryScreenshot.screenshotController,
-              child: UiViewModel.buildBackgroundContainer(
-                  context: context,
-                  backgroundType: BackgroundType.write,
-                  child: UiViewModel.buildSizedLayout(
-                      context, SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  (value.diary.title == null ? "" :value.diary.title!),
-                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35),
-                                ),
-                                Divider(),
-                                Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                          DateFormat.yMMMd('en_US').format(
-                                              value.diary.traveldate == null ? DateTime.now()
-                                                  : value.diary.traveldate!
-                                          )
-                                      ),
-                                      SizedBox(width: 10),
-                                      Text(
-                                          (value.diary.weather == null ? "" :value.diary.weather!)
-                                      ),
-                                      SizedBox(width: 10),
-                                      Text(
-                                          (value.diary.travel == null ? "" :value.diary.travel!)
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Divider(),
-                                SingleChildScrollView(
-                                  child: Text("${value.diary.content}"),
-                                ),
-                                value.diary.images == null ? Container() :
-                                value.diary.images![0].imagefile == "" && value.diary.images!.length == 1
+        appBar: AppBar(
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
+          title: Text("Diary", style: TextStyle(color: Colors.grey[700])),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          actions: [
+            DiarySocialShareViewModel().buildPopupMenu(context,
+                (DiarySocialShare item) async {
+              setState(() {
+                isAwait = true;
+              });
+              await _mainViewModel
+                  .share(
+                    item,
+                    diaryScreenshot,
+                  )
+                  .then((value) => value
+                      ? ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("${item.name} 공유 완료")))
+                      : ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("${item.name} 공유 실패"))));
+              setState(() {
+                isAwait = false;
+              });
+            }, Colors.black),
+          ],
+        ),
+        extendBodyBehindAppBar: true,
+        body: Stack(children: [
+          Consumer<DiaryProvider>(
+              builder: (context, DiaryProvider value, child) {
+            return Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Screenshot(
+                  controller: diaryScreenshot.screenshotController,
+                  child: UiViewModel.buildBackgroundContainer(
+                    context: context,
+                    backgroundType: BackgroundType.write,
+                    child: UiViewModel.buildSizedLayout(
+                      context,
+                      SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              (value.diary.title == null
+                                  ? ""
+                                  : value.diary.title!),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 35),
+                            ),
+                            Divider(),
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(DateFormat.yMMMd('en_US').format(
+                                      value.diary.traveldate == null
+                                          ? DateTime.now()
+                                          : value.diary.traveldate!)),
+                                  SizedBox(width: 10),
+                                  Text((value.diary.weather == null
+                                      ? ""
+                                      : value.diary.weather!)),
+                                  SizedBox(width: 10),
+                                  Text((value.diary.travel == null
+                                      ? ""
+                                      : value.diary.travel!)),
+                                ],
+                              ),
+                            ),
+                            Divider(),
+                            SingleChildScrollView(
+                              child: Text("${value.diary.content}"),
+                            ),
+                            value.diary.images == null
+                                ? Container()
+                                : value.diary.images![0].imagefile == "" &&
+                                        value.diary.images!.length == 1
                                     ? Container()
                                     : SizedBox(
-                                  width: UiViewModel.getSizedLayoutSize(context).width * 0.7,
-                                  child: ColumnBuilder(
-                                    itemCount: value.diary.images!.length ?? 0,
-                                    itemBuilder: (context, index) {
-                                      if (value.diary.images![index].imagefile == "" ) {
-                                        return Container();
-                                      } else {
-                                        data = Uri.parse("${value.diary.images![index].imagefile}").data!;
-                                        bytes = data.contentAsBytes();
-                                        return Card(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(16.0)),
-                                          clipBehavior: Clip.antiAlias,
-                                          borderOnForeground: false,
-                                          child: Image.memory(bytes, fit: BoxFit.fitWidth),
-                                        );
-                                      }
-                                    },
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                          DateFormat.yMd().add_jm().format(
-                                              value.diary.created == null ? DateTime.now()
-                                                  : value.diary.created!
-                                          ), style: TextStyle(fontSize: 11),
+                                        width: UiViewModel.getSizedLayoutSize(
+                                                    context)
+                                                .width *
+                                            0.7,
+                                        child: ColumnBuilder(
+                                          itemCount:
+                                              value.diary.images!.length ?? 0,
+                                          itemBuilder: (context, index) {
+                                            if (value.diary.images![index]
+                                                    .imagefile ==
+                                                "") {
+                                              return Container();
+                                            } else {
+                                              data = Uri.parse(
+                                                      "${value.diary.images![index].imagefile}")
+                                                  .data!;
+                                              bytes = data.contentAsBytes();
+                                              return Card(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            16.0)),
+                                                clipBehavior: Clip.antiAlias,
+                                                borderOnForeground: false,
+                                                child: Image.memory(bytes,
+                                                    fit: BoxFit.fitWidth),
+                                              );
+                                            }
+                                          },
+                                        ),
                                       ),
-                                      SizedBox(width: 10),
-                                      Text(
-                                          DateFormat.yMd().add_jm().format(
-                                              value.diary.updated == null ? DateTime.now()
-                                                  : value.diary.updated!
-                                          ), style: TextStyle(fontSize: 11),
-                                      ),
-                                    ],
+                            Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    DateFormat.yMd().add_jm().format(
+                                        value.diary.created == null
+                                            ? DateTime.now()
+                                            : value.diary.created!),
+                                    style: TextStyle(fontSize: 11),
                                   ),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    DateFormat.yMd().add_jm().format(
+                                        value.diary.updated == null
+                                            ? DateTime.now()
+                                            : value.diary.updated!),
+                                    style: TextStyle(fontSize: 11),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    setState(() {
+                                      isAwait = true;
+                                    });
+                                    await diaryDeleteProvider.diaryDelete(id);
+                                    setState(() {
+                                      isAwait = false;
+                                    });
+                                    Get.off(() => DiaryListPage(travelId));
+                                  },
+                                  child: Text("삭제"),
                                 ),
-                                Divider(),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    ElevatedButton(
-                                      onPressed: () async {
-                                        await diaryDeleteProvider.diaryDelete(id);
-                                        Get.off(() => DiaryListPage(travelId));
-                                      },
-                                      child: Text("삭제"),
-                                    ),
-                                    SizedBox(width: 10),
-                                    ElevatedButton(
-                                      onPressed: () async {
-                                        await Get.off(() => UpdatePage(id, travelId));
-                                      },
-                                      child: Text("수정"),
-                                    ),
-                                  ],
+                                SizedBox(width: 10),
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    Get.off(
+                                        () => UpdatePage(id, travelId));
+                                  },
+                                  child: Text("수정"),
                                 ),
                               ],
                             ),
+                          ],
                         ),
+                      ),
                     ),
                   ),
-                )
-            );
-          }
-      )
-    );
+                ));
+          }),
+          isAwait ? UiViewModel.buildProgressBar() : Container(),
+        ]));
   }
 }

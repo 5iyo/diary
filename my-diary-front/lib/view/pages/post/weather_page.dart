@@ -15,7 +15,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../components/ui_view_model.dart';
 
 String? host = dotenv.env['SERVER_URI'];
-String? get_host = dotenv.env['SERVER_NAME'];
+String? getHost = dotenv.env['SERVER_NAME'];
 
 Future<WeatherResp> fetchWeather() async {
   var url = '$host/weather/clear';
@@ -33,6 +33,8 @@ Future<WeatherResp> fetchWeather() async {
 }
 
 class WeatherPage extends StatefulWidget {
+  const WeatherPage({super.key});
+
   @override
   State<WeatherPage> createState() => _WeatherPageState();
 }
@@ -146,9 +148,9 @@ class _WeatherPageState extends State<WeatherPage> {
                       Row(
                         children: [
                           TimerBuilder.periodic(
-                            (Duration(minutes: 1)),
+                            (const Duration(minutes: 1)),
                             builder: (context) {
-                              print('${getSystemTime()}');
+                              print(getSystemTime());
                               return Text(
                                 getSystemTime(),
                                 style: GoogleFonts.lato(

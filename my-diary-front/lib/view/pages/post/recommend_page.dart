@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:my_diary_front/controller/dto/RecommendResp.dart';
 import 'package:http/http.dart' as http;
+import 'package:my_diary_front/view/components/ui_view_model.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
@@ -65,7 +66,13 @@ class _RecommendPageState extends State<RecommendPage> {
     return Scaffold(
         appBar: AppBar(
           systemOverlayStyle: SystemUiOverlayStyle.dark,
-          title: Text(" "),
+          title: Text(
+            '${location} 추천 여행지 🤸',
+            style: GoogleFonts.lato(
+                fontSize: 23,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey[700]),
+          ),
           backgroundColor: Colors.transparent,
           elevation: 0.0,
         ),
@@ -80,7 +87,7 @@ class _RecommendPageState extends State<RecommendPage> {
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}에러");
               }
-              return CircularProgressIndicator();
+              return Expanded(child: UiViewModel.buildProgressBar());
             },
           ),
         ));
@@ -92,16 +99,6 @@ class _RecommendPageState extends State<RecommendPage> {
         children: [
           SizedBox(
             height: 50,
-          ),
-          Container(
-            padding: EdgeInsets.all(10.0),
-            child: Text(
-              '${location} 추천 여행지 🤸',
-              style: GoogleFonts.lato(
-                  fontSize: 23,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.grey[700]),
-            ),
           ),
           SizedBox(
             height: 25.0,
