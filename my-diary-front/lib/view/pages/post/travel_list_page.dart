@@ -96,6 +96,8 @@ class _TravelListPage extends State<TravelListPage> {
       extendBodyBehindAppBar: true,
       body: Consumer<TravelListProvider>(
           builder: (context, TravelListProvider value, child) {
+
+        travelImageList.clear();
         for (int i = 0; i < value.travels.length; i++) {
           travelImageList.add("${value.travels[i].image}");
         }
@@ -137,31 +139,18 @@ class _TravelListPage extends State<TravelListPage> {
                                     itemCount: travelImageList.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      travelImageList[index] == "" ||
-                                              travelImageList[index] == null
-                                          ? data = null
-                                          : data =
-                                              Uri.parse(travelImageList[index])
-                                                  .data;
-                                      data == null
-                                          ? bytes = null
-                                          : bytes = data!.contentAsBytes();
+                                          travelImageList[index] == "" || travelImageList[index] == null ? data = null
+                                              : data = Uri.parse(travelImageList[index]).data;
+                                          data == null ? bytes = null : bytes = data!.contentAsBytes();
                                       if (bytes != null) {
                                         return Container(
-                                          width: UiViewModel.getSizedLayoutSize(
-                                                          context)
-                                                      .width *
-                                                  0.45 -
-                                              5,
+                                          width: UiViewModel.getSizedLayoutSize(context).width * 0.45 - 5,
                                           child: Card(
                                             shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        20.0)),
+                                                borderRadius: BorderRadius.circular(20.0)),
                                             clipBehavior: Clip.antiAlias,
                                             borderOnForeground: false,
-                                            child: Image.memory(bytes!,
-                                                fit: BoxFit.cover),
+                                            child: Image.memory(bytes!, fit: BoxFit.cover),
                                           ),
                                           padding: EdgeInsets.all(10.0),
                                         );
@@ -206,24 +195,20 @@ class _TravelListPage extends State<TravelListPage> {
                                               Navigator.of(context);
                                           await Future.delayed(Duration.zero);
                                           navigator.push(
-                                            MaterialPageRoute(
-                                                builder: (_) =>
+                                            MaterialPageRoute(builder: (_) =>
                                                     TravelUpdatePage(
                                                         travelLatLng,
                                                         value.travels[index].id,
-                                                        value.travels[index]
-                                                            .title,
-                                                        value.travels[index]
-                                                            .image)),
+                                                        value.travels[index].title,
+                                                        value.travels[index].image)),
                                           );
                                         },
                                       ),
                                       PopupMenuItem(
                                         child: Text('삭제'),
                                         onTap: () async {
-                                          await _travelDeleteProvider
-                                              .travelDelete(
-                                                  value.travels[index].id!);
+                                          await _travelDeleteProvider.travelDelete(
+                                              value.travels[index].id!);
                                           Get.off(() => TravelListPage(
                                                 travelLatLng: travelLatLng,
                                               ));
@@ -239,10 +224,11 @@ class _TravelListPage extends State<TravelListPage> {
                       ],
                     ),
                   ),
-                )),
+                )
+            ),
           );
         }
-        return Center(child: CircularProgressIndicator());
+        return Center(child : Text("여행을 추가해주세요."));
       }),
     );
   }

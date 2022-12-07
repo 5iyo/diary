@@ -9,6 +9,10 @@ import 'package:my_diary_front/view/pages/post/diaryImagePage.dart';
 import 'package:my_diary_front/view/pages/post/diaryInfoPage.dart';
 import 'package:my_diary_front/signInPage.dart';
 import 'package:my_diary_front/view/pages/user/user_info.dart';
+import 'controller/provider/diary_image_delete_provider.dart';
+import 'controller/provider/diary_image_input_provider.dart';
+import 'controller/provider/diary_image_provider.dart';
+import 'controller/provider/diary_provider.dart';
 import 'view/pages/post/mapPage.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:provider/provider.dart';
@@ -46,6 +50,14 @@ void main() async {
         create: (BuildContext context) => DiaryUpdateProvider()),
     ChangeNotifierProvider(
         create: (BuildContext context) => DiaryDeleteProvider()),
+    ChangeNotifierProvider(
+        create: (BuildContext context) => DiaryProvider()),
+    ChangeNotifierProvider(
+        create: (BuildContext context) => DiaryImageProvider()),
+    ChangeNotifierProvider(
+        create: (BuildContext context) => DiaryImageDeleteProvider()),
+    ChangeNotifierProvider(
+        create: (BuildContext context) => DiaryImageInputProvider()),
   ],
     child: const MyApp()));
 }
