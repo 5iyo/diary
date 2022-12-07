@@ -114,7 +114,7 @@ class _WeatherPageState extends State<WeatherPage> {
           return ListTile(
             onTap: (){
               Get.to(()=> RecommendPage(snapshot.data.weatherresp[index].location,
-                  snapshot.data.weatherresp[index].position.x, snapshot.data.weatherresp[index].position.y));
+                  snapshot.data.weatherresp[index].position.y, snapshot.data.weatherresp[index].position.x));
             },
             title: Container(
               margin: EdgeInsets.only(bottom: 15),

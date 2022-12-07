@@ -11,10 +11,10 @@ import 'dart:math';
 String? host = dotenv.env['SERVER_URI'];
 String? get_host = dotenv.env['SERVER_NAME'];
 
-Future<RecommendResp> fetchRecommend(String x, String y) async {
+Future<RecommendResp> fetchRecommend(String y, String x) async {
   Map<String, String> queryParams = {
+    "mapY": y,
     "mapX": x,
-    "mapY": y
   };
   final response = await http.get(
     Uri.http('$get_host', '/recommend', queryParams),
@@ -34,26 +34,28 @@ Future<RecommendResp> fetchRecommend(String x, String y) async {
 class RecommendPage extends StatefulWidget {
 
   final String location;
-  final String x;
   final String y;
-  const RecommendPage(this.location, this.x, this.y);
+  final String x;
+
+  const RecommendPage(this.location, this.y, this.x);
 
   @override
-  State<RecommendPage> createState() => _RecommendPageState(location, x, y);
+  State<RecommendPage> createState() => _RecommendPageState(location, y, x);
 }
 
 class _RecommendPageState extends State<RecommendPage> {
 
   final String location;
-  final String x;
   final String y;
-  _RecommendPageState(this.location, this.x, this.y);
+  final String x;
+
+  _RecommendPageState(this.location, this.y, this.x);
 
   Future<RecommendResp>? recommend;
 
   void initState() {
     super.initState();
-    recommend = fetchRecommend(x, y);
+    recommend = fetchRecommend(y, x);
   }
 
   @override
