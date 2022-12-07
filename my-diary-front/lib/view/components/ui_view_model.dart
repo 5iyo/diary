@@ -49,7 +49,7 @@ class UiViewModel {
     print("buildSizedLayout context containerHeight : $containerHeight");
     return Column(
       children: [
-        const Spacer(),
+        const Spacer(flex: 1,),
         Wrap(
           children: [
             SizedBox(
@@ -63,7 +63,7 @@ class UiViewModel {
             )
           ],
         ),
-        const Spacer(),
+        const Spacer(flex: 2,),
       ],
     );
   }
