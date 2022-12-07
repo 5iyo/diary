@@ -235,9 +235,6 @@ class _TravelPageState extends State<TravelPage> {
                                       base64[0],
                                       _startdate.text,
                                       _enddate.text);
-                                  print("=======!!");
-                                  print(travelLatLng.latitude);
-                                  print(travelLatLng.longitude);
                                   Get.to(() =>
                                       TravelListPage(travelLatLng: travelLatLng));
                                   //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => TravelListPage()), (route) => false);
