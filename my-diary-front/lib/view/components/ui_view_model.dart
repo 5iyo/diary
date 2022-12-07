@@ -54,8 +54,8 @@ class UiViewModel {
     double containerWidth = sizedLayoutSize.width;
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Spacer(),
         Wrap(
           children: [
             SizedBox(
@@ -63,13 +63,12 @@ class UiViewModel {
               height: containerHeight,
               child: Padding(
                 padding: EdgeInsets.fromLTRB(
-                    containerWidth * 0.05, containerHeight * 0.05, containerWidth * 0.05, 0.0),
+                    containerWidth * 0.05, containerHeight * 0.05, containerWidth * 0.05, containerHeight * 0.05),
                 child: child,
               ),
             ),
           ],
         ),
-        const Spacer(),
       ],
     );
   }
