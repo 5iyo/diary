@@ -231,7 +231,6 @@ class _WritePageState extends State<WritePage> {
                                           width: 30.0,
                                           height: 30.0,
                                           decoration: BoxDecoration(
-                                              color: Colors.white,
                                               borderRadius:
                                                   BorderRadius.circular(30.0)),
                                           child: Icon(Icons.navigate_next),

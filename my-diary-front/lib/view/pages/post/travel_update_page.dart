@@ -116,7 +116,7 @@ class _TravelUpdatePageState extends State<TravelUpdatePage> {
                           borderRadius: BorderRadius.circular(5.0),
                         ),
                         width: MediaQuery.of(context).size.width,
-                        height: 200.0,
+                        height: MediaQuery.of(context).size.height * 0.5,
                         child: travelImage[0] == ""
                             ? Center(child: Text("이미지를 등록해주세요"))
                             : ListView.builder(
@@ -135,7 +135,7 @@ class _TravelUpdatePageState extends State<TravelUpdatePage> {
                                     return Stack(children: <Widget>[
                                       GestureDetector(
                                         child: Container(
-                                          width: 200.0,
+                                          height: MediaQuery.of(context).size.height * 0.5,
                                           child: Card(
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
