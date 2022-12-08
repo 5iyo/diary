@@ -101,7 +101,7 @@ class _TravelPageState extends State<TravelPage> {
                               borderRadius: BorderRadius.circular(5.0),
                             ),
                             width: MediaQuery.of(context).size.width,
-                            height: 200.0,
+                            height: MediaQuery.of(context).size.height * 0.5,
                             child: this.travelImage.isEmpty
                                 ? Center(child: Text("이미지를 등록해주세요"))
                                 : Stack(children: <Widget>[

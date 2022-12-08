@@ -27,7 +27,7 @@ public class TravelRepository {
     }
 
     public Travel findTravel(Long travelId) {
-        return em.createQuery("select t from Travel t fetch join t.diaries where t.id = :travelId", Travel.class)
+        return em.createQuery("select t from Travel t where t.id = :travelId", Travel.class)
                 .setParameter("travelId", travelId)
                 .getSingleResult();
     }

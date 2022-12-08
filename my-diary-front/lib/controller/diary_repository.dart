@@ -43,6 +43,9 @@ class DiaryRepository {
     final response = await http.get(Uri.parse(url));
 
     if(response.statusCode == 200) {
+      if(response.body.isEmpty) {
+        return [];
+      }
       DiaryList diaryList = DiaryList.fromJson(json.decode(utf8.decode(response.bodyBytes)));
       List<dynamic> temp = diaryList.data;
       print("리스트 요청 성공");

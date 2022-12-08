@@ -76,8 +76,8 @@ class _WritePageState extends State<WritePage> {
         elevation: 0.0,
       ),
       extendBodyBehindAppBar: true,
-      body: Stack(
-        children: [UiViewModel.buildBackgroundContainer(
+      body: Stack(children: [
+        UiViewModel.buildBackgroundContainer(
             context: context,
             backgroundType: BackgroundType.write,
             child: UiViewModel.buildSizedLayout(
@@ -132,110 +132,113 @@ class _WritePageState extends State<WritePage> {
                           controller: _content,
                           hint: "Content",
                           funValidator: validateContent()),
-                      SafeArea(
-                        child: SingleChildScrollView(
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
-                            child: Column(
-                              children: <Widget>[
-                                Stack(children: <Widget>[
-                                  Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(),
-                                        borderRadius: BorderRadius.circular(5.0),
-                                      ),
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 200.0,
-                                      child: this.userImages.isEmpty
-                                          ? const Center(child: Text("이미지를 등록해주세요"))
-                                          : ListView.builder(
-                                              padding: const EdgeInsets.all(10.0),
-                                              scrollDirection: Axis.horizontal,
-                                              controller: controller,
-                                              itemCount: userImages.length,
-                                              itemBuilder: (BuildContext context,
-                                                      int index) =>
-                                                  Stack(children: <Widget>[
-                                                    GestureDetector(
+                      SingleChildScrollView(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding:
+                              const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+                          child: Column(
+                            children: <Widget>[
+                              Stack(children: <Widget>[
+                                Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(),
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    ),
+                                    width: MediaQuery.of(context).size.width,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.5,
+                                    child: this.userImages.isEmpty
+                                        ? const Center(
+                                            child: Text("이미지를 등록해주세요"))
+                                        : ListView.builder(
+                                            padding: const EdgeInsets.all(10.0),
+                                            scrollDirection: Axis.horizontal,
+                                            controller: controller,
+                                            itemCount: userImages.length,
+                                            itemBuilder: (BuildContext context,
+                                                    int index) =>
+                                                Stack(children: <Widget>[
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        userBestImageIndex =
+                                                            index;
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      width: 200.0,
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              10.0),
+                                                      child: Card(
+                                                        shape: RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20.0)),
+                                                        clipBehavior:
+                                                            Clip.antiAlias,
+                                                        borderOnForeground:
+                                                            false,
+                                                        child: Image.file(
+                                                            userImages[index],
+                                                            fit: BoxFit.cover),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Positioned(
+                                                    top: 0,
+                                                    right: 0,
+                                                    child: GestureDetector(
                                                       onTap: () {
                                                         setState(() {
-                                                          userBestImageIndex =
-                                                              index;
+                                                          userImages.remove(
+                                                              userImages[
+                                                                  index]);
+                                                          iconCountCheck();
                                                         });
                                                       },
                                                       child: Container(
-                                                        width: 200.0,
-                                                        padding:
-                                                            const EdgeInsets.all(10.0),
-                                                        child: Card(
-                                                          shape:
-                                                              RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              20.0)),
-                                                          clipBehavior:
-                                                              Clip.antiAlias,
-                                                          borderOnForeground: false,
-                                                          child: Image.file(
-                                                              userImages[
-                                                                  index],
-                                                              fit: BoxFit.cover),
-                                                        ),
-                                                      ),
+                                                          width: 30.0,
+                                                          height: 30.0,
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .all(5.0),
+                                                          alignment:
+                                                              Alignment.center,
+                                                          decoration: BoxDecoration(
+                                                              color: Colors.red,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          30.0)),
+                                                          child: const Center(
+                                                              child: Icon(
+                                                            Icons.close,
+                                                            size: 20.0,
+                                                            color: Colors.white,
+                                                          ))),
                                                     ),
-                                                    Positioned(
-                                                      top: 0,
-                                                      right: 0,
-                                                      child: GestureDetector(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            userImages.remove(
-                                                                userImages[index]);
-                                                            iconCountCheck();
-                                                          });
-                                                        },
-                                                        child: Container(
-                                                            width: 30.0,
-                                                            height: 30.0,
-                                                            margin:
-                                                                const EdgeInsets.all(5.0),
-                                                            alignment:
-                                                                Alignment.center,
-                                                            decoration: BoxDecoration(
-                                                                color: Colors.red,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            30.0)),
-                                                            child: const Center(
-                                                                child: Icon(
-                                                              Icons.close,
-                                                              size: 20.0,
-                                                              color: Colors.white,
-                                                            ))),
-                                                      ),
-                                                    ),
-                                                  ]))),
-                                  !nextIconView
-                                      ? Container()
-                                      : Positioned(
-                                          top: 100.0,
-                                          right: 10.0,
-                                          child: Container(
-                                            width: 30.0,
-                                            height: 30.0,
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(30.0)),
-                                            child: Icon(Icons.navigate_next),
-                                          ),
-                                        )
-                                ]),
-                              ],
-                            ),
+                                                  ),
+                                                ]))),
+                                !nextIconView
+                                    ? Container()
+                                    : Positioned(
+                                        top: 100.0,
+                                        right: 10.0,
+                                        child: Container(
+                                          width: 30.0,
+                                          height: 30.0,
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(30.0)),
+                                          child: Icon(Icons.navigate_next),
+                                        ),
+                                      )
+                              ]),
+                            ],
                           ),
                         ),
                       ),
@@ -255,8 +258,9 @@ class _WritePageState extends State<WritePage> {
                                           shape: BoxShape.circle),
                                       child: Icon(
                                         CupertinoIcons.xmark,
-                                        color:
-                                            Theme.of(context).colorScheme.primary,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       ))
                                   : Container(
                                       alignment: Alignment.center,
@@ -265,45 +269,47 @@ class _WritePageState extends State<WritePage> {
                                           shape: BoxShape.circle),
                                       child: Icon(
                                         CupertinoIcons.camera,
-                                        color:
-                                            Theme.of(context).colorScheme.primary,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       )),
                               onPressed: userImages.length >= 3
-                                  ? () => { }
+                                  ? () => {}
                                   : () async {
                                       bool? check = await showDialog(
-                                              context: context,
-                                              builder: (context) => AlertDialog(
-                                                    title: const Text(
-                                                        "카메라 또는 갤러리를 통해 업로드할 수 있습니다"),
-                                                    actions: <Widget>[
-                                                      ElevatedButton(
-                                                        child: const Text("촬영"),
-                                                        onPressed: () =>
-                                                            Navigator.of(context)
-                                                                .pop(true),
-                                                      ),
-                                                      ElevatedButton(
-                                                        child: const Text("앨범"),
-                                                        onPressed: () =>
-                                                            Navigator.of(context)
-                                                                .pop(false),
-                                                      ),
-                                                      ElevatedButton(
-                                                        child: const Text("취소"),
-                                                        onPressed: () async =>
-                                                            Navigator.of(context)
-                                                                .pop(null),
-                                                      ),
-                                                    ],
-                                                  ));
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                                title: const Text(
+                                                    "카메라 또는 갤러리를 통해 업로드할 수 있습니다"),
+                                                actions: <Widget>[
+                                                  ElevatedButton(
+                                                    child: const Text("촬영"),
+                                                    onPressed: () =>
+                                                        Navigator.of(context)
+                                                            .pop(true),
+                                                  ),
+                                                  ElevatedButton(
+                                                    child: const Text("앨범"),
+                                                    onPressed: () =>
+                                                        Navigator.of(context)
+                                                            .pop(false),
+                                                  ),
+                                                  ElevatedButton(
+                                                    child: const Text("취소"),
+                                                    onPressed: () async =>
+                                                        Navigator.of(context)
+                                                            .pop(null),
+                                                  ),
+                                                ],
+                                              ));
                                       if (check == null) return;
                                       if (check) {
                                         setState(() {
                                           isAwait = true;
                                         });
-                                        final pickCamera = await _picker.pickImage(
-                                            source: ImageSource.camera);
+                                        final pickCamera =
+                                            await _picker.pickImage(
+                                                source: ImageSource.camera);
                                         setState(() {
                                           isAwait = false;
                                         });
@@ -314,8 +320,9 @@ class _WritePageState extends State<WritePage> {
                                         setState(() {
                                           isAwait = true;
                                         });
-                                        final pickGallery = await _picker.pickImage(
-                                            source: ImageSource.gallery);
+                                        final pickGallery =
+                                            await _picker.pickImage(
+                                                source: ImageSource.gallery);
                                         setState(() {
                                           isAwait = false;
                                         });
@@ -337,7 +344,9 @@ class _WritePageState extends State<WritePage> {
                                     ? null
                                     : userImages.forEach((e) => base64List.add(
                                         "data:image/png;base64,${base64Encode(e.readAsBytesSync())}"));
-                                base64List.isEmpty ? base64List = [""] : base64List;
+                                base64List.isEmpty
+                                    ? base64List = [""]
+                                    : base64List;
                                 if (_formKey.currentState!.validate()) {
                                   setState(() {
                                     isAwait = true;
@@ -365,8 +374,9 @@ class _WritePageState extends State<WritePage> {
                   ),
                 ),
               ),
-            )),isAwait ? UiViewModel.buildProgressBar() : Container(),]
-      ),
+            )),
+        isAwait ? UiViewModel.buildProgressBar() : Container(),
+      ]),
     );
   }
 

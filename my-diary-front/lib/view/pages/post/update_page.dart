@@ -200,7 +200,7 @@ class _UpdatePageState extends State<UpdatePage> {
                             children: <Widget>[
                               SizedBox(
                                 width: MediaQuery.of(context).size.width,
-                                height: 200.0,
+                                height: MediaQuery.of(context).size.height * 0.5,
                                 child: ListView.builder(
                                     padding: const EdgeInsets.all(10.0),
                                     scrollDirection: Axis.horizontal,
