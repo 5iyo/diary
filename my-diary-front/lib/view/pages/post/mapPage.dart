@@ -73,18 +73,20 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
   }
 
   addMarker(LatLng coordinate, InfoWindow infoWindow,
-      [TravelMarker? travelMarker]) {
+      [TravelMarker? travelMarker, BitmapDescriptor icon = BitmapDescriptor.defaultMarker]) {
     print("#######addMarker ${markerId}");
     markers.add(travelMarker == null
         ? Marker(
             position: coordinate,
             markerId: MarkerId("$markerId"),
             infoWindow: infoWindow,
+      icon: icon
           )
         : Marker(
             position: coordinate,
             markerId: MarkerId("${markerId++}"),
             infoWindow: infoWindow,
+        icon: icon
           ));
     setState(() {
       setOfMarkers = markers.toSet();
@@ -106,7 +108,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
     ));
   }
 
-  void initMarkers(TravelMarkerList list, [Function(TravelMarker)? onTap]) {
+  void initMarkers(TravelMarkerList list, [Function(TravelMarker)? onTap, BitmapDescriptor icon = BitmapDescriptor.defaultMarker]) {
     print("#######initMarkers");
     if (list.travelMarkers!.isEmpty) {
       setState(() {
@@ -131,7 +133,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                                   )));
                     }
                   : () => onTap(e)),
-          e);
+          e, icon);
     }
   }
 
@@ -264,7 +266,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
 //                  markers.clear();
                   TravelMarkerList list = TravelMarkerList();
                   list.travelMarkers = [result];
-                  initMarkers(list, (e) {});
+                  initMarkers(list, (e) {}, BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange));
                   _controller.animateCamera(CameraUpdate.newCameraPosition(
                       CameraPosition(target: result.travelLatLng, zoom: 14.0)));
                 }
@@ -367,14 +369,14 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
 //                    markers.clear();
                     TravelMarkerList list = TravelMarkerList();
                     list.travelMarkers = [value];
-                    initMarkers(list, (e) {});
+                    initMarkers(list, (e) {}, BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet));
                     _controller.animateCamera(CameraUpdate.newCameraPosition(
                         CameraPosition(
                             target: value.travelLatLng, zoom: 14.0)));
                   }
                 });
 //                Get.to(()=> RecommendPage(e.travelTitle, e.travelLatLng.latitude.toString(), e.travelLatLng.longitude.toString()));
-              });
+              }, BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueMagenta));
             });
             setState(() {
               isAwait = false;
@@ -487,7 +489,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
               Get.to(() =>
                   TravelPage(_mainViewModel!.diaryUser!.id.toString(), latLng));
 //              Navigator.pushNamed(context, '/diaryInfoPage');
-            }));
+            }), null, BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange));
 
     _controller.animateCamera(CameraUpdate.newLatLngZoom(latLng, 14.0));
   }
