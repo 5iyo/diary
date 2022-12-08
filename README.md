@@ -7,14 +7,6 @@
 ## Demo
 https://youtu.be/OU2kYgFw5_g
 
-## 실행 방법
-```sh
-cd my-diary-back\my-diary-back
-```
-```sh
-./gradlew bootRun
-```
-
 ## APIs
 Google Map API - https://developers.google.com/maps \
 Google Cloud Platform API - https://cloud.google.com/compute/docs/oslogin/rest \
