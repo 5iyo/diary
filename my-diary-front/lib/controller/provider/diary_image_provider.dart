@@ -7,6 +7,7 @@ class DiaryImageProvider extends ChangeNotifier {
 
   DiaryRepository _diaryRepository = DiaryRepository();
   DiaryImage _diaryImage = DiaryImage();
+
   bool _isImgUpdate = false;
   bool get isImgUpdate => _isImgUpdate;
 
