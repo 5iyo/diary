@@ -39,8 +39,8 @@ public class TravelService {
         return travelRepository.findTravelsByMember(memberId);
     }
 
-    public List<Travel> inquiryTravelsByCoordinate(String travelLatitude, String travelLongitude) {
-        return travelRepository.findTravelsByCoordinate(travelLatitude, travelLongitude);
+    public List<Travel> inquiryTravelsByCoordinate(Long userId, String travelLatitude, String travelLongitude) {
+        return travelRepository.findTravelsByCoordinate(userId, travelLatitude, travelLongitude);
     }
 
     @Transactional
