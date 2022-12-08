@@ -81,7 +81,7 @@ class DiarySocialShareViewModel {
             const Spacer(),
             Text(
               e.name,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.width * 0.03),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: AppBar().preferredSize.height * 1),
             )
           ],
         ),
