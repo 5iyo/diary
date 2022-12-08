@@ -27,7 +27,37 @@ OpenWeather API - https://openweathermap.org/api \
 
 
 ## OpenSources
-사용한 오픈소스 주소
+  - google_map\
+  google_maps_flutter: ^2.2.1\
+  flutter_google_places: ^0.3.0\
+  google_maps_cluster_manager: ^3.0.0+1
+  - location\
+  location: ^4.4.0
+  - swipe animation\
+  flutter_swiper: ^1.1.6\
+  swipe_cards: ^1.0.0
+  - google login\
+  google_sign_in: ^5.4.2
+  - kakao login\
+  kakao_flutter_sdk: ^1.2.2
+  - naver login\
+  flutter_naver_login: ^1.7.0
+  - secure storage\
+  flutter_secure_storage: ^6.0.0
+  - provider\
+  provider: ^6.0.4
+  - .env\
+  flutter_dotenv: ^5.0.2
+  - floating action bubble\
+  floating_action_bubble: ^1.1.4
+  - screenshot\
+  screenshot: ^1.2.3
+  - social_share\
+  social_share: ^2.3.1
+  - resize image\
+  image: ^3.2.2
+  - separated_column\
+  separated_column: ^2.0.0
 
 
 ## Development Environment
