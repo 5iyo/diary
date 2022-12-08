@@ -327,6 +327,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
 
   Widget _buildFloatingActionBubble() {
     return FloatingActionBubble(
+
       // Menu items
       items: <Bubble>[
         // Floating action menu item
@@ -423,7 +424,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
       animation: _animation,
 
       // On pressed change animation state
-      onPress: () => _animationController.isCompleted
+      onPress: () => isAwait ? null : _animationController.isCompleted
           ? _animationController.reverse()
           : _animationController.forward(),
 

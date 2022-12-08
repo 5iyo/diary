@@ -112,7 +112,6 @@ class _TravelUpdatePageState extends State<TravelUpdatePage> {
                   Stack(children: <Widget>[
                     Container(
                         decoration: BoxDecoration(
-                          color: Colors.white,
                           border: Border.all(),
                           borderRadius: BorderRadius.circular(5.0),
                         ),

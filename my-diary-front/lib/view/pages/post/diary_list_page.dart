@@ -88,7 +88,7 @@ class _DiaryListPage extends State<DiaryListPage> {
         isAwait ? UiViewModel.buildProgressBar() : Container(),
       ]),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: isAwait ? null : () {
           Get.off(() => WritePage(id));
         },
         child: Icon(Icons.add, color: Colors.white),

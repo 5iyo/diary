@@ -97,7 +97,6 @@ class _TravelPageState extends State<TravelPage> {
                         SizedBox(height: 10),
                         Container(
                             decoration: BoxDecoration(
-                              color: Colors.white,
                               border: Border.all(),
                               borderRadius: BorderRadius.circular(5.0),
                             ),

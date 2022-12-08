@@ -302,7 +302,6 @@ class _UpdatePageState extends State<UpdatePage> {
                                         width: 30.0,
                                         height: 30.0,
                                         decoration: BoxDecoration(
-                                            color: Colors.white,
                                             borderRadius:
                                                 BorderRadius.circular(30.0)),
                                         child: const Icon(Icons.navigate_next),
