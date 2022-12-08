@@ -36,25 +36,23 @@ class _CustomDatePicker extends State<CustomDatePicker> {
       },
       child: AbsorbPointer(
         child: Container(
-/*          decoration: BoxDecoration(
-            border: Border.all(),
-          ),*/
           // width: MediaQuery
           //     .of(context)
           //     .size
           //     .width,
-          color: Colors.white,
           child: Center(
             child: TextFormField(
               style: TextStyle(fontSize: 16),
               decoration: InputDecoration(
+                contentPadding: new EdgeInsets.symmetric(
+                    vertical: 5.0, horizontal: 5.0),
                 isDense: true,
                 hintText: "$init",
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey),
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red),
                 ),
               ),
               controller: controller,

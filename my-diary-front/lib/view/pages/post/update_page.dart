@@ -46,6 +46,7 @@ class _UpdatePageState extends State<UpdatePage> {
 
   @override
   void didChangeDependencies() async {
+    print("update page didChange");
     super.didChangeDependencies();
     DiaryProvider diaryProvider =
         Provider.of<DiaryProvider>(context, listen: false);
@@ -86,7 +87,15 @@ class _UpdatePageState extends State<UpdatePage> {
   bool isAwait = false;
 
   @override
+  void initState() {
+    print("update page init");
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print("update page build");
+
     diaryProvider = Provider.of<DiaryProvider>(context, listen: false);
     diaryImageDeleteProvider =
         Provider.of<DiaryImageDeleteProvider>(context, listen: false);
@@ -178,6 +187,8 @@ class _UpdatePageState extends State<UpdatePage> {
                   for (int i = 0; i < value.diaryImage.images!.length; i++) {
                     diaryImage.add(value.diaryImage.images![i].imagefile!);
                   }
+                } else {
+                  diaryImage.add("");
                 }
                 return Column(
                   children: [
