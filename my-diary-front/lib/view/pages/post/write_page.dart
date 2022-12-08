@@ -13,7 +13,6 @@ import 'package:my_diary_front/view/pages/post/diary_list_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:provider/provider.dart';
@@ -50,12 +49,14 @@ class _WritePageState extends State<WritePage> {
   ScrollController controller = ScrollController();
   final ImagePicker _picker = ImagePicker();
 
+  bool isAwait = false;
+
   @override
   void initState() {
-    controller = new ScrollController()
+    controller = ScrollController()
       ..addListener(() {
         setState(() {
-          this.iconView();
+          iconView();
         });
       });
     super.initState();
@@ -75,84 +76,86 @@ class _WritePageState extends State<WritePage> {
         elevation: 0.0,
       ),
       extendBodyBehindAppBar: true,
-      body: UiViewModel.buildBackgroundContainer(
-          context: context,
-          backgroundType: BackgroundType.write,
-          child: UiViewModel.buildSizedLayout(
-            context,
-            Form(
-              key: _formKey,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                            child: CustomDatePicker(
-                                controller: _date,
-                                init: init,
-                                funValidator: validateDate())),
-                        Padding(padding: EdgeInsets.all(5.0)),
-                        Expanded(
-                            child: DropdownButton(
-                          value: _selectedValue,
-                          items: _valueList.map(
-                            (value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value),
-                              );
+      body: Stack(children: [
+        UiViewModel.buildBackgroundContainer(
+            context: context,
+            backgroundType: BackgroundType.write,
+            child: UiViewModel.buildSizedLayout(
+              context,
+              Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                              child: CustomDatePicker(
+                                  controller: _date,
+                                  init: init,
+                                  funValidator: validateDate())),
+                          const Padding(padding: EdgeInsets.all(5.0)),
+                          Expanded(
+                              child: DropdownButton(
+                            value: _selectedValue,
+                            items: _valueList.map(
+                              (value) {
+                                return DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              },
+                            ).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedValue = value!;
+                              });
                             },
-                          ).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedValue = value!;
-                            });
-                          },
-                        )),
-                        Padding(padding: EdgeInsets.all(5.0)),
-                        Expanded(
-                          child: TextFormField(
-                              controller: _travel,
-                              decoration: InputDecoration(
-                                hintText: "Travel",
-                              )),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    CustomTextFormField(
-                        controller: _title,
-                        hint: "Title",
-                        funValidator: validateTitle()),
-                    SizedBox(height: 5),
-                    CustomTextArea(
-                        controller: _content,
-                        hint: "Content",
-                        funValidator: validateContent()),
-                    SafeArea(
-                      child: SingleChildScrollView(
+                          )),
+                          const Padding(padding: EdgeInsets.all(5.0)),
+                          Expanded(
+                            child: TextFormField(
+                                controller: _travel,
+                                decoration: const InputDecoration(
+                                  hintText: "Travel",
+                                )),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      CustomTextFormField(
+                          controller: _title,
+                          hint: "Title",
+                          funValidator: validateTitle()),
+                      SizedBox(height: 5),
+                      CustomTextArea(
+                          controller: _content,
+                          hint: "Content",
+                          funValidator: validateContent()),
+                      SingleChildScrollView(
                         child: Container(
                           width: MediaQuery.of(context).size.width,
-                          padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+                          padding:
+                              const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
                           child: Column(
                             children: <Widget>[
                               Stack(children: <Widget>[
                                 Container(
                                     decoration: BoxDecoration(
-                                      color: Colors.white,
                                       border: Border.all(),
                                       borderRadius: BorderRadius.circular(5.0),
                                     ),
                                     width: MediaQuery.of(context).size.width,
-                                    height: 200.0,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.5,
                                     child: this.userImages.isEmpty
-                                        ? Center(child: Text("이미지를 등록해주세요"))
+                                        ? const Center(
+                                            child: Text("이미지를 등록해주세요"))
                                         : ListView.builder(
-                                            padding: EdgeInsets.all(10.0),
+                                            padding: const EdgeInsets.all(10.0),
                                             scrollDirection: Axis.horizontal,
-                                            controller: this.controller,
-                                            itemCount: this.userImages.length,
+                                            controller: controller,
+                                            itemCount: userImages.length,
                                             itemBuilder: (BuildContext context,
                                                     int index) =>
                                                 Stack(children: <Widget>[
@@ -165,23 +168,23 @@ class _WritePageState extends State<WritePage> {
                                                     },
                                                     child: Container(
                                                       width: 200.0,
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              10.0),
                                                       child: Card(
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            20.0)),
+                                                        shape: RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20.0)),
                                                         clipBehavior:
                                                             Clip.antiAlias,
-                                                        borderOnForeground: false,
+                                                        borderOnForeground:
+                                                            false,
                                                         child: Image.file(
-                                                            this.userImages[
-                                                                index],
+                                                            userImages[index],
                                                             fit: BoxFit.cover),
                                                       ),
-                                                      padding:
-                                                          EdgeInsets.all(10.0),
                                                     ),
                                                   ),
                                                   Positioned(
@@ -191,7 +194,8 @@ class _WritePageState extends State<WritePage> {
                                                       onTap: () {
                                                         setState(() {
                                                           userImages.remove(
-                                                              userImages[index]);
+                                                              userImages[
+                                                                  index]);
                                                           iconCountCheck();
                                                         });
                                                       },
@@ -199,7 +203,8 @@ class _WritePageState extends State<WritePage> {
                                                           width: 30.0,
                                                           height: 30.0,
                                                           margin:
-                                                              EdgeInsets.all(5.0),
+                                                              const EdgeInsets
+                                                                  .all(5.0),
                                                           alignment:
                                                               Alignment.center,
                                                           decoration: BoxDecoration(
@@ -208,7 +213,7 @@ class _WritePageState extends State<WritePage> {
                                                                   BorderRadius
                                                                       .circular(
                                                                           30.0)),
-                                                          child: Center(
+                                                          child: const Center(
                                                               child: Icon(
                                                             Icons.close,
                                                             size: 20.0,
@@ -217,7 +222,7 @@ class _WritePageState extends State<WritePage> {
                                                     ),
                                                   ),
                                                 ]))),
-                                !this.nextIconView
+                                !nextIconView
                                     ? Container()
                                     : Positioned(
                                         top: 100.0,
@@ -237,125 +242,148 @@ class _WritePageState extends State<WritePage> {
                           ),
                         ),
                       ),
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: IconButton(
-                            color: this.userImages.length >= 3
-                                ? Colors.white
-                                : Colors.grey,
-                            icon: this.userImages.length >= 3
-                                ? Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white.withOpacity(0.6),
-                                        shape: BoxShape.circle),
-                                    child: Icon(
-                                      CupertinoIcons.xmark,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ))
-                                : Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white.withOpacity(0.6),
-                                        shape: BoxShape.circle),
-                                    child: Icon(
-                                      CupertinoIcons.camera,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    )),
-                            onPressed: this.userImages.length >= 3
-                                ? () => print("이미지 초과")
-                                : () async {
-                                    bool? check = await showDialog(
-                                            context: context,
-                                            builder: (context) => AlertDialog(
-                                                  title: Text(
-                                                      "카메라 또는 갤러리를 통해 업로드할 수 있습니다"),
-                                                  actions: <Widget>[
-                                                    ElevatedButton(
-                                                      child: Text("촬영"),
-                                                      onPressed: () =>
-                                                          Navigator.of(context)
-                                                              .pop(true),
-                                                    ),
-                                                    ElevatedButton(
-                                                      child: Text("앨범"),
-                                                      onPressed: () =>
-                                                          Navigator.of(context)
-                                                              .pop(false),
-                                                    ),
-                                                    ElevatedButton(
-                                                      child: Text("취소"),
-                                                      onPressed: () async =>
-                                                          Navigator.of(context)
-                                                              .pop(null),
-                                                    ),
-                                                  ],
-                                                )) ??
-                                        null;
-                                    if (check == null) return;
-                                    if (check) {
-                                      final pickcamera = await _picker.pickImage(
-                                          source: ImageSource.camera);
-                                      final cfile =
-                                          File(pickcamera!.path.toString());
-                                      userImages.add(cfile);
-                                    } else {
-                                      final pickgallery = await _picker.pickImage(
-                                          source: ImageSource.gallery);
-                                      final gfile =
-                                          File(pickgallery!.path.toString());
-                                      userImages.add(gfile);
-                                    }
-                                    iconCountCheck();
-                                    return setState(() {});
-                                  },
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: IconButton(
+                              color: userImages.length >= 3
+                                  ? Colors.white
+                                  : Colors.grey,
+                              icon: userImages.length >= 3
+                                  ? Container(
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white.withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: Icon(
+                                        CupertinoIcons.xmark,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      ))
+                                  : Container(
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white.withOpacity(0.6),
+                                          shape: BoxShape.circle),
+                                      child: Icon(
+                                        CupertinoIcons.camera,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      )),
+                              onPressed: userImages.length >= 3
+                                  ? () => {}
+                                  : () async {
+                                      bool? check = await showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                                title: const Text(
+                                                    "카메라 또는 갤러리를 통해 업로드할 수 있습니다"),
+                                                actions: <Widget>[
+                                                  ElevatedButton(
+                                                    child: const Text("촬영"),
+                                                    onPressed: () =>
+                                                        Navigator.of(context)
+                                                            .pop(true),
+                                                  ),
+                                                  ElevatedButton(
+                                                    child: const Text("앨범"),
+                                                    onPressed: () =>
+                                                        Navigator.of(context)
+                                                            .pop(false),
+                                                  ),
+                                                  ElevatedButton(
+                                                    child: const Text("취소"),
+                                                    onPressed: () async =>
+                                                        Navigator.of(context)
+                                                            .pop(null),
+                                                  ),
+                                                ],
+                                              ));
+                                      if (check == null) return;
+                                      if (check) {
+                                        setState(() {
+                                          isAwait = true;
+                                        });
+                                        final pickCamera =
+                                            await _picker.pickImage(
+                                                source: ImageSource.camera);
+                                        setState(() {
+                                          isAwait = false;
+                                        });
+                                        final cFile =
+                                            File(pickCamera!.path.toString());
+                                        userImages.add(cFile);
+                                      } else {
+                                        setState(() {
+                                          isAwait = true;
+                                        });
+                                        final pickGallery =
+                                            await _picker.pickImage(
+                                                source: ImageSource.gallery);
+                                        setState(() {
+                                          isAwait = false;
+                                        });
+                                        final gFile =
+                                            File(pickGallery!.path.toString());
+                                        userImages.add(gFile);
+                                      }
+                                      iconCountCheck();
+                                      return setState(() {});
+                                    },
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: CustomElavatedButton(
-                            text: "글쓰기",
-                            funPageRoute: () async {
-                              this.userImages.isEmpty
-                                  ? null
-                                  : this.userImages.forEach((e) => base64List.add(
-                                      "data:image/png;base64,${base64Encode(e.readAsBytesSync())}"));
-                              base64List.isEmpty ? base64List = [""] : base64List;
-                              _travel.text == null ? " " : _travel.text;
-                              if (_formKey.currentState!.validate()) {
-                                await diaryWriteProvider.save(
-                                    id,
-                                    _title.text,
-                                    _date.text,
-                                    _content.text,
-                                    _selectedValue,
-                                    _travel.text,
-                                    base64List);
-                                Get.off(() => DiaryListPage(id));
-                                //Navigator.push(context, MaterialPageRoute(builder: (context) => DiaryListPage(id)));
-                              }
-                            },
+                          Expanded(
+                            flex: 3,
+                            child: CustomElavatedButton(
+                              text: "글쓰기",
+                              funPageRoute: () async {
+                                userImages.isEmpty
+                                    ? null
+                                    : userImages.forEach((e) => base64List.add(
+                                        "data:image/png;base64,${base64Encode(e.readAsBytesSync())}"));
+                                base64List.isEmpty
+                                    ? base64List = [""]
+                                    : base64List;
+                                if (_formKey.currentState!.validate()) {
+                                  setState(() {
+                                    isAwait = true;
+                                  });
+                                  await diaryWriteProvider.save(
+                                      id,
+                                      _title.text,
+                                      _date.text,
+                                      _content.text,
+                                      _selectedValue,
+                                      _travel.text,
+                                      base64List);
+                                  setState(() {
+                                    isAwait = false;
+                                  });
+                                  Get.off(() => DiaryListPage(id));
+                                  //Navigator.push(context, MaterialPageRoute(builder: (context) => DiaryListPage(id)));
+                                }
+                              },
+                            ),
                           ),
-                        ),
-                      ],
-                    )
-                  ],
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-          )),
+            )),
+        isAwait ? UiViewModel.buildProgressBar() : Container(),
+      ]),
     );
   }
 
   bool nextIconView = false;
 
   void iconCountCheck() {
-    if (this.userImages.length >= 2) {
+    if (userImages.length >= 2) {
       nextIconView = true;
       return;
     }
@@ -364,7 +392,7 @@ class _WritePageState extends State<WritePage> {
   }
 
   void iconView() {
-    if (controller!.offset >= controller!.position.maxScrollExtent) {
+    if (controller.offset >= controller.position.maxScrollExtent) {
       nextIconView = false;
     } else {
       nextIconView = true;

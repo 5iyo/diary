@@ -13,7 +13,6 @@ class CustomTextArea extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Container(
-        color: Colors.white,
         child: TextFormField(
           controller: controller,
           validator: funValidator,

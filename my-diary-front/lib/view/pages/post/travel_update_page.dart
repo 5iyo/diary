@@ -44,32 +44,38 @@ class _TravelUpdatePageState extends State<TravelUpdatePage> {
   final _formKey = GlobalKey<FormState>();
 
   final _title = TextEditingController();
-  final _startdate = TextEditingController();
-  final _enddate = TextEditingController();
+  final _startDate = TextEditingController();
+  final _endDate = TextEditingController();
 
-  Future<TravelList>? travellist;
+  Future<TravelList>? travelList;
   List<File> updateImage = [];
   List<String> travelImage = [];
   List<String> base64 = [];
   final ImagePicker _picker = ImagePicker();
   ScrollController controller = ScrollController();
 
+  bool isAwait = false;
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(),
         extendBodyBehindAppBar: true,
-        body: UiViewModel.buildBackgroundContainer(
-            context: context,
-            backgroundType: BackgroundType.write,
-            child: UiViewModel.buildSizedLayout(context, buildTravel())));
+        resizeToAvoidBottomInset: false,
+        body: Stack(
+          children: [UiViewModel.buildBackgroundContainer(
+              context: context,
+              backgroundType: BackgroundType.write,
+              child: UiViewModel.buildSizedLayout(context, buildTravel())),isAwait ? UiViewModel.buildProgressBar() : Container(),]
+        ));
   }
 
   Widget buildTravel() {
     travelUpdateProvider =
         Provider.of<TravelUpdateProvider>(context, listen: false);
 
-    String startinit = "여행 시작 날짜";
-    String endinit = "여행 종료 날짜";
+    String startInit = "여행 시작 날짜";
+    String endInit = "여행 종료 날짜";
     _title.text = title;
     UriData? data;
     Uint8List? bytes;
@@ -84,14 +90,14 @@ class _TravelUpdatePageState extends State<TravelUpdatePage> {
               children: <Widget>[
                 Expanded(
                     child: CustomDatePicker(
-                        controller: _startdate,
-                        init: startinit,
+                        controller: _startDate,
+                        init: startInit,
                         funValidator: validateDate())),
                 Padding(padding: EdgeInsets.all(5.0)),
                 Expanded(
                     child: CustomDatePicker(
-                        controller: _enddate,
-                        init: endinit,
+                        controller: _endDate,
+                        init: endInit,
                         funValidator: validateDate())),
               ],
             ),
@@ -106,7 +112,6 @@ class _TravelUpdatePageState extends State<TravelUpdatePage> {
                   Stack(children: <Widget>[
                     Container(
                         decoration: BoxDecoration(
-                          color: Colors.white,
                           border: Border.all(),
                           borderRadius: BorderRadius.circular(5.0),
                         ),
@@ -185,6 +190,7 @@ class _TravelUpdatePageState extends State<TravelUpdatePage> {
                 ],
               ),
             ),
+            SizedBox(height: 10),
             Row(
               children: [
                 Expanded(
@@ -233,8 +239,14 @@ class _TravelUpdatePageState extends State<TravelUpdatePage> {
                                           ],
                                         )) ??
                                 null;
+                            setState(() {
+                              isAwait = true;
+                            });
                             final pickgallery = await _picker.pickImage(
                                 source: ImageSource.gallery);
+                            setState(() {
+                              isAwait = false;
+                            });
                             final gfile = File(pickgallery!.path.toString());
 
                             updateImage.add(gfile);
@@ -255,8 +267,14 @@ class _TravelUpdatePageState extends State<TravelUpdatePage> {
                     text: "수정하기",
                     funPageRoute: () async {
                       if (_formKey.currentState!.validate()) {
+                        setState(() {
+                          isAwait = true;
+                        });
                         await travelUpdateProvider.travelUpdate(id, _title.text,
-                            travelImage[0], _startdate.text, _enddate.text);
+                            travelImage[0], _startDate.text, _endDate.text);
+                        setState(() {
+                          isAwait = false;
+                        });
                         Get.offAll(
                             () => TravelListPage(travelLatLng: travelLatLng));
                       }

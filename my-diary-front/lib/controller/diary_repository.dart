@@ -4,8 +4,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:my_diary_front/controller/dto/TravelListResp.dart';
 import 'package:http/http.dart' as http;
+import 'dto/DiaryImageResp.dart';
 import 'dto/DiaryListResp.dart';
 import 'dto/DiaryList_diaries.dart';
+import 'dto/DiaryResp.dart';
 import 'dto/TravelList_travels.dart';
 
 String? host = dotenv.env['SERVER_URI'];
@@ -41,6 +43,9 @@ class DiaryRepository {
     final response = await http.get(Uri.parse(url));
 
     if(response.statusCode == 200) {
+      if(response.body.isEmpty) {
+        return [];
+      }
       DiaryList diaryList = DiaryList.fromJson(json.decode(utf8.decode(response.bodyBytes)));
       List<dynamic> temp = diaryList.data;
       print("리스트 요청 성공");
@@ -54,6 +59,76 @@ class DiaryRepository {
     else{
       throw Exception("리스트 요청을 실패했습니다.");
     }
+  }
+
+  Future<Diary> fetchDiary(int id) async {
+    var url = '$host/api/diaries/$id';
+    final response = await http.get(Uri.parse(url));
+
+    if(response.statusCode == 200) {
+      print("일기 요청 성공");
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return Diary.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+    } else {
+      throw Exception("일기 요청을 실패했습니다.");
+    }
+  }
+
+  Future<DiaryImage> fetchDiaryImage(int id) async {
+    var url = '$host/api/diaries/$id';
+    final response = await http.get(Uri.parse(url));
+
+    if(response.statusCode == 200) {
+      print("일기 이미지 요청 성공");
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return DiaryImage.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+    } else {
+      throw Exception("일기 이미지 요청을 실패했습니다.");
+    }
+  }
+
+  Future<int?> fetchDeleteImage(int id) async{
+    var url = '$host/api/diary-images/$id';
+    final response = await http.delete(Uri.parse(url));
+
+    if(response.statusCode == 200) {
+      print("이미지 삭제 성공");
+      return response.statusCode;
+    } else {
+      throw Exception("이미지 삭제 실패");
+    }
+  }
+
+  Future<int?> dioInputImage(int id, String image) async {
+
+    Dio dio = new Dio();
+
+    try {
+      Response response = await dio.post(
+          '$host/api/diary-images/$id',
+          data: {
+            "imageFile": image
+          }
+      );
+
+      final jsonBody = response.data;
+
+      if (response.statusCode == 201) {
+        print(jsonBody);
+
+        return response.statusCode;
+      } else {
+        throw Exception('일기 작성 실패');
+      }
+    } catch (e) {
+      Exception(e);
+      print(e);
+      print("일기 작성 예외");
+    } finally {
+      dio.close();
+      print("끝");
+    }
+    return 0;
   }
 
   Future<int?> dioTravel(String id, String title, String area, String latitude, String longitude,
