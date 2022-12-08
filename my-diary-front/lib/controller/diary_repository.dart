@@ -14,15 +14,15 @@ String? host = dotenv.env['SERVER_URI'];
 String? get_host = dotenv.env['SERVER_NAME'];
 
 class DiaryRepository {
-  Future<List<Travels>> fetchTravelList(LatLng travelLatLng) async {
+  Future<List<Travels>> fetchTravelList(LatLng travelLatLng, int id) async {
     Map<String, String> queryParams = {
       "travelLatitude": "${travelLatLng.latitude}",
       "travelLongitude": "${travelLatLng.longitude}"
     }; //마커 좌표
     final response = await http.get(
-      Uri.https('$get_host', 'api/travels', queryParams),
+      Uri.https('$get_host', 'api/user/$id/inquire-travels-list', queryParams),
     );
-
+    print("##############${response.body}");
     if(response.statusCode == 200) {
       TravelList travelList = TravelList.fromJson(json.decode(utf8.decode(response.bodyBytes)));
       List<dynamic> temp = travelList.travels;

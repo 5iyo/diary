@@ -23,25 +23,29 @@ class Menu {
 
 class TravelListPage extends StatefulWidget {
   final LatLng travelLatLng;
+  final int id;
 
   // 좌표 받아야함
   const TravelListPage({
     super.key,
     required this.travelLatLng,
+    required this.id,
   });
 
   @override
   State<TravelListPage> createState() =>
-      _TravelListPage(travelLatLng: travelLatLng);
+      _TravelListPage(travelLatLng: travelLatLng, id: id);
 }
 
 class _TravelListPage extends State<TravelListPage> {
   LatLng travelLatLng;
+  int id;
   List<String> travelImageList = [];
   ScrollController controller = ScrollController();
 
   _TravelListPage({
     required this.travelLatLng,
+    required this.id,
   });
 
   TravelListProvider _travelListProvider = TravelListProvider();
@@ -60,7 +64,7 @@ class _TravelListPage extends State<TravelListPage> {
     setState(() {
       isAwait = true;
     });
-    await _travelListProvider.travelList(travelLatLng);
+    await _travelListProvider.travelList(travelLatLng, id);
     setState(() {
       isAwait = false;
     });
@@ -251,7 +255,7 @@ class _TravelListPage extends State<TravelListPage> {
                                                       isAwait = false;
                                                     });
                                                     Get.off(() => TravelListPage(
-                                                      travelLatLng: travelLatLng,
+                                                      travelLatLng: travelLatLng, id: id,
                                                     ));
                                                   },
                                                 ),

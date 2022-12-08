@@ -129,7 +129,7 @@ class _MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
                           context,
                           MaterialPageRoute(
                               builder: (context) => TravelListPage(
-                                    travelLatLng: e.travelLatLng,
+                                    travelLatLng: e.travelLatLng, id: _mainViewModel!.diaryUser!.id
                                   )));
                     }
                   : () => onTap(e)),

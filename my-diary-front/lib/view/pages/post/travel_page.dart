@@ -48,9 +48,12 @@ class _TravelPageState extends State<TravelPage> {
 
   bool isAwait = false;
 
+  late MainViewModel _mainViewModel;
+
   @override
   Widget build(BuildContext context) {
     travelProvider = Provider.of<TravelProvider>(context, listen: false);
+    _mainViewModel = Provider.of<MainViewModel>(context,listen: true);
     String startinit = "여행 시작 날짜";
     String endinit = "여행 종료 날짜";
 
@@ -261,7 +264,7 @@ class _TravelPageState extends State<TravelPage> {
                                       isAwait = false;
                                     });
                                     Get.to(() => TravelListPage(
-                                        travelLatLng: travelLatLng));
+                                        travelLatLng: travelLatLng, id: _mainViewModel.diaryUser!.id,));
                                     //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => TravelListPage()), (route) => false);
                                   }
                                 },

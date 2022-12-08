@@ -11,8 +11,8 @@ class TravelListProvider extends ChangeNotifier {
   List<Travels> _travels = [];
 
   List<Travels> get travels => _travels;
-  travelList(LatLng travelLatLng) async {
-    List<Travels> travels = await _diaryRepository.fetchTravelList(travelLatLng);
+  travelList(LatLng travelLatLng, int id) async {
+    List<Travels> travels = await _diaryRepository.fetchTravelList(travelLatLng, id);
     _travels = travels;
     notifyListeners();
   }

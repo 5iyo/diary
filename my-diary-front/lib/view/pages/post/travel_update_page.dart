@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:my_diary_front/data.dart';
 import 'package:my_diary_front/util/validator_util.dart';
 import 'package:my_diary_front/view/components/custom_date_picker.dart';
 import 'package:my_diary_front/view/components/custom_elevated_button.dart';
@@ -56,8 +57,11 @@ class _TravelUpdatePageState extends State<TravelUpdatePage> {
 
   bool isAwait = false;
 
+  late MainViewModel _mainViewModel;
+
   @override
   Widget build(BuildContext context) {
+    _mainViewModel = Provider.of<MainViewModel>(context,listen: true);
     return Scaffold(
         appBar: AppBar(),
         extendBodyBehindAppBar: true,
@@ -275,8 +279,8 @@ class _TravelUpdatePageState extends State<TravelUpdatePage> {
                         setState(() {
                           isAwait = false;
                         });
-                        Get.offAll(
-                            () => TravelListPage(travelLatLng: travelLatLng));
+                        Get.off(
+                            () => TravelListPage(travelLatLng: travelLatLng, id: _mainViewModel.diaryUser!.id,));
                       }
                     },
                   ),
