@@ -16,15 +16,22 @@ cd my-diary-back\my-diary-back
 ```
 
 ## APIs
-사용한 API 주소
+사용한 API 주소\
+Google Map API - https://developers.google.com/maps \
+Kakao API - https://developers.kakao.com/ \
+Naver API - https://developers.naver.com/products/login/api/api.md \
+OpenWeather API - https://openweathermap.org/api \
+한국관광공사 API - https://api.visitkorea.or.kr/ \
+
+
 
 ## OpenSources
 사용한 오픈소스 주소
 
 
 ## Development Environment
-minSdk : 21
-targetSdk : 33
+minSdk : 21\
+targetSdk : 33\
 ios : 11
 
 
@@ -65,3 +72,4 @@ ios : 11
 </table>
 
 ## Licences
+DiaryApp is released under the MIT License. http://www.opensource.org/licenses/mit-license
