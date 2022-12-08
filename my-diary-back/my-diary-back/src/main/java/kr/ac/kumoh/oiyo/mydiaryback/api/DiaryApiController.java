@@ -78,7 +78,7 @@ public class DiaryApiController {
     @GetMapping("/api/diaries/{id}/inquiry-diary-list")
     public ResponseEntity inquireDiaryList(@PathVariable("id") Long travelId) {
 
-        Travel findTravel = travelService.findTravel(travelId);
+        Travel findTravel = travelService.findOne(travelId);
 
         List<Diary> diaries = findTravel.getDiaries();
 

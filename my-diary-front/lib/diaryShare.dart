@@ -20,7 +20,7 @@ class DiaryScreenshot {
     Uint8List? data;
 
     if (googleMapScreenshot == null) {
-      data = await screenshotController.capture();
+      data = await screenshotController.capture(delay: Duration(milliseconds: 500));
     } else {
       data = googleMapScreenshot;
     }
@@ -81,7 +81,7 @@ class DiarySocialShareViewModel {
             const Spacer(),
             Text(
               e.name,
-              style: const TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.width * 0.03),
             )
           ],
         ),
