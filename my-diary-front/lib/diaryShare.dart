@@ -50,12 +50,12 @@ class DiarySocialShareViewModel {
   ];
 
   PopupMenuButton<DiarySocialShare> buildPopupMenu(
-      BuildContext context, Function onSelected) {
+      BuildContext context, Function onSelected, [Color iconColor = Colors.white]) {
     print("buildPopupMenu");
     return PopupMenuButton<DiarySocialShare>(
-        icon: const Icon(
+        icon: Icon(
           Icons.share_outlined,
-          color: Colors.white,
+          color: iconColor,
         ),
         color: Colors.blueGrey[400]!.withOpacity(0.4),
         offset: Offset(0, AppBar().preferredSize.height + 8.0),
@@ -109,7 +109,7 @@ class DiarySocialShareViewModel {
 abstract class DiarySocialShare {
   late String name;
 
-  Future share(DiaryScreenshot diaryShare, [Uint8List? googleMapScreenshot]);
+  Future<bool> share(DiaryScreenshot diaryShare, [Uint8List? googleMapScreenshot]);
 }
 
 class DiaryInstagramShare implements DiarySocialShare {
@@ -117,21 +117,25 @@ class DiaryInstagramShare implements DiarySocialShare {
   String name = "Instagram";
 
   @override
-  Future share(DiaryScreenshot diaryShare,
+  Future<bool> share(DiaryScreenshot diaryShare,
       [Uint8List? googleMapScreenshot]) async {
     var file = await diaryShare.screenshot(googleMapScreenshot);
 
     if (file == null) {
-      return;
+      return false;
     }
 
     var path = file.path;
 
     print("####$path");
 
-    await SocialShare.shareInstagramStory(
-            appId: dotenv.get("FACEBOOK_APP_ID"), imagePath: path)
-        .then((value) => print(value));
+    var result = await SocialShare.shareInstagramStory(
+            appId: dotenv.get("FACEBOOK_APP_ID"), imagePath: path);
+    if(result == 'error') {
+      return false;
+    } else {
+      return true;
+    }
 /*    await SocialSharePlugin.shareToFeedInstagram(path: path);*/
   }
 }
@@ -141,21 +145,25 @@ class DiaryFacebookShare implements DiarySocialShare {
   String name = "Facebook";
 
   @override
-  Future share(DiaryScreenshot diaryShare,
+  Future<bool> share(DiaryScreenshot diaryShare,
       [Uint8List? googleMapScreenshot]) async {
     var file = await diaryShare.screenshot(googleMapScreenshot);
 
     if (file == null) {
-      return;
+      return false;
     }
 
     var path = file.path;
 
     print(path);
 
-    await SocialShare.shareFacebookStory(
-            appId: dotenv.get("FACEBOOK_APP_ID"), imagePath: path)
-        .then((value) => print(value));
+    var result = await SocialShare.shareFacebookStory(
+            appId: dotenv.get("FACEBOOK_APP_ID"), imagePath: path);
+    if(result == 'error') {
+      return false;
+    } else {
+      return true;
+    }
 /*    await SocialSharePlugin.shareToFeedFacebook(path: path);*/
   }
 }
@@ -167,13 +175,13 @@ class DiaryKakaostoryShare implements DiarySocialShare {
   KakaoLogin kakaoLogin = KakaoLogin();
 
   @override
-  Future share(DiaryScreenshot diaryShare,
+  Future<bool> share(DiaryScreenshot diaryShare,
       [Uint8List? googleMapScreenshot]) async {
     var file = await diaryShare.screenshot(googleMapScreenshot);
     bool isKakao = true;
 
     if (file == null) {
-      return;
+      return false;
     }
 
     List<String> images;
@@ -188,7 +196,7 @@ class DiaryKakaostoryShare implements DiarySocialShare {
         images = await StoryApi.instance.upload([file]);
       } catch (error) {
         print('사진 업로드 실패 $error');
-        return;
+        return false;
       }
     }
 
@@ -200,12 +208,15 @@ class DiaryKakaostoryShare implements DiarySocialShare {
       print('스토리 쓰기 성공 [${storyPostResult.id}]');
     } catch (error) {
       print('스토리 쓰기 실패 $error');
+      return false;
     }
 
     if (!isKakao) {
       print("is not kakao");
       await kakaoLogin.logout();
     }
+
+    return true;
   }
 }
 
@@ -216,13 +227,13 @@ class DiaryKakaoTalkShare implements DiarySocialShare {
   KakaoLogin kakaoLogin = KakaoLogin();
 
   @override
-  Future share(DiaryScreenshot diaryShare,
+  Future<bool> share(DiaryScreenshot diaryShare,
       [Uint8List? googleMapScreenshot]) async {
     var file = await diaryShare.screenshot(googleMapScreenshot);
     bool isKakao = true;
 
     if (file == null) {
-      return;
+      return false;
     }
 
     ImageUploadResult imageUploadResult;
@@ -239,7 +250,7 @@ class DiaryKakaoTalkShare implements DiarySocialShare {
         imageUploadResult = await ShareClient.instance.uploadImage(image: file);
       } catch (error) {
         print('이미지 업로드 실패 $error');
-        return;
+        return false;
       }
     }
 
@@ -267,11 +278,14 @@ class DiaryKakaoTalkShare implements DiarySocialShare {
         await launchBrowserTab(shareUrl);
       } catch (error) {
         print('카카오톡 공유 실패 $error');
+        return false;
       }
     }
     if (!isKakao) {
       print("is not kakao");
       await kakaoLogin.logout();
     }
+
+    return true;
   }
 }

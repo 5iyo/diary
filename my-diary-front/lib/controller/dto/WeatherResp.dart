@@ -17,23 +17,23 @@ class Location {
 }
 
 class Weather {
-  final Location? position;
   final String? temp;
   final String? location;
+  final Location? position;
 
   Weather(
       {
-        this.position,
         this.temp,
         this.location,
+        this.position,
       });
 
   factory Weather.fromJson(Map<String, dynamic> json) {
 
     return Weather(
-        position: Location.fromJson(json["position"]),
-        temp : json["temp"],
-        location : json["location"]
+      temp : json["temp"],
+      location : json["location"],
+      position: Location.fromJson(json["position"]),
     );
   }
 }

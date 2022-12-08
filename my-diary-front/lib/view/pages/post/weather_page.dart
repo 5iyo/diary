@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:my_diary_front/controller/dto/WeatherResp.dart';
+import 'package:my_diary_front/data.dart';
 import 'package:my_diary_front/view/pages/post/recommend_page.dart';
 import 'package:timer_builder/timer_builder.dart';
 import 'package:http/http.dart' as http;
@@ -113,8 +114,13 @@ class _WeatherPageState extends State<WeatherPage> {
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
             onTap: (){
-              Get.to(()=> RecommendPage(snapshot.data.weatherresp[index].location,
-                  snapshot.data.weatherresp[index].position.x, snapshot.data.weatherresp[index].position.y));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => RecommendPage(snapshot.data.weatherresp[index].location,
+                  snapshot.data.weatherresp[index].position.y, snapshot.data.weatherresp[index].position.x))).then((value) {
+                    if(value.runtimeType == TravelMarker) {
+                      print("pop weather_page");
+                      Navigator.pop(context, value);
+                    }
+              });
             },
             title: Container(
               margin: EdgeInsets.only(bottom: 15),

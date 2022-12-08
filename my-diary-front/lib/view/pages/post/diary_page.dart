@@ -5,6 +5,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:my_diary_front/controller/provider/diary_delete_provider.dart';
 import 'package:my_diary_front/controller/provider/diarylist_provider.dart';
+import 'package:my_diary_front/data.dart';
+import 'package:my_diary_front/view/components/ui_view_model.dart';
 import 'package:my_diary_front/view/pages/post/update_page.dart';
 import 'package:my_diary_front/view/pages/post/diary_list_page.dart';
 import 'package:my_diary_front/controller/dto/DiaryResp.dart';
@@ -14,6 +16,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:provider/provider.dart';
+import 'package:screenshot/screenshot.dart';
+
+import '../../../diaryShare.dart';
 
 String? host = dotenv.env['SERVER_URI'];
 
@@ -21,7 +26,7 @@ Future<Diary> fetchDiary(int id) async {
   var url = '$host/api/diaries/$id';
   final response = await http.get(Uri.parse(url));
 
-  if(response.statusCode == 200) {
+  if (response.statusCode == 200) {
     print("리스트 요청 성공");
     print(json.decode(utf8.decode(response.bodyBytes)));
     return Diary.fromJson(json.decode(utf8.decode(response.bodyBytes)));
@@ -31,7 +36,6 @@ Future<Diary> fetchDiary(int id) async {
 }
 
 class DiaryPage extends StatefulWidget {
-
   final int? id;
   final int travelId;
 
@@ -53,6 +57,10 @@ class _DiaryPage extends State<DiaryPage> {
   Future<Diary>? diary;
   ScrollController controller = ScrollController();
 
+  late MainViewModel _mainViewModel;
+
+  DiaryScreenshot diaryScreenshot = DiaryScreenshot();
+
   void initState() {
     super.initState();
     diary = fetchDiary(id);
@@ -60,25 +68,47 @@ class _DiaryPage extends State<DiaryPage> {
 
   @override
   Widget build(BuildContext context) {
+    _mainViewModel = Provider.of<MainViewModel>(context, listen: true);
 
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-        title: Text("Diary",
-            style: TextStyle(color: Colors.grey[700])),
+        title: Text("Diary", style: TextStyle(color: Colors.grey[700])),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0.0,
+        actions: [
+          DiarySocialShareViewModel().buildPopupMenu(context,
+              (DiarySocialShare item) async {
+            await _mainViewModel
+                .share(
+                  item,
+                  diaryScreenshot,
+                )
+                .then((value) => value
+                    ? ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("${item.name} 공유 완료")))
+                    : ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("${item.name} 공유 실패"))));
+          }, Colors.black),
+        ],
       ),
       extendBodyBehindAppBar: true,
       body: Padding(
-        padding:EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: FutureBuilder<Diary>(
           future: diary,
           builder: (context, snapshot) {
-            if(snapshot.hasData) {
-              return buildDiary(context, snapshot);
-            } else if(snapshot.hasError) {
+            if (snapshot.hasData) {
+              return Screenshot(
+                controller: diaryScreenshot.screenshotController,
+                child: UiViewModel.buildBackgroundContainer(
+                    context: context,
+                    backgroundType: BackgroundType.write,
+                    child: UiViewModel.buildSizedLayout(
+                        context, buildDiary(context, snapshot))),
+              );
+            } else if (snapshot.hasError) {
               return Text("${snapshot.error}에러");
             }
             return CircularProgressIndicator();
@@ -90,12 +120,12 @@ class _DiaryPage extends State<DiaryPage> {
 
   Widget buildDiary(context, snapshot) {
     diaryListProvider = Provider.of<DiaryListProvider>(context, listen: false);
-    diaryDeleteProvider = Provider.of<DiaryDeleteProvider>(context, listen: true);
+    diaryDeleteProvider =
+        Provider.of<DiaryDeleteProvider>(context, listen: true);
 
     UriData data;
     Uint8List bytes;
-    return Padding(
-      padding: const EdgeInsets.only(top: 100),
+    return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -109,67 +139,52 @@ class _DiaryPage extends State<DiaryPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                    DateFormat.yMMMd('en_US').format(snapshot.data!.traveldate)
-                ),
+                Text(DateFormat.yMMMd('en_US')
+                    .format(snapshot.data!.traveldate)),
                 SizedBox(width: 10),
-                Text(
-                    (snapshot.data!.weather)
-                ),
+                Text((snapshot.data!.weather)),
                 SizedBox(width: 10),
-                Text(
-                    (snapshot.data!.travel)
-                ),
+                Text((snapshot.data!.travel)),
               ],
             ),
           ),
           Divider(),
-          Expanded(
-              child: SingleChildScrollView(
-                child: Text(snapshot.data!.content),
-              )
+          SingleChildScrollView(
+            child: Text(snapshot.data!.content),
           ),
-
-          snapshot.data!.images[0].imagefile == "" && snapshot.data!.images.length == 1
-              ? Container() : Expanded(
-              child: SingleChildScrollView(
-                child: ListView.builder(
-                  padding: EdgeInsets.all(8.0),
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  controller: this.controller,
-                  itemCount: snapshot.data?.images.length ?? 0,
-                  itemBuilder: (context, index) {
-                    if(snapshot.data.images[index].imagefile == "" ) return Container();
-                    else {
-                      data = Uri.parse(snapshot.data.images[index].imagefile).data!;
-                      bytes = data.contentAsBytes();
-                      return Container(
-                          width: 200.0,
-                          child: Card(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                            clipBehavior: Clip.antiAlias,
-                            borderOnForeground: false,
-                            child: Image.memory(bytes, fit: BoxFit.cover),
-                          )
-                      );
-                    }
-                  },
+          snapshot.data!.images[0].imagefile == "" &&
+                  snapshot.data!.images.length == 1
+              ? Container()
+              : SizedBox(
+                  width: UiViewModel.getSizedLayoutSize(context).width * 0.7,
+                  child: ColumnBuilder(
+                    itemCount: snapshot.data?.images.length ?? 0,
+                    itemBuilder: (context, index) {
+                      if (snapshot.data.images[index].imagefile == "") {
+                        return Container();
+                      } else {
+                        data = Uri.parse(snapshot.data.images[index].imagefile)
+                            .data!;
+                        bytes = data.contentAsBytes();
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0)),
+                          clipBehavior: Clip.antiAlias,
+                          borderOnForeground: false,
+                          child: Image.memory(bytes, fit: BoxFit.fitWidth),
+                        );
+                      }
+                    },
+                  ),
                 ),
-              )
-          ),
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                    DateFormat.yMd().add_jm().format(snapshot.data!.created)
-                ),
+                Text(DateFormat.yMd().add_jm().format(snapshot.data!.created)),
                 SizedBox(width: 10),
-                Text(
-                    DateFormat.yMd().add_jm().format(snapshot.data!.updated)
-                ),
+                Text(DateFormat.yMd().add_jm().format(snapshot.data!.updated)),
               ],
             ),
           ),
@@ -187,7 +202,7 @@ class _DiaryPage extends State<DiaryPage> {
               SizedBox(width: 10),
               ElevatedButton(
                 onPressed: () async {
-                  await Get.off(()=>UpdatePage(id, travelId));
+                  await Get.off(() => UpdatePage(id, travelId));
                 },
                 child: Text("수정"),
               ),

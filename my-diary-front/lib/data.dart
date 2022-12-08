@@ -36,9 +36,9 @@ class MainViewModel {
     _stream.addEvent("");
   }
 
-  Future share(DiarySocialShare diarySocialShare, DiaryScreenshot diaryShare,
+  Future<bool> share(DiarySocialShare diarySocialShare, DiaryScreenshot diaryShare,
       [Uint8List? googleMapScreenshot]) async {
-    await diarySocialShare.share(diaryShare, googleMapScreenshot);
+    return await diarySocialShare.share(diaryShare, googleMapScreenshot);
   }
 }
 
@@ -148,19 +148,19 @@ class DiaryUser {
       required this.travels});
 
   factory DiaryUser.fromJson(Map<String, dynamic> json) {
-    print("DiaryUser.fromJson ${TravelMarkerList.fromJson(json['travels'] as List)}");
+    var user = json['user'];
     return DiaryUser(
-      id: json['id'],
-      createDate: DateTime.parse(json['createDate']),
-      lastModifiedDate: DateTime.parse(json['lastModifiedDate']),
-      email: json['email'],
-      username: json['username'],
-      profileImage: json['profileImage'],
-      role: json['role'],
-      profileIntroduction: json['profileIntroduction'],
+      id: user['id'],
+      createDate: DateTime.parse(user['createDate']),
+      lastModifiedDate: DateTime.parse(user['lastModifiedDate']),
+      email: user['email'],
+      username: user['username'],
+      profileImage: user['profileImage'],
+      role: user['role'],
+      profileIntroduction: user['profileIntroduction'],
       birthDate:
-          json['birthDate'] == null ? null : DateTime.parse(json['birthDate']),
-      address: json['address'],
+        user['birthDate'] == null ? null : DateTime.parse(user['birthDate']),
+      address: user['address'],
       travels: TravelMarkerList.fromJson(json['travels'] as List),
     );
   }
