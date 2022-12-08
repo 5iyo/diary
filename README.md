@@ -15,6 +15,18 @@ cd my-diary-back\my-diary-back
 ./gradlew bootRun
 ```
 
+## APIs
+사용한 API 주소
+
+## OpenSources
+사용한 오픈소스 주소
+
+
+## Development Environment
+minSdk : 21
+targetSdk : 33
+ios : 11
+
 
 ## Contributor
 <table>
@@ -51,3 +63,5 @@ cd my-diary-back\my-diary-back
         </td>
     </tr>
 </table>
+
+## Licences
