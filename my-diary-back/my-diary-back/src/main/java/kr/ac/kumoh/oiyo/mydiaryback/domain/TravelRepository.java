@@ -39,14 +39,19 @@ public class TravelRepository {
      * @return 해당 사용자의 모든 여행 기록 조회
      */
     public List<Travel> findTravelsByMember(Long memberId) {
-        return em.createQuery("select t from Travel t join t.user m on m.id = :mId", Travel.class)
+        return em.createQuery("select t from Travel t" +
+                        " join t.user m on m.id = :mId", Travel.class)
                 .setParameter("mId", memberId)
                 .getResultList();
     }
 
-    public List<Travel> findTravelsByCoordinate(String travelLatitude, String travelLongitude) {
-       return em.createQuery("select t from Travel t where t.travelLatitude = :travelLatitude and t.travelLongitude = :travelLongitude"
+    public List<Travel> findTravelsByCoordinate(Long userId, String travelLatitude, String travelLongitude) {
+       return em.createQuery("select t from Travel t" +
+                               " join t.user u on u.id = :userId" +
+                               " where t.travelLatitude = :travelLatitude" +
+                               " and t.travelLongitude = :travelLongitude" +
                         , Travel.class)
+                .setParameter("userId", userId)
                 .setParameter("travelLatitude", travelLatitude)
                 .setParameter("travelLongitude", travelLongitude)
                 .getResultList();

@@ -91,13 +91,13 @@ public class TravelApiController {
      * @param findTravelsRequest REQUEST BODY
      * @return
      */
-    @GetMapping("/api/travels")
-    public ResponseEntity inquireTravelsByCoordinate(FindTravelsRequest findTravelsRequest) {
+    @GetMapping("/api/user/{id}/inquire-travels-list")
+    public ResponseEntity inquireTravelsByCoordinate(@PathVariable("id") Long userId, FindTravelsRequest findTravelsRequest) {
 
         String travelLatitude = findTravelsRequest.getTravelLatitude();
         String travelLongitude = findTravelsRequest.getTravelLongitude();
 
-        List<Travel> travels = travelService.inquiryTravelsByCoordinate(travelLatitude, travelLongitude);
+        List<Travel> travels = travelService.inquiryTravelsByCoordinate(userId, travelLatitude, travelLongitude);
 
         List<TravelListDto> collect = travels.stream()
                 .map(t -> new TravelListDto(t))
