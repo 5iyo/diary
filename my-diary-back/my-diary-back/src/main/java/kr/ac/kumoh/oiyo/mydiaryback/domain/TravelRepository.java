@@ -49,7 +49,7 @@ public class TravelRepository {
        return em.createQuery("select t from Travel t" +
                                " join t.user u on u.id = :userId" +
                                " where t.travelLatitude = :travelLatitude" +
-                               " and t.travelLongitude = :travelLongitude" +
+                               " and t.travelLongitude = :travelLongitude"
                         , Travel.class)
                 .setParameter("userId", userId)
                 .setParameter("travelLatitude", travelLatitude)
