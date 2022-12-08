@@ -5,15 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2bbbed5c-b4d0-4feb-9d21-400060351cbd" name="Changes" comment="init project">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-diary-front/lib/controller/diary_repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/my-diary-front/lib/controller/diary_repository.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-diary-front/lib/controller/dio_update_image.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-diary-front/lib/controller/dto/DiaryResp.dart" beforeDir="false" afterPath="$PROJECT_DIR$/my-diary-front/lib/controller/dto/DiaryResp.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-diary-front/lib/controller/provider/travellist_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/my-diary-front/lib/controller/provider/travellist_provider.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-diary-front/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/my-diary-front/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-diary-front/lib/view/pages/post/diary_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/my-diary-front/lib/view/pages/post/diary_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my-diary-front/lib/controller/provider/diary_image_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/my-diary-front/lib/controller/provider/diary_image_provider.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-diary-front/lib/view/pages/post/travel_list_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/my-diary-front/lib/view/pages/post/travel_list_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my-diary-front/lib/view/pages/post/travel_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/my-diary-front/lib/view/pages/post/travel_page.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my-diary-front/lib/view/pages/post/update_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/my-diary-front/lib/view/pages/post/update_page.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -45,16 +40,16 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/my-diary-front/lib/view/pages/post/diary_list_page.dart" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/my-diary-front/lib/main.dart" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/my-diary-front/lib/signInPage.dart" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/my-diary-front/lib/view/pages/post/diaryInfoPage.dart" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/my-diary-front/lib/controller/dto/DiaryListResp.dart" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/my-diary-front/lib/view/components/custom_text_form_field.dart" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/my-diary-front/lib/view/components/custom_date_picker.dart" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/my-diary-front/lib/controller/dto/DiaryResp.dart" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/my-diary-front/lib/view/pages/post/diaryImagePage.dart" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/my-diary-front/lib/view/components/custom_text_form_field.dart" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/my-diary-front/lib/main.dart" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/my-diary-front/lib/controller/dto/DiaryListResp.dart" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/my-diary-front/lib/view/components/custom_date_picker.dart" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/my-diary-front/lib/signInPage.dart" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/my-diary-front/pubspec.yaml" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/my-diary-front/lib/view/pages/post/diary_list_page.dart" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/my-diary-front/lib/view/pages/post/diaryInfoPage.dart" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/my-diary-front/lib/controller/dto/DiaryResp.dart" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/my-diary-front/lib/controller/dto/WriteResp.dart" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/my-diary-front/lib/view/pages/post/diary_page.dart" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -74,17 +69,17 @@
     <property name="cidr.known.project.marker" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/my-diary-front/lib/controller/provider" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="dart.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\yunej\StudioProjects\myDiary\diary\my-diary-front\android" />
+      <recent name="C:\Users\yunej\StudioProjects\myDiary\diary\my-diary-front\android\app" />
+      <recent name="C:\Users\yunej\StudioProjects\myDiary\diary\my-diary-front" />
       <recent name="C:\Users\yunej\StudioProjects\hotfix_update\diary\my-diary-front\lib\controller\provider" />
       <recent name="C:\Users\yunej\StudioProjects\hotfix_update\diary\my-diary-front\lib\controller\dto" />
-      <recent name="C:\Users\yunej\StudioProjects\hotfix_update\diary\my-diary-front" />
-      <recent name="C:\Users\yunej\StudioProjects\hotfix_update\diary\my-diary-front\android\app" />
-      <recent name="C:\Users\yunej\StudioProjects\hotfix_update\diary\my-diary-front\android" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\yunej\StudioProjects\hotfix\diary\my-diary-front\android" />
